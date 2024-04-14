@@ -1,0 +1,36 @@
+:root{
+    --main-color: #6dacff;
+    --sec-color: #006eff;
+    --dark-color: #1f1f1f;
+    --light-color: #f3f3f3;
+}
+
+
+.hero{
+    min-height: 100vh;
+    background: linear-gradient(to bottom, var(--main-color), var(--light-color));
+    padding-top: 20px;
+}
+
+
+
+
+.descImageDiv{
+    display: flex;
+}
+
+.descLogDiv{
+   width: 50%;
+   margin-left: 10%;
+   margin-top: 8%;
+}
+
+.logBtnsDiv{
+    display: flex;
+    margin-top: 8%;
+}
+
+.btn{
+    padding: 10px;
+    margin-right: 20px;
+}
