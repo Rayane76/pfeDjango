@@ -1,0 +1,23 @@
+.patientHomeDiv{
+    display: flex;
+    justify-content: center;
+}
+
+.card {
+    margin-top: 50px;
+    width: 75vw;
+    max-width: 800px;
+    height: 500px;
+    border-radius: 30px;
+    background: #e0e0e0;
+    box-shadow: 15px 15px 30px #bebebe,
+               -15px -15px 30px #ffffff;
+  }
+
+
+  .scanDiv{
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }

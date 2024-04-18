@@ -8,7 +8,6 @@
 
 .hero{
     min-height: 100vh;
-    background: linear-gradient(to bottom, var(--main-color), var(--light-color));
     padding-top: 20px;
 }
 

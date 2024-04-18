@@ -1,11 +1,11 @@
 'use client'
 import "../styles/register.css"
 
-export default function Login(){
+
+export default function LoginAsAdmin(){
     return(
         <>
-
-          <div className="container">
+<div className="container">
         <header>Sign Up</header>
         <div className="form-outer">
             <form action="#">
@@ -18,14 +18,8 @@ export default function Login(){
                         <div className="label">Password</div>
                         <input type="password" />
                     </div>
-                    <div>
-                        <div className="label">Don't have an account ? <a href="/register">Register</a></div>
-                    </div>
                     <div className="field">
                         <button className="next">Submit</button>
-                    </div>
-                    <div>
-                    <div className="label">Doctor or Labo ? <a href="/loginAsAdmin">Login here</a></div>
                     </div>
                     </div>
                     </form>
