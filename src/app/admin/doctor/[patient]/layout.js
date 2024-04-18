@@ -1,4 +1,4 @@
-import SideBarAdmin from "@/app/components/sideBarAdmin/SideBarAdmin"
+import SideBarAdmin from "@/app/components/doctor/sideBarAdmin/SideBarAdmin"
 
 
 export default function AdminLayout({ children }) {

@@ -1,0 +1,23 @@
+.generalInfos{
+    height: 85vh;
+}
+
+.radios{
+    height: 85vh;
+}
+
+.analyses{
+    height: 85vh;
+}
+
+.operations{
+    height: 85vh;
+}
+
+.consultation{
+    height: 85vh;
+}
+
+.unActive{
+  display: none;
+}
