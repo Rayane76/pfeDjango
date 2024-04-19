@@ -1,0 +1,46 @@
+.radio{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* width: 100%; */
+    height: auto;
+    position: relative;
+}
+
+.fWidth{
+    width: 100%;
+}
+
+.radioPDF{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+
+.close{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.radiosDiv{
+   
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 40px;
+       
+}
+
+.unActive{
+    display: none;
+}
+
+.firstDisplay{
+    cursor: pointer;
+}

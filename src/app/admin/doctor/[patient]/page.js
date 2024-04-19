@@ -1,6 +1,7 @@
 'use client'
 import GeneralInfos from "@/app/components/doctor/generalInfos/GeneralInfos";
 import "../../../styles/doctor/patient/all.css"
+import Radios from "@/app/components/doctor/radios/Radios";
 
 export default function Patient() {
   return (
@@ -10,7 +11,7 @@ export default function Patient() {
            <GeneralInfos />
         </div>
         <div id="radios" className="radios unActive">
-         <h1>Radios</h1>
+         <Radios />
         </div>
         <div id="analyses" className="analyses unActive">
           <h1>Analyses</h1>
