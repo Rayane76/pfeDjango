@@ -7,7 +7,23 @@
     position: relative;
 }
 
+
+.analyse{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* width: 100%; */
+    height: auto;
+    position: relative;
+}
+
+
+
 .fWidth{
+    width: 100%;
+}
+
+.fWidthAnalyse{
     width: 100%;
 }
 

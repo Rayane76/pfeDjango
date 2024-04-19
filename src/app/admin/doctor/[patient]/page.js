@@ -2,6 +2,7 @@
 import GeneralInfos from "@/app/components/doctor/generalInfos/GeneralInfos";
 import "../../../styles/doctor/patient/all.css"
 import Radios from "@/app/components/doctor/radios/Radios";
+import Analyses from "@/app/components/doctor/analyses/Analyses";
 
 export default function Patient() {
   return (
@@ -14,7 +15,7 @@ export default function Patient() {
          <Radios />
         </div>
         <div id="analyses" className="analyses unActive">
-          <h1>Analyses</h1>
+          <Analyses />
         </div>
         <div id="operations" className="operations unActive">
          <h1>Operations</h1>

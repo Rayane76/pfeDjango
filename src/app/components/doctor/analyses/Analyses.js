@@ -1,31 +1,31 @@
 "use client";
 import "../../../styles/doctor/patient/radios.css";
-export default function Radios() {
+export default function Analyses() {
 
 
   const showRadio = (e, radio) => {
     e.preventDefault();
-    const selected = document.getElementById("radio" + radio);
+    const selected = document.getElementById("analyse" + radio);
     const parent = selected.parentNode;
-    const radios = document.getElementsByClassName("radio");
-    const radiosArray = Array.from(radios);
-    radiosArray.forEach(radio => {
-        if(radio != parent){
-           radio.classList.toggle("unActive");
+    const analyses = document.getElementsByClassName("analyse");
+    const analysesArray = Array.from(analyses);
+    analysesArray.forEach(analyse => {
+        if(analyse != parent){
+           analyse.classList.toggle("unActive");
         }
     });
-    parent.classList.toggle("fWidth");
+    parent.classList.toggle("fWidthAnalyse");
     selected.classList.toggle("unActive");
   };
   
   return (
     <>
       <div className="radiosDiv">
-        <div className="radio">
+        <div className="analyse">
           <div className="firstDisplay" onClick={(e) => showRadio(e, 1)}>
-            Radio 1
+            Analyse 1
           </div>
-          <div id="radio1" className="radioPDF unActive">
+          <div id="analyse1" className="radioPDF unActive">
             <embed
               src="/test.pdf"
               type="application/pdf"
@@ -34,11 +34,11 @@ export default function Radios() {
             />
           </div>
         </div>
-        <div className="radio">
+        <div className="analyse">
           <div className="firstDisplay" onClick={(e) => showRadio(e, 2)}>
-            Radio 2
+            Analyse 2
           </div>
-          <div id="radio2" className="radioPDF unActive">
+          <div id="analyse2" className="radioPDF unActive">
             <embed
               src="/test.pdf"
               type="application/pdf"
@@ -51,3 +51,5 @@ export default function Radios() {
     </>
   );
 }
+
+
