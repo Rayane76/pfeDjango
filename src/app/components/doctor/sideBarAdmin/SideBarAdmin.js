@@ -2,75 +2,35 @@
 import "../../../styles/doctor/sideBarAdmin.css"
 
 export default function SideBarAdmin(){
-    
-    const handleGeneralInfos = (e) =>{
-        e.preventDefault();
-        const div = document.getElementById("generalInfos");
-        const active = document.getElementsByClassName("active");
-        active[0].classList.add("unActive");
-        active[0].classList.remove("active");
-        div.classList.remove("unActive");
-        div.classList.add("active");
-        }
 
-    const handleRadios = (e) =>{
+
+    const handleClick = (e,clicked) =>{
         e.preventDefault();
-        const div = document.getElementById("radios");
+        const div = document.getElementById(clicked);
         const active = document.getElementsByClassName("active");
         active[0].classList.add("unActive");
         active[0].classList.remove("active");
         div.classList.remove("unActive");
         div.classList.add("active");
     }
-
-    const handleAnalyses = (e) =>{
-        e.preventDefault();
-        const div = document.getElementById("analyses");
-        const active = document.getElementsByClassName("active");
-        active[0].classList.add("unActive");
-        active[0].classList.remove("active");
-        div.classList.remove("unActive");
-        div.classList.add("active");
-    }
-
-    const handleOperations = (e) =>{
-        e.preventDefault();
-        const div = document.getElementById("operations");
-        const active = document.getElementsByClassName("active");
-        active[0].classList.add("unActive");
-        active[0].classList.remove("active");
-        div.classList.remove("unActive");
-        div.classList.add("active");
-    }
-
-    const handleConsultation = (e) =>{
-        e.preventDefault();
-        const div = document.getElementById("consultation");
-        const active = document.getElementsByClassName("active");
-        active[0].classList.add("unActive");
-        active[0].classList.remove("active");
-        div.classList.remove("unActive");
-        div.classList.add("active");
-    }
-
 
     return(
         <>
             <div className="sideBarDiv">
               <div className="fieldsParent">
-               <div className="field" onClick={(e)=>handleGeneralInfos(e)}>
+               <div className="field" onClick={(e)=>handleClick(e,"generalInfos")}>
                 General Informations
                </div>
-               <div className="field" onClick={(e)=>handleRadios(e)}>
+               <div className="field" onClick={(e)=>handleClick(e,"radios")}>
                 Radios
                </div>
-                <div className="field" onClick={(e)=>handleAnalyses(e)}>
+                <div className="field" onClick={(e)=>handleClick(e,"analyses")}>
                 Analyses
                </div>
-                <div className="field" onClick={(e)=>handleOperations(e)}>
+                <div className="field" onClick={(e)=>handleClick(e,"operations")}>
                 Operations
                </div>
-                <div className="field" onClick={(e)=>handleConsultation(e)}>
+                <div className="field" onClick={(e)=>handleClick(e,"consultation")}>
                 Consultation informations
                </div>
               </div>
