@@ -1,8 +1,19 @@
 'use client'
+import { useRouter } from "next/navigation";
 import "../styles/register.css"
 
 
 export default function LoginAsAdmin(){
+
+    const router = useRouter();
+
+    const handleSubmit = async (e) => {
+
+        e.preventDefault();
+        router.push("/admin/doctor")
+    }
+
+
     return(
         <>
 <div className="container">
@@ -19,7 +30,7 @@ export default function LoginAsAdmin(){
                         <input type="password" />
                     </div>
                     <div className="field">
-                        <button className="next">Submit</button>
+                        <button type="sumbit" className="next" onClick={(e)=>handleSubmit(e)}>Submit</button>
                     </div>
                     </div>
                     </form>
