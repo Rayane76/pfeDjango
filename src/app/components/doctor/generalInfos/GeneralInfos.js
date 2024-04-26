@@ -3,6 +3,7 @@ import TrendingFlatIcon from "@mui/icons-material/TrendingFlat";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import AddIcon from '@mui/icons-material/Add';
 
 export default function GeneralInfos() {
   const handleFlip = (e) => {
@@ -16,7 +17,6 @@ export default function GeneralInfos() {
   const handleShow = (e,type)=>{
     e.preventDefault();
     const allergies = document.getElementsByClassName(type);
-    console.log(allergies);
     const moreAllergies = document.getElementsByClassName("more" + type);
     [...allergies].forEach((allergie)=>{
       allergie.classList.toggle("hiddenFirst");
@@ -33,7 +33,7 @@ export default function GeneralInfos() {
           <div className="card">
             <div className="card__face card__face--front">
               <div className="frontCard">
-              <h1 className="title">General Informations</h1>
+              <h1 className="titleInfos">General Informations</h1>
                 <div className="nameInfosDiv">
                   <h4 className="nameInfos">
                     <span className="fw-bold me-2">
@@ -69,7 +69,7 @@ export default function GeneralInfos() {
             </div>
             <div className="card__face card__face--back">
               <div className="backCard">
-               <h1 className="title">Maladies Informations</h1>
+               <h1 className="titleInfos">Maladies Informations</h1>
                 <div className="allergiesMaladiesDiv">
                 <div className="allergiesDiv">
                  <h4 className="alrgTitle text-black">Allergies :</h4>
@@ -78,12 +78,12 @@ export default function GeneralInfos() {
                   <li className="allergie">Eggs</li>
                   <li className="allergie">Tree nuts</li>
                   <li className="allergie">Peanuts</li>
-                  <li className="allergie">Shellfish</li>
                   <li className="allergie showMore" onClick={(e)=> handleShow(e,"allergie")}>Show more <ExpandMoreIcon /></li>
                   <li className="hiddenFirst moreallergie">Shellfish</li>
                   <li className="hiddenFirst moreallergie">Shellfish</li>
                   <li className="hiddenFirst moreallergie showMore" onClick={(e)=> handleShow(e,"allergie")}>Back <ExpandLessIcon /></li>
                  </ul>
+                 
                 </div>
                 <div className="maladiesDiv">
                 <h4 className="nameInfos text-black">Maladies :</h4>

@@ -112,7 +112,7 @@
     cursor: pointer;
   }
 
-  .title{
+  .titleInfos{
     color: black;
     margin-top: 10px;
   }
@@ -176,11 +176,14 @@
     text-decoration: underline;
     color: #007bff;
     cursor: pointer;
+    list-style-type: none;
   }
 
   .hiddenFirst{
     display: none;
   }
+
+  
 
 
 
@@ -191,7 +194,7 @@
     .nameInfos{
       font-size: 18px;
     }
-    .title{
+    .titleInfos{
       font-size: 25px;
     }
     .allergiesMaladiesDiv{
