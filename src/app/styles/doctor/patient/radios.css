@@ -3,8 +3,9 @@
     justify-content: center;
     align-items: center;
     /* width: 100%; */
-    height: auto;
+    height: 100vh;
     position: relative;
+
 }
 
 
@@ -27,12 +28,16 @@
     width: 100%;
 }
 
+.embed{
+    height: 100vh;
+}
+
 .radioPDF{
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: auto;
+    height: 100vh;
     position: relative;
 }
 
@@ -50,6 +55,7 @@
         justify-content: center;
         align-items: center;
         gap: 40px;
+        height: 100vh;
        
 }
 

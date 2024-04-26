@@ -6,7 +6,7 @@
 }
 
 .sideBarDiv{
-    min-height: 85vh;
+    min-height: 100vh;
     width: 275px;
     background-color:  #20558a;
     position: absolute;
@@ -28,5 +28,5 @@
 }
 
 .fieldsParent{
-    margin-top: 100px;
+    margin-top: 200px;
 }

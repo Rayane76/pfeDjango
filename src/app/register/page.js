@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Navbar from "../components/navbar/Navbar";
 import "../styles/register.css";
 
 export default function Register() {
@@ -63,8 +64,8 @@ export default function Register() {
   const [allInfos, setAllInfos] = useState({
     fname: "",
     lname: "",
-    situation: "",
-    children: "",
+    // situation: "",
+    // children: "",
     email: "",
     phone: "",
     emergency: "",
@@ -82,6 +83,7 @@ export default function Register() {
 
   return (
     <>
+      <Navbar />
       <div className="container">
         <header>Sign Up</header>
 
@@ -132,6 +134,10 @@ export default function Register() {
                 <input type="text" name="lname" onChange={(e)=>handleInput(e)} />
               </div>
               <div className="field">
+                <div className="label">Address</div>
+                <input type="text" name="address" onChange={(e)=>handleInput(e)} />
+              </div>
+              {/* <div className="field">
                 <div className="label">Family Situation</div>
                 <select name="situation" value={allInfos.situation} onChange={(e)=> handleInput(e)}>
                   <option hidden>Click to select</option>
@@ -146,7 +152,7 @@ export default function Register() {
                 <div className="label">Number of Children</div>
                 <input type="text" name="children" onChange={(e)=>handleInput(e)} />
               </div>
-              }
+              } */}
               <div className="field">
                 <button className="next" onClick={(e) => handleFirstNext(e)}>
                   Next
@@ -203,10 +209,6 @@ export default function Register() {
                   <option value="abPlus">AB +</option>
                   <option value="abMinus">AB -</option>
                 </select>
-              </div>
-              <div className="field">
-                <div className="label">Address</div>
-                <input type="text" name="address" onChange={(e)=>handleInput(e)} />
               </div>
               <div className="field btns">
                 <button className="prev" onClick={(e) => handleSecondPrev(e)}>

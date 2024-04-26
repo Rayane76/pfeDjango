@@ -1,10 +1,11 @@
 'use client'
 import "../styles/register.css"
+import Navbar from "../components/navbar/Navbar"
 
 export default function Login(){
     return(
         <>
-
+          <Navbar />
           <div className="container">
         <header>Sign Up</header>
         <div className="form-outer">

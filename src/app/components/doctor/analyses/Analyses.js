@@ -27,6 +27,7 @@ export default function Analyses() {
           </div>
           <div id="analyse1" className="radioPDF unActive">
             <embed
+              className="embed"
               src="/test.pdf"
               type="application/pdf"
               width="50%"
@@ -40,6 +41,7 @@ export default function Analyses() {
           </div>
           <div id="analyse2" className="radioPDF unActive">
             <embed
+              className="embed"
               src="/test.pdf"
               type="application/pdf"
               width="50%"

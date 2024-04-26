@@ -32,7 +32,7 @@ body{
     color: var(--dark-color);
     border-radius: 15px;
     text-align: center;
-    padding: 50px 35px 10px 35px;
+    padding: 40px 35px 10px 35px;
     box-shadow: 1px 1px 5px var(--main-color);
     margin-top: 50px;
 }
