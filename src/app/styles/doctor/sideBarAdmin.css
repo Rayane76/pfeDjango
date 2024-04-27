@@ -33,3 +33,38 @@
 .selected{
     background-color: #3c749d;
 }
+
+.mobile{
+    display: none;
+}
+
+
+@media screen and (max-width: 768px) {
+    .sideBarDiv{
+        display: none;
+    }
+
+    .mobile{
+        display: block;
+    }
+    
+    .sideBarDivMobile{
+        min-height: 100vh;
+        width: 100%;
+        background-color:  #20558a;
+        position: absolute;
+        left: 0;
+    }
+
+    .field{
+        width: 100%;
+    }
+
+    .selectedMobile{
+        background-color: #3c749d;
+    }
+    .selected{
+    
+    }
+
+}

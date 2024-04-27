@@ -21,3 +21,13 @@
 .unActive{
   display: none;
 }
+
+.doctorView{
+    margin-left: 275px;
+}
+
+@media screen and (max-width: 768px) {
+    .doctorView{
+        margin-left: 0;
+    }
+}

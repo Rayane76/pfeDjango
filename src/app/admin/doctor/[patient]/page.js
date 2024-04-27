@@ -11,11 +11,11 @@ import Modify from "@/app/components/doctor/modify/Modify";
 export default function Patient() {
   return (
     <>
-      <div style={{ marginLeft: "275px" }}>
+      <div className="doctorView">
         <div id="generalInfos" className="generalInfos active">
            <GeneralInfos />
         </div>
-        <div id="modify" className="modify active">
+        <div id="modify" className="modify unActive">
            <Modify />
         </div>
         <div id="history" className="history unActive">
