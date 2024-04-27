@@ -1,9 +1,23 @@
 "use client";
-import { useState } from "react";
+
+import { useState , useNavigate } from "react";
 import Navbar from "../components/navbar/Navbar";
 import "../styles/register.css";
+import axios from "axios";
+import { useRouter } from 'next/navigation'
+import { getUser } from "../helpers/axios";
+
 
 export default function Register() {
+
+
+  const router = useRouter()
+
+  // const user = getUser
+  // if(user){
+  //   router.push('/')
+  // }
+
   const handleFirstNext = (e) => {
     e.preventDefault();
     const allSlides = document.querySelectorAll(".slide");
@@ -52,35 +66,54 @@ export default function Register() {
     allSteps[2].classList.remove("passed");
   };
 
-  const handleSubmit = (e) => {
+
+
+
+const handleSubmit = (e) => {
     e.preventDefault();
     const allSteps = document.querySelectorAll(".step");
-    setTimeout(() => {
-      alert("Thanks! \n You Are Successfully Signed Up");
-      location.reload();
-    }, 800);
+    
+    console.log("DATA;",allInfos)
+    axios
+      .post("http://127.0.0.1:8000/api/register/",allInfos)
+      .then((res)=>{
+        localStorage.setItem("auth",JSON.stringify({
+          id:res.data.id ,
+          refresh:res.data.refresh,
+          access:res.data.access,
+          role:res.data.role
+        }))
+
+        router.push('/')
+      }).catch((err)=>{
+        console.log('err',err.request.response)
+
+      })
   };
 
   const [allInfos, setAllInfos] = useState({
-    fname: "",
-    lname: "",
-    // situation: "",
-    // children: "",
+    first_name: "",
+    last_name: "",
     email: "",
-    phone: "",
-    emergency: "",
-    date: "",
-    gender: "",
-    blood: "",
+    numero_tel: "",
+    emergency_number: "",
+    birth_date: "",
+    gender: "Male",
+    blood_type: "O+",
     address: "",
-    cardId: "",
+    carte_id: "",
     password: "",
+    role:"P"
   });
 
   const handleInput = (e) => {
     setAllInfos((prev)=>({...prev,[e.target.name]:e.target.value}));
   }
 
+
+
+  
+  
   return (
     <>
       <Navbar />
@@ -127,11 +160,11 @@ export default function Register() {
               <div className="title">Basic Info :</div>
               <div className="field">
                 <div className="label">First Name</div>
-                <input type="text" name="fname" onChange={(e)=>handleInput(e)} />
+                <input type="text" name="first_name" onChange={(e)=>handleInput(e)} />
               </div>
               <div className="field">
                 <div className="label">Last Name</div>
-                <input type="text" name="lname" onChange={(e)=>handleInput(e)} />
+                <input type="text" name="last_name" onChange={(e)=>handleInput(e)} />
               </div>
               <div className="field">
                 <div className="label">Address</div>
@@ -168,11 +201,11 @@ export default function Register() {
               </div>
               <div className="field">
                 <div className="label">Phone Number</div>
-                <input type="tel" name="phone" onChange={(e)=>handleInput(e)} />
+                <input type="tel" name="numero_tel" onChange={(e)=>handleInput(e)} />
               </div>
               <div className="field">
                 <div className="label">Emergency Contact Number</div>
-                <input type="tel" name="emergency" onChange={(e)=>handleInput(e)} />
+                <input type="tel" name="emergency_number" onChange={(e)=>handleInput(e)} />
               </div>
               <div className="field btns">
                 <button className="prev" onClick={(e) => handleFirstPrev(e)}>
@@ -188,26 +221,26 @@ export default function Register() {
               <div className="title">Date of Birth :</div>
               <div className="field">
                 <div className="label">Date</div>
-                <input type="date" name="date" onChange={(e)=>handleInput(e)} />
+                <input type="date" name="birth_date" onChange={(e)=>handleInput(e)} />
               </div>
               <div className="field">
                 <div className="label">Gender</div>
                 <select name="gender" value={allInfos.gender} onChange={(e)=>handleInput(e)}>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
                 </select>
               </div>
               <div className="field">
                 <div className="label">Blood Type</div>
-                <select name="blood" value={allInfos.blood} onChange={(e)=>handleInput(e)}>
-                  <option value="oPlus">O +</option>
-                  <option value="oMinus">O -</option>
-                  <option value="aPlus">A +</option>
-                  <option value="aMinus">A -</option>
-                  <option value="bPlus">B +</option>
-                  <option value="bMinus">B -</option>
-                  <option value="abPlus">AB +</option>
-                  <option value="abMinus">AB -</option>
+                <select name="blood_type" value={allInfos.blood} onChange={(e)=>handleInput(e)}>
+                  <option value="O+">O +</option>
+                  <option value="O-">O -</option>
+                  <option value="A+">A +</option>
+                  <option value="A-">A -</option>
+                  <option value="B+">B +</option>
+                  <option value="B-">B -</option>
+                  <option value="AB+">AB +</option>
+                  <option value="AB-">AB -</option>
                 </select>
               </div>
               <div className="field btns">
@@ -224,7 +257,7 @@ export default function Register() {
               <div className="title">Login Details :</div>
               <div className="field">
                 <div className="label">ID Card number</div>
-                <input type="text" name="cardId" onChange={(e)=>handleInput(e)} />
+                <input type="text" name="carte_id" onChange={(e)=>handleInput(e)} />
               </div>
               <div className="field">
                 <div className="label">Password</div>
