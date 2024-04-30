@@ -1,23 +1,14 @@
 import DeleteIcon from '@mui/icons-material/Delete';
+import "../../../styles/doctor/patient/modify.css"
+import ModifyTitleSvg from '@/app/utils/svg/modifyTitle';
 
 export default function Modify(){
     return(
-        <div>
-            <div className="modifyAllergies">
-            <h4>Allergies :</h4>
-            <ul>
-                  <li className="allergie">Cow’s milk <DeleteIcon /></li>
-                  <li className="allergie">Eggs <DeleteIcon /></li>
-                  <li className="allergie">Tree nuts <DeleteIcon /></li>
-                  <li className="allergie">Peanuts <DeleteIcon /></li>
-             </ul>     
-            </div>
-            <div className="antFamiliaux">
-
-            </div>
-            <div className="antPersonnels">
-
-            </div>
+        <div className='modifyDiv'>
+           <div className='modifyDivTitleDiv'>
+           <ModifyTitleSvg />
+           <h1 className='modifyDivTitle'>Modifier les informations</h1>
+           </div>
         </div>
     )
 }

@@ -72,7 +72,7 @@ export default function GeneralInfos() {
                <h1 className="titleInfos">Maladies Informations</h1>
                 <div className="allergiesMaladiesDiv">
                 <div className="allergiesDiv">
-                 <h4 className="alrgTitle text-black">Allergies :</h4>
+                 <h4 className="alrgTitle">Allergies :</h4>
                  <ul>
                   <li className="allergie">Cow’s milk</li>
                   <li className="allergie">Eggs</li>
@@ -86,7 +86,7 @@ export default function GeneralInfos() {
                  
                 </div>
                 <div className="maladiesDiv">
-                <h4 className="nameInfos text-black">Maladies :</h4>
+                <h4 className="nameInfos">Maladies :</h4>
                  <ul>
                   <li className="disease">Heart disease</li>
                   <li className="disease">Arthritis</li>

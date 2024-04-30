@@ -11,9 +11,16 @@
     background-color:  #20558a;
     position: absolute;
     left: 0;
+}
+
+.sideBarTitle{
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 26px;
+    color: white;
+    border-bottom: solid 4px white;
+    height: 100px;
 }
 
 
@@ -24,10 +31,12 @@
     border-style: none none solid none;
     border-color: white;
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     color: white;
     cursor: pointer;
+    padding-left: 20px;
+    gap: 5px;
 }
 
 .selected{
