@@ -41,6 +41,20 @@ export default function History() {
     },
   ];
 
+  const familiaux = [
+    {
+    antecedent: "Cancer du colon",
+    membre: "pere",
+    categorie: "cardiaque"
+    },
+      {
+      antecedent: "diabete",
+      membre: "mere",
+      categorie: "chronique"
+      },
+
+]
+
    maladies.sort((a, b) => {
     // Convert dates to Date objects for comparison
     const dateA = new Date(a.date.split('-').reverse().join('-'));
@@ -53,6 +67,7 @@ export default function History() {
 
   const [filteredCat,setFilteredCat] = useState(undefined);
   const [filteredMed,setFilteredMed] = useState(undefined);
+  const [activeDiv,setActiveDiv] = useState("historiquePersonnel");
 
   
   const handleSwitch = (e, selected, button, otherBtn) => {
@@ -61,6 +76,14 @@ export default function History() {
     const activeOne = document.getElementsByClassName("activeOneInHistorique");
     const selectedbtn = document.getElementById(button);
     const notSelected = document.getElementById(otherBtn);
+    setActiveDiv(selected);
+    const medFilter = document.getElementsByClassName("medecinFilter");
+    if(selected === "historiqueFamilial"){
+      medFilter[0].classList.add("unActive");
+    }
+    else{
+      medFilter[0].classList.remove("unActive");
+    }
 
     if (clickedOne.classList.contains("unActive")) {
       activeOne[0].classList.add("unActive");
@@ -73,6 +96,7 @@ export default function History() {
 
       notSelected.classList.toggle("activeHistoriqueBtn");
       notSelected.classList.toggle("notActiveHistoriqueBtn");
+      setFilteredCat(undefined);
     }
   };
 
@@ -87,6 +111,7 @@ export default function History() {
 
   const uniqueCategories = [...new Set(maladies.map((maladie) => maladie.categorie))];
   const uniqueMedecins = [...new Set(maladies.map((maladie)=>maladie.medecin))];
+  const uniqueFam = [...new Set(familiaux.map((ant)=>ant.categorie))];
 
 
   return (
@@ -121,7 +146,9 @@ export default function History() {
         </button>
       </div>
       <div className="historiqueFilterDiv">
-      <Autocomplete
+      {  activeDiv === "historiquePersonnel" ? 
+
+        <Autocomplete
       disablePortal
       onChange={(e)=>handleChangeFilterCat(e)}
       id="combo-box-demo"
@@ -130,10 +157,23 @@ export default function History() {
       sx={{ width: 300 }}
       renderInput={(params) => <TextField {...params} label="Categorie" />}
     />
+         : 
+          <Autocomplete
+      disablePortal
+      onChange={(e)=>handleChangeFilterCat(e)}
+      id="combo-box-demo"
+      options={uniqueFam}
+      autoHighlight
+      sx={{ width: 300 }}
+      renderInput={(params) => <TextField {...params} label="Categorie" />}
+    />
+        
+      }
       <Autocomplete
       disablePortal
       onChange={(e)=>handleChangeFilterMed(e)}
-      id="combo-box-demo"
+      className="medecinFilter"
+      id="combo-box-demo1"
       options={uniqueMedecins}
       autoHighlight
       sx={{ width: 300 }}
@@ -211,11 +251,18 @@ export default function History() {
           <label className="tableTitleLabelF">Catégorie</label>
         </div>
         <div className="tableRowsFamilial">
-          <div className="tableRow">
-            <label className="labelRowFamilial2">Cancer du côlon</label>
-            <label className="labelRowFamilial1">Pere</label>
-            <label className="labelRowFamilial">Cardiaque</label>
+          {familiaux.map((ant)=>{
+            if(ant.categorie === filteredCat || filteredCat === undefined){
+            return(
+              <div className="tableRow">
+            <label className="labelRowFamilial2">{ant.antecedent}</label>
+            <label className="labelRowFamilial1">{ant.membre}</label>
+            <label className="labelRowFamilial">{ant.categorie}</label>
           </div>
+            )
+            }
+          })}
+      
         </div>
       </div>
     </div>
