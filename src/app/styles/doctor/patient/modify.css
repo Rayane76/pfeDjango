@@ -14,6 +14,7 @@
 .modifyDivTitleDiv{
     display: flex;
     align-items: center;
+    justify-content: space-between;
     margin-top: 50px;
     margin-left: 50px;
 }
@@ -160,4 +161,45 @@
 
 .unActive{
   display: none;
+}
+
+
+
+
+
+
+
+
+
+
+.cssbuttons-io-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .2em;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 16px;
+  padding: .5em 1.5em;
+  color: white;
+  background: linear-gradient(0deg, rgb(46, 114, 166), rgb(54, 110, 158));
+  border: none;
+  outline: none;
+  border-bottom: 3px solid rgb(53, 101, 159);
+  box-shadow: 0 .5em .5em -.4em rgb(0, 0, 0, .5);
+  letter-spacing: 0.08em;
+  border-radius: 20em;
+  cursor: pointer;
+  transition: .5s;
+  margin-right: 40px;
+}
+
+.cssbuttons-io-button:hover {
+  filter: brightness(1.2);
+  color: rgb(0, 0, 0, .5);
+}
+
+.cssbuttons-io-button:active {
+  transition: 0s;
+  transform: rotate(-10deg);
 }
