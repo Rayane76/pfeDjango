@@ -33,33 +33,41 @@ export default function GeneralInfos() {
           <div className="card">
             <div className="card__face card__face--front">
               <div className="frontCard">
-              <h1 className="titleInfos">General Informations</h1>
+              <h1 className="titleInfos">Informations Générales</h1>
                 <div className="nameInfosDiv">
                   <h4 className="nameInfos">
                     <span className="fw-bold me-2">
-                      Full Name : 
+                      Nom Complet: 
                     </span>
                      Rayane Hiouani <br></br>
                     <span className="fw-bold me-2">
-                      Birth:
+                      Naissance:
                     </span>
                     14/08/2003 <br></br>
                     <span className="fw-bold me-2">
-                      Gender:
+                      Sexe:
                     </span>
                     Male <br></br>
                     <span className="fw-bold me-2">
-                      Address:
+                      Adresse:
                     </span>
                     Aadl Belle Vue Ain Benian Algiers <br></br>
                     <span className="fw-bold me-2">
-                      Blood Type:
+                      Groupe sanguin:
                     </span>
                      O+ <br></br>
                      <span className="fw-bold me-2">
-                      Emergency number :
+                      Contact d'urgence :
                     </span>
                      0793637763 <br></br>
+                     <span className="fw-bold me-2">
+                     Situation: 
+                     </span>
+                     Marrié <br></br>
+                     <span className="fw-bold me-2">
+                      Nombre d'enfants:
+                     </span>
+                      2 <br></br>
                   </h4>
                 </div>
                 <div className="more" onClick={(e) => handleFlip(e)}>
