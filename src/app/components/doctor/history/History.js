@@ -11,7 +11,7 @@ export default function History() {
   const maladies = [
     {
       nom: "maladie1",
-      date: "14-02-2012",
+      date: "14-02-2009",
       medecin: "Dr. Bendriss Asma",
       categorie: "cardiaque",
     },
@@ -21,7 +21,35 @@ export default function History() {
       medecin: "Dr. Omar Fouad",
       categorie: "renal",
     },
+    {
+      nom: "maladie3",
+      date: "30-12-2019",
+      medecin: "Dr. Bougara Ali",
+      categorie: "osseuse",
+    },
+    {
+      nom: "maladie4",
+      date: "05-01-2023",
+      medecin: "Dr. Djeha Hakim",
+      categorie: "abcd",
+    },
+    {
+      nom: "maladie5",
+      date: "12-11-2020",
+      medecin: "Dr. Assim Ahmed",
+      categorie: "osseuse",
+    },
   ];
+
+   maladies.sort((a, b) => {
+    // Convert dates to Date objects for comparison
+    const dateA = new Date(a.date.split('-').reverse().join('-'));
+    const dateB = new Date(b.date.split('-').reverse().join('-'));
+    // Sort in descending order (most recent first)
+    return dateB - dateA;
+  });
+
+  // console.log(sortedMaladies);
 
   const [filteredCat,setFilteredCat] = useState(undefined);
   const [filteredMed,setFilteredMed] = useState(undefined);
@@ -57,6 +85,10 @@ export default function History() {
      setFilteredMed(e.target.innerText);
   }
 
+  const uniqueCategories = [...new Set(maladies.map((maladie) => maladie.categorie))];
+  const uniqueMedecins = [...new Set(maladies.map((maladie)=>maladie.medecin))];
+
+
   return (
     <div className="historiqueDiv">
       <div className="historiqueDivTitleDiv">
@@ -89,62 +121,24 @@ export default function History() {
         </button>
       </div>
       <div className="historiqueFilterDiv">
-        <Autocomplete
-        //   value={filteredCat}
-          onChange={(e)=>handleChangeFilterCat(e)}
-          disablePortal
-          id="combo-box-demo"
-          sx={{ width: 300 }}
-          options={maladies}
-          autoHighlight
-          getOptionLabel={(option) => option.categorie}
-          renderOption={(props, option) => (
-            <Box
-              component="li"
-              sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-              {...props}
-            >
-              {option.categorie}
-            </Box>
-          )}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Categorie"
-              inputProps={{
-                ...params.inputProps,
-                autoComplete: "new-password", // disable autocomplete and autofill
-              }}
-            />
-          )}
-        />
-        <Autocomplete
-          id="country-select-demo"
-          onChange={(e)=>handleChangeFilterMed(e)}
-          sx={{ width: 300 }}
-          options={maladies}
-          autoHighlight
-          getOptionLabel={(option) => option.medecin}
-          renderOption={(props, option) => (
-            <Box
-              component="li"
-              sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-              {...props}
-            >
-              {option.medecin}
-            </Box>
-          )}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Medecin"
-              inputProps={{
-                ...params.inputProps,
-                autoComplete: "new-password", // disable autocomplete and autofill
-              }}
-            />
-          )}
-        />
+      <Autocomplete
+      disablePortal
+      onChange={(e)=>handleChangeFilterCat(e)}
+      id="combo-box-demo"
+      options={uniqueCategories}
+      autoHighlight
+      sx={{ width: 300 }}
+      renderInput={(params) => <TextField {...params} label="Categorie" />}
+    />
+      <Autocomplete
+      disablePortal
+      onChange={(e)=>handleChangeFilterMed(e)}
+      id="combo-box-demo"
+      options={uniqueMedecins}
+      autoHighlight
+      sx={{ width: 300 }}
+      renderInput={(params) => <TextField {...params} label="Medecin" />}
+    />
       </div>
       <div
         id="historiquePersonnel"
@@ -158,9 +152,9 @@ export default function History() {
         </div>
         <div className="tableRowsPersonnel">
           { filteredCat === undefined && filteredMed === undefined ?
-            maladies.map((maladie)=>{
+            maladies.map((maladie,index)=>{
             return(
-                <div className="tableRowPers">
+                <div key={index} className="tableRowPers">
             <label className="labelRowPers2">{maladie.nom}</label>
             <label className="labelRowPers1">{maladie.date}</label>
             <label className="labelRowPers">{maladie.medecin}</label>
@@ -170,10 +164,10 @@ export default function History() {
             
           }) : 
            filteredCat != undefined && filteredMed === undefined ?
-           maladies.map((maladie)=>{
+           maladies.map((maladie,index)=>{
             if(maladie.categorie === filteredCat){
             return(
-                <div className="tableRowPers">
+                <div key={index} className="tableRowPers">
             <label className="labelRowPers2">{maladie.nom}</label>
             <label className="labelRowPers1">{maladie.date}</label>
             <label className="labelRowPers">{maladie.medecin}</label>
@@ -183,10 +177,10 @@ export default function History() {
             }
         }) : 
             filteredCat === undefined && filteredMed != undefined ?
-            maladies.map((maladie)=>{
+            maladies.map((maladie,index)=>{
             if(maladie.medecin === filteredMed){    
             return(
-                <div className="tableRowPers">
+                <div key={index} className="tableRowPers">
             <label className="labelRowPers2">{maladie.nom}</label>
             <label className="labelRowPers1">{maladie.date}</label>
             <label className="labelRowPers">{maladie.medecin}</label>
@@ -195,10 +189,10 @@ export default function History() {
             )
             }
         }) : 
-            maladies.map((maladie)=>{
+            maladies.map((maladie,index)=>{
             if(maladie.categorie === filteredCat && maladie.medecin === filteredMed){    
             return(
-                <div className="tableRowPers">
+                <div key={index} className="tableRowPers">
             <label className="labelRowPers2">{maladie.nom}</label>
             <label className="labelRowPers1">{maladie.date}</label>
             <label className="labelRowPers">{maladie.medecin}</label>
