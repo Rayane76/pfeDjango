@@ -1,43 +1,97 @@
 "use client";
 import "../../../styles/doctor/patient/historique.css";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import HistoriqueSvg from "@/app/utils/svg/historique";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import Box from "@mui/material/Box";
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import { useState } from "react";
 
 export default function History() {
   const maladies = [
     {
+      id: "1",
       nom: "maladie1",
       date: "14-02-2009",
       medecin: "Dr. Bendriss Asma",
       categorie: "cardiaque",
+      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+      ordonnance: [
+        {
+          medicament: "Medicament 1",
+          ratio: "2/jr",
+          duree: "7 jours",
+        },
+        {
+          medicament: "Medicament 2",
+          ratio: "2/jr",
+          duree: "10 jours",
+        },
+        {
+          medicament: "Medicament 3",
+          ratio: "1/jr",
+          duree: "3 jours",
+        }
+
+      ]
     },
     {
+      id: "2",
       nom: "maladie2",
       date: "11-06-2012",
       medecin: "Dr. Omar Fouad",
       categorie: "renal",
+      note: "Note maladie 2",
+      ordonnance: [
+        {
+          medicament: "Medicament 1",
+          ratio: "2/jr",
+          duree: "7 jours",
+        },
+        {
+          medicament: "Medicament 2",
+          ratio: "2/jr",
+          duree: "10 jours",
+        },
+      ]
     },
     {
+      id: "3",
       nom: "maladie3",
       date: "30-12-2019",
       medecin: "Dr. Bougara Ali",
       categorie: "osseuse",
+      note: "",
+      ordonnance: [],
     },
     {
+      id: "4",
       nom: "maladie4",
       date: "05-01-2023",
       medecin: "Dr. Djeha Hakim",
       categorie: "abcd",
+      note: "Note maladie 4",
+      ordonnance: [],
     },
     {
+      id: "5",
       nom: "maladie5",
       date: "12-11-2020",
       medecin: "Dr. Assim Ahmed",
       categorie: "osseuse",
+      note: "",
+      ordonnance: [
+        {
+          medicament: "Medicament 1",
+          ratio: "2/jr",
+          duree: "5 jours",
+        },
+        {
+          medicament: "Medicament 2",
+          ratio: "2/jr",
+          duree: "10 jours",
+        },
+      ],
     },
   ];
 
@@ -112,6 +166,55 @@ export default function History() {
   const uniqueCategories = [...new Set(maladies.map((maladie) => maladie.categorie))];
   const uniqueMedecins = [...new Set(maladies.map((maladie)=>maladie.medecin))];
   const uniqueFam = [...new Set(familiaux.map((ant)=>ant.categorie))];
+
+
+  const [modalShow, setModalShow] = useState(false);
+  const [selectedMaladie,setSelectedMaladie] = useState(null);
+
+  function MyVerticallyCenteredModal(props) {
+    return (
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            {selectedMaladie != null && selectedMaladie.nom}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h4>{selectedMaladie != null && "Ajoute par : " + selectedMaladie.medecin}</h4>
+          <h4>{selectedMaladie != null && "Date : " + selectedMaladie.date}</h4>
+          {selectedMaladie != null && selectedMaladie.note != "" && 
+          <>
+          <h4>Note : </h4>
+          <p>{selectedMaladie.note}</p>
+          </>
+          }
+          {selectedMaladie != null && selectedMaladie.ordonnance.length > 0 && <>
+            <h4>Ordonnance : </h4>
+          <ul>
+             {selectedMaladie.ordonnance.map((med)=>{
+              return(
+                <li>{med.medicament} : {med.ratio} pendant {med.duree} </li>
+              )
+             })}
+          </ul>
+          </>}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={props.onHide}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+
+  const handleClickedMaladie = (e,maladie) =>{
+    setModalShow(true);
+    setSelectedMaladie(maladie);
+  }
 
 
   return (
@@ -194,7 +297,7 @@ export default function History() {
           { filteredCat === undefined && filteredMed === undefined ?
             maladies.map((maladie,index)=>{
             return(
-                <div key={index} className="tableRowPers">
+                <div onClick={(e)=>handleClickedMaladie(e,maladie)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{maladie.nom}</label>
             <label className="labelRowPers1">{maladie.date}</label>
             <label className="labelRowPers">{maladie.medecin}</label>
@@ -265,6 +368,10 @@ export default function History() {
       
         </div>
       </div>
+      <MyVerticallyCenteredModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+      />
     </div>
   );
 }
