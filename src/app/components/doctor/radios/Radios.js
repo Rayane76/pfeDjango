@@ -29,6 +29,15 @@ export default function Radios() {
       document: "test.pdf",
       rapport: "The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like). It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like",
       centre: "MASSINISSA"
+    },
+    {
+      nom: "Radio3",
+      date: "12-01-2023",
+      type: "radiologie",
+      categorie: "Thorax-Abdomen-Pelvis",
+      document: "test.pdf",
+      rapport: "",
+      centre: "MASSINISSA"
     }
   
   
@@ -73,6 +82,7 @@ function MyVerticallyCenteredModal(props) {
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
+      className="modalOfHistorique"
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
@@ -86,8 +96,12 @@ function MyVerticallyCenteredModal(props) {
             <h5>{selectedRadio != null && "le : " + selectedRadio.date}</h5>
             <h5>{selectedRadio != null && "Type : " + selectedRadio.type}</h5>
             <h5>{selectedRadio != null && "Categorie : " + selectedRadio.categorie}</h5>
+            {selectedRadio != null && selectedRadio.rapport!="" && 
+            <>
             <h5>Rapport : </h5>
-            <p>{selectedRadio != null && selectedRadio.rapport}</p>
+            <p>{selectedRadio.rapport}</p>
+            </>
+            }
           </div>
           <div className="modalBodyDiv2">
           {selectedRadio != null && 
@@ -102,7 +116,7 @@ function MyVerticallyCenteredModal(props) {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={props.onHide}>Close</Button>
+        <Button variant="secondary" onClick={props.onHide}>Close</Button>
       </Modal.Footer>
     </Modal>
   );
@@ -161,7 +175,7 @@ function MyVerticallyCenteredModal(props) {
           radios.map((radio,index)=>{
             if(radio.categorie === filteredCat){
             return(
-              <div key={index} className="tableRowPers">
+              <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
             <label className="labelRowPers1">{radio.date}</label>
             <label className="labelRowPers">{radio.type}</label>
@@ -174,7 +188,7 @@ function MyVerticallyCenteredModal(props) {
           radios.map((radio,index)=>{
             if(radio.type === filteredType){
             return(
-              <div key={index} className="tableRowPers">
+              <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
             <label className="labelRowPers1">{radio.date}</label>
             <label className="labelRowPers">{radio.type}</label>
@@ -186,7 +200,7 @@ function MyVerticallyCenteredModal(props) {
           radios.map((radio,index)=>{
             if(radio.type === filteredType && radio.categorie === filteredCat){
             return(
-              <div key={index} className="tableRowPers">
+              <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
             <label className="labelRowPers1">{radio.date}</label>
             <label className="labelRowPers">{radio.type}</label>
