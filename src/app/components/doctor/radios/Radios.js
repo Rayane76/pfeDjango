@@ -5,6 +5,10 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import { useState } from "react";
 export default function Radios() {
 
@@ -54,7 +58,8 @@ export default function Radios() {
 
   const uniqueCategories = [...new Set(radios.map((radio) => radio.categorie))];
   const uniqueTypes = [...new Set(radios.map((radio)=>radio.type))];
-  const [modalShow, setModalShow] = useState(false);
+  const [modalShowRadio, setModalShowRadio] = useState(false);
+  const [modalShowAdd, setModalShowAdd] = useState(false);
 
 
   const[filteredCat,setFilteredCat] = useState(undefined);
@@ -70,7 +75,7 @@ const handleChangeFilterType = (e)=>{
 }
 
 const handleClickRadio = (e,radio) =>{
-   setModalShow(true);
+   setModalShowRadio(true);
    setSelectedRadio(radio);
 }
 
@@ -122,13 +127,121 @@ function MyVerticallyCenteredModal(props) {
   );
 }
 
+let today = new Date();
+
+let day = today.getDate();
+let month = today.getMonth() + 1; // Month is zero-based, so we add 1
+let year = today.getFullYear();
+
+// Pad day and month with leading zeros if needed
+day = day < 10 ? '0' + day : day;
+month = month < 10 ? '0' + month : month;
+
+let formattedDate = `${day}-${month}-${year}`;
+
+const handleAdd = (e)=>{
+   setModalShowAdd(true);
+}
+
+let radioData = {
+  nom: "",
+  date: formattedDate,
+  type:"",
+  categorie:"",
+  document:"",
+  rapport:"",
+  centre:""
+}
+
+const handleChange = (e) => {
+    const {name, value} = e.target;
+    radioData[name] = value;
+    console.log(radioData);
+};
+
+function MyVerticallyCenteredModalAdd(props) {
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Ajouter Radio
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className="d-flex justify-content-start align-items-center gap-4">
+        <h4>Nom Radio : </h4>
+        <input onChange={(e)=>handleChange(e)} placeholder="Nom Radio ... " required name="nom"></input>
+        </div>
+        <div className="d-flex justify-content-start align-items-center gap-4">
+        <h4>Type Radio : </h4>
+        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+      <InputLabel id="demo-select-small-label">Type</InputLabel>
+      <Select
+        labelId="demo-select-small-label"
+        id="demo-select-small"
+        // value={age}
+        label="Type"
+        onChange={(e)=>handleChange(e)}
+        name="type"
+        required
+      >
+        <MenuItem value="irm">IRM</MenuItem>
+        <MenuItem value="scanner">Scanner</MenuItem>
+        <MenuItem value="radiologie">Radiologie Numerique</MenuItem>
+        <MenuItem value="echographie">Echographie</MenuItem>
+        <MenuItem value="imagerieFemme">Imagerie de la femme</MenuItem>
+        <MenuItem value="panoramique">Panoramique dentaire</MenuItem>
+        <MenuItem value="medecineNucleaire">Medecine Nucleaire</MenuItem>
+        <MenuItem value="densitometrie">Densitometrie Osseuse</MenuItem>
+      </Select>
+    </FormControl>
+        </div>
+        
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide}>Close</Button>
+      </Modal.Footer>
+    </Modal>
+  );
+}
+
   
   return (
     <>
       <div className="radiosDiv">
       <div className="radiosDivTitleDiv">
+        <div className="d-flex justify-content-center align-items-center">
         <DocumentSvg />
         <h1 className="radiosDivTitle">Radios</h1>
+        </div>
+        <button
+          onClick={(e) => handleAdd(e)}
+          title="Add"
+          className="cssbuttons-io-button"
+        >
+          <svg
+            height="25"
+            width="25"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M0 0h24v24H0z" fill="none"></path>
+            <path
+              d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"
+              fill="currentColor"
+            ></path>
+          </svg>
+          <span>Nouveau</span>
+        </button>
+        <MyVerticallyCenteredModalAdd
+        show={modalShowAdd}
+        onHide={() => setModalShowAdd(false)}
+      />
       </div>
       <div className="radiosFilterDiv">
       <Autocomplete
@@ -213,8 +326,8 @@ function MyVerticallyCenteredModal(props) {
         </div>
       </div>
       <MyVerticallyCenteredModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
+        show={modalShowRadio}
+        onHide={() => setModalShowRadio(false)}
       />
       </div>
     </>

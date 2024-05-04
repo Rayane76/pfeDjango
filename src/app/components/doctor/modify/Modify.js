@@ -41,6 +41,16 @@ export default function Modify() {
     }
   };
 
+  let data = '';
+
+  const handleChange = (e) => {
+    data = e.target.value;
+  }
+
+  const handleAjouter = (e)=>{
+    console.log(data);
+  }
+
   function MyVerticallyCenteredModalAllergie(props) {
     return (
       <Modal
@@ -55,6 +65,7 @@ export default function Modify() {
         <Modal.Body>
           <h4>Ajouter nouvelle allergie :</h4>
           <input
+            onChange={(e)=>handleChange(e)}
             className="me-4"
             name="allergie"
             type="text"
@@ -65,7 +76,7 @@ export default function Modify() {
           <label>Afficher sur la carte ?</label>
         </Modal.Body>
         <Modal.Footer>
-          <Button>Ajouter</Button>
+          <Button onClick={(e)=>handleAjouter(e)}>Ajouter</Button>
           <Button variant="secondary" onClick={props.onHide}>
             Annuler
           </Button>
