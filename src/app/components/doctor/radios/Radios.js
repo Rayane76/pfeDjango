@@ -9,7 +9,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 export default function Radios() {
 
   //  types disponibles : irm , radiologie , scanner , echographie
@@ -45,6 +45,41 @@ export default function Radios() {
     }
   
   
+  ];
+
+  const typeEtCategories = [
+    {
+      nomType: "IRM",
+      categories: ["Neuro","ORL","Abdomino-pelvien","Cœur","Urinaire","Génital masculin et féminin","Ostéo Articulaire","Vasculaire","Sein"]
+    },
+    {
+      nomType: "Scanner",
+      categories: ["Neuro-Imagerie","ORL","Thorax-Abdomen-Pelvis","Uro-imagerie","Ostéo-articulaire","Vasculaire","Cœur"]
+    },
+    {
+      nomType: "Radiologie Numerique",
+      categories: ["Radiologie osseuse et articulaire","Radiologie pulmonaire","Radiographie de l’abdomen sans préparation","Neuro radiologique, Rachis"]
+    },
+    {
+      nomType: "Echographie",
+      categories: ["Viscéral","Musculo-tendineux","Vasculaires : echo-doppler","Thyroïde"]
+    },
+    {
+      nomType: "Imagerie de la femme",
+      categories: ["Mammographie","Echographie mammaire","IRM Mammaire","Hystérosalpingographie","Echographie Pelvienne","Echographie endo-vaginale","IRM Pelvienne","Ostéodensitométrie-DMO","Cytoponction mammaire","Mise en place de clip mammaire","Microbiopsie mammaire"]
+    },
+    {
+      nomType: "Panoramique dentaire",
+      categories: ["Panoramique Dentaire","Scanner Dentaire","Radiographie des Sinus","CONE BEAM"]
+    },
+    {
+      nomType: "Médecine nucléaire",
+      categories: ["Myocarde","Osseuse","Thyroïde","DMSA","DTPA","MAG 3","MIBG","Balayage à l’iode 131","Parathyroïde","Poumon","Abdomen","Transit du LCR"]
+    },
+    {
+      nomType: "Densitométrie osseuse",
+      categories: ["Densitométrie osseuse"]
+    }
   ]
 
 
@@ -143,7 +178,11 @@ const handleAdd = (e)=>{
    setModalShowAdd(true);
 }
 
-let radioData = {
+const [cats,setCats] = useState([]);
+let array = [];
+
+
+const [radioData,setRadioData] = useState({
   nom: "",
   date: formattedDate,
   type:"",
@@ -151,63 +190,22 @@ let radioData = {
   document:"",
   rapport:"",
   centre:""
-}
+})
 
-const handleChange = (e) => {
-    const {name, value} = e.target;
-    radioData[name] = value;
-    console.log(radioData);
-};
-
-function MyVerticallyCenteredModalAdd(props) {
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Ajouter Radio
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <div className="d-flex justify-content-start align-items-center gap-4">
-        <h4>Nom Radio : </h4>
-        <input onChange={(e)=>handleChange(e)} placeholder="Nom Radio ... " required name="nom"></input>
-        </div>
-        <div className="d-flex justify-content-start align-items-center gap-4">
-        <h4>Type Radio : </h4>
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-      <InputLabel id="demo-select-small-label">Type</InputLabel>
-      <Select
-        labelId="demo-select-small-label"
-        id="demo-select-small"
-        // value={age}
-        label="Type"
-        onChange={(e)=>handleChange(e)}
-        name="type"
-        required
-      >
-        <MenuItem value="irm">IRM</MenuItem>
-        <MenuItem value="scanner">Scanner</MenuItem>
-        <MenuItem value="radiologie">Radiologie Numerique</MenuItem>
-        <MenuItem value="echographie">Echographie</MenuItem>
-        <MenuItem value="imagerieFemme">Imagerie de la femme</MenuItem>
-        <MenuItem value="panoramique">Panoramique dentaire</MenuItem>
-        <MenuItem value="medecineNucleaire">Medecine Nucleaire</MenuItem>
-        <MenuItem value="densitometrie">Densitometrie Osseuse</MenuItem>
-      </Select>
-    </FormControl>
-        </div>
-        
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={props.onHide}>Close</Button>
-      </Modal.Footer>
-    </Modal>
-  );
+const handleChangeAddRadio = (e)=>{
+  setRadioData((prev)=>({...prev,[e.target.name]:e.target.value}));
+  if(e.target.name === "type"){
+     array = [];
+     for (let index = 0; index < typeEtCategories.length; index++) {
+      if(typeEtCategories[index].nomType === e.target.value){
+        typeEtCategories[index].categories.map((categ)=>{
+          array.push(categ);
+        })
+      }
+      
+     }
+     setCats(array);
+  }
 }
 
   
@@ -238,10 +236,76 @@ function MyVerticallyCenteredModalAdd(props) {
           </svg>
           <span>Nouveau</span>
         </button>
-        <MyVerticallyCenteredModalAdd
-        show={modalShowAdd}
+          <Modal
+     show={modalShowAdd}
         onHide={() => setModalShowAdd(false)}
-      />
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Ajouter Radio
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className="d-flex justify-content-start align-items-center gap-4">
+        <h4>Nom Radio : </h4>
+        <input onChange={(e)=>handleChangeAddRadio(e)} placeholder="Nom Radio ... " required name="nom"></input>
+        </div>
+        <div className="d-flex justify-content-start align-items-center gap-4">
+        <h4>Type : </h4>
+        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+      <InputLabel id="demo-select-small-label">Type</InputLabel>
+      <Select
+        labelId="demo-select-small-label"
+        id="demo-select-small"
+        value={radioData.type}
+        label="Type"
+        onChange={(e)=>handleChangeAddRadio(e)}
+        name="type"
+        required
+      >
+        {typeEtCategories.map((type,index)=>{
+          return(
+            <MenuItem key={index} value={type.nomType}>{type.nomType}</MenuItem>
+          )
+        })}
+      </Select>
+    </FormControl>
+        </div>
+
+        <div className="d-flex justify-content-start align-items-center gap-4">
+          <h4>Categorie : </h4>
+          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+      <InputLabel id="demo-select-small-label">Categorie</InputLabel>
+      <Select
+        labelId="demo-select-small-label"
+        id="demo-select-small"
+        value={radioData.categorie}
+        label="Categorie"
+        onChange={(e)=>handleChangeAddRadio(e)}
+        name="categorie"
+        required
+      >
+      {cats.length > 0 && 
+       cats.map((categorie,index)=>{
+        return(
+            <MenuItem key={index} value={categorie}>{categorie}</MenuItem>
+          )
+       })
+      }
+      
+      </Select>
+    </FormControl>
+        </div>
+        
+        
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={()=>setModalShowAdd(false)}>Close</Button>
+      </Modal.Footer>
+    </Modal>
       </div>
       <div className="radiosFilterDiv">
       <Autocomplete

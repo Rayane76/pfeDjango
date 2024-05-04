@@ -41,48 +41,14 @@ export default function Modify() {
     }
   };
 
-  let data = '';
+  const [data,setData] = useState({nom:"",affiche:false})
 
   const handleChange = (e) => {
-    data = e.target.value;
+    setData((prev)=>({...prev,[e.target.name]:e.target.value}));
   }
 
   const handleAjouter = (e)=>{
     console.log(data);
-  }
-
-  function MyVerticallyCenteredModalAllergie(props) {
-    return (
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">Allergie</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <h4>Ajouter nouvelle allergie :</h4>
-          <input
-            onChange={(e)=>handleChange(e)}
-            className="me-4"
-            name="allergie"
-            type="text"
-            required
-            placeholder="allergie ..."
-          ></input>
-          <input className="me-2" type="checkbox"></input>
-          <label>Afficher sur la carte ?</label>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={(e)=>handleAjouter(e)}>Ajouter</Button>
-          <Button variant="secondary" onClick={props.onHide}>
-            Annuler
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    );
   }
 
   function MyVerticallyCenteredModalAnt(props) {
@@ -166,10 +132,36 @@ export default function Modify() {
           </svg>
           <span>Nouveau</span>
         </button>
-        <MyVerticallyCenteredModalAllergie
-          show={modalShowAllergie}
-          onHide={() => setModalShowAllergie(false)}
-        />
+        <Modal
+        show={modalShowAllergie}
+        onHide={() => setModalShowAllergie(false)}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">Allergie</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h4>Ajouter nouvelle allergie :</h4>
+          <input
+            onChange={(e)=>handleChange(e)}
+            className="me-4"
+            name="allergie"
+            type="text"
+            required
+            placeholder="allergie ..."
+          ></input>
+          <input className="me-2" type="checkbox"></input>
+          <label>Afficher sur la carte ?</label>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={(e)=>handleAjouter(e)}>Ajouter</Button>
+          <Button variant="secondary" onClick={()=>setModalShowAllergie(false)}>
+            Annuler
+          </Button>
+        </Modal.Footer>
+      </Modal>
         <MyVerticallyCenteredModalAnt
           show={modalShowAnt}
           onHide={() => setModalShowAnt(false)}
