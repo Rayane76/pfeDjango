@@ -83,7 +83,7 @@ export default function Analyses() {
   return (
     <>
       <div className="radiosDiv">
-        <div className="radiosDivTitleDiv">
+        <div className="analysesDivTitleDiv">
           <DocumentSvg />
           <h1 className="radiosDivTitle">Analyses</h1>
         </div>
