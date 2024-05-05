@@ -6,6 +6,7 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import ModalAddAnalyse from "./ModalAddAnalyse";
 
 export default function Analyses() {
   const analyses = [
@@ -79,14 +80,38 @@ export default function Analyses() {
     );
   }
 
+  const [showModalAdd,setShowModalAdd] = useState(false);
+
 
   return (
     <>
       <div className="radiosDiv">
-        <div className="analysesDivTitleDiv">
+        <div className="radiosDivTitleDiv">
+          <div className="d-flex justify-content-center align-items-center">
           <DocumentSvg />
           <h1 className="radiosDivTitle">Analyses</h1>
+          </div>
+          <button
+           onClick={() => setShowModalAdd(true)}
+          title="Add"
+          className="cssbuttons-io-button"
+        >
+          <svg
+            height="25"
+            width="25"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M0 0h24v24H0z" fill="none"></path>
+            <path
+              d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"
+              fill="currentColor"
+            ></path>
+          </svg>
+          <span>Nouveau</span>
+        </button>
         </div>
+        <ModalAddAnalyse showModalAdd={showModalAdd} setShowModalAdd={setShowModalAdd} />
         <div className="analysesFilterDiv">
           <Autocomplete
             disablePortal
