@@ -9,6 +9,7 @@ export default function Consultation(){
         <ConsultationTitleSvg />
         <h1 className='consultationDivTitle'>Consultation</h1>
         </div>
+        
      </div>
     )
 }

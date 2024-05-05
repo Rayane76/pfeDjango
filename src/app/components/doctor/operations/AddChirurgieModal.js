@@ -37,7 +37,7 @@ export default function AddChirurgieModal({modalShowAdd, setModalShowAdd}){
     return(
         <Modal
         show={modalShowAdd}
-           onHide={() => setShowModalAdd(false)}
+           onHide={() => setModalShowAdd(false)}
          size="lg"
          aria-labelledby="contained-modal-title-vcenter"
          centered

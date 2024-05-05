@@ -155,7 +155,6 @@ export default function History() {
   };
 
   const handleChangeFilterCat = (e)=>{
-      console.log(e.target.innerText);
       setFilteredCat(e.target.innerText);
   }
 
