@@ -11,6 +11,7 @@ export default function History() {
   const maladies = [
     {
       id: "1",
+      affiche: false,
       nom: "maladie1",
       date: "14-02-2009",
       medecin: "Dr. Bendriss Asma",
@@ -38,6 +39,7 @@ export default function History() {
     {
       id: "2",
       nom: "maladie2",
+      affiche: true,
       date: "11-06-2012",
       medecin: "Dr. Omar Fouad",
       categorie: "renal",
@@ -58,6 +60,7 @@ export default function History() {
     {
       id: "3",
       nom: "maladie3",
+      affiche: false,
       date: "30-12-2019",
       medecin: "Dr. Bougara Ali",
       categorie: "osseuse",
@@ -67,6 +70,7 @@ export default function History() {
     {
       id: "4",
       nom: "maladie4",
+      affiche: true,
       date: "05-01-2023",
       medecin: "Dr. Djeha Hakim",
       categorie: "abcd",
@@ -75,6 +79,7 @@ export default function History() {
     },
     {
       id: "5",
+      affiche: false,
       nom: "maladie5",
       date: "12-11-2020",
       medecin: "Dr. Assim Ahmed",
@@ -297,8 +302,9 @@ export default function History() {
         <div className="tableRowsPersonnel">
           { filteredCat === undefined && filteredMed === undefined ?
             maladies.map((maladie,index)=>{
+              
             return(
-                <div onClick={(e)=>handleClickedMaladie(e,maladie)} key={index} className="tableRowPers">
+                <div onClick={(e)=>handleClickedMaladie(e,maladie)} key={index} className={"tableRowPersH " + (maladie.affiche === true ? "importantRow" : "normalMaladie")}>
             <label className="labelRowPers2">{maladie.nom}</label>
             <label className="labelRowPers1">{maladie.date}</label>
             <label className="labelRowPers">{maladie.medecin}</label>
@@ -311,7 +317,7 @@ export default function History() {
            maladies.map((maladie,index)=>{
             if(maladie.categorie === filteredCat){
             return(
-                <div onClick={(e)=>handleClickedMaladie(e,maladie)} key={index} className="tableRowPers">
+                <div onClick={(e)=>handleClickedMaladie(e,maladie)} key={index} className={"tableRowPersH " + (maladie.affiche === true ? "importantRow" : "normalMaladie")}>
             <label className="labelRowPers2">{maladie.nom}</label>
             <label className="labelRowPers1">{maladie.date}</label>
             <label className="labelRowPers">{maladie.medecin}</label>
@@ -324,7 +330,7 @@ export default function History() {
             maladies.map((maladie,index)=>{
             if(maladie.medecin === filteredMed){    
             return(
-                <div onClick={(e)=>handleClickedMaladie(e,maladie)} key={index} className="tableRowPers">
+                <div onClick={(e)=>handleClickedMaladie(e,maladie)} key={index} className={"tableRowPersH " + (maladie.affiche === true ? "importantRow" : "normalMaladie")}>
             <label className="labelRowPers2">{maladie.nom}</label>
             <label className="labelRowPers1">{maladie.date}</label>
             <label className="labelRowPers">{maladie.medecin}</label>
@@ -336,7 +342,7 @@ export default function History() {
             maladies.map((maladie,index)=>{
             if(maladie.categorie === filteredCat && maladie.medecin === filteredMed){    
             return(
-                <div onClick={(e)=>handleClickedMaladie(e,maladie)} key={index} className="tableRowPers">
+                <div onClick={(e)=>handleClickedMaladie(e,maladie)} key={index} className={"tableRowPersH " + (maladie.affiche === true ? "importantRow" : "normalMaladie")}>
             <label className="labelRowPers2">{maladie.nom}</label>
             <label className="labelRowPers1">{maladie.date}</label>
             <label className="labelRowPers">{maladie.medecin}</label>

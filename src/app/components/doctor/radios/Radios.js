@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useState } from "react";
 import AddModal from "./AddModal";
+import AddDemandeeModal from "./AddDemandeeModal";
 
 
 
@@ -17,6 +18,7 @@ export default function Radios() {
     {
       nom: "Radio1",
       date: "14-12-2018",
+      demande: false,
       type: "irm",
       categorie: "Vasculaire",
       document: "test.pdf",
@@ -26,6 +28,7 @@ export default function Radios() {
     {
       nom: "Radio2",
       date: "05-11-2020",
+      demande: false,
       type: "scanner",
       categorie: "Thorax-Abdomen-Pelvis",
       document: "test.pdf",
@@ -35,11 +38,22 @@ export default function Radios() {
     {
       nom: "Radio3",
       date: "12-01-2023",
+      demande: false,
       type: "radiologie",
       categorie: "Thorax-Abdomen-Pelvis",
       document: "test.pdf",
       rapport: "",
       centre: "MASSINISSA"
+    },
+    {
+      nom: "Radio4",
+      date: "12-04-2024",
+      demande: true,
+      type: "echographie",
+      categorie: "Thorax-Abdomen-Pelvis",
+      document: "",
+      rapport: "",
+      centre: "DR. Hammou Ilyas",
     }
   
   
@@ -53,8 +67,10 @@ export default function Radios() {
     return dateB - dateA;
   });
 
-  const uniqueCategories = [...new Set(radios.map((radio) => radio.categorie))];
-  const uniqueTypes = [...new Set(radios.map((radio)=>radio.type))];
+  const uniqueCategories = [...new Set(radios.map((radio) => radio.demande === false && radio.categorie))];
+  const filteredArrayCats = uniqueCategories.filter(item => item !== false);
+  const uniqueTypes = [...new Set(radios.map((radio)=> radio.demande === false && radio.type))];
+  const filteredArrayTypes = uniqueTypes.filter(item => item !== false);
   const [modalShowRadio, setModalShowRadio] = useState(false);
   const [modalShowAdd, setModalShowAdd] = useState(false);
 
@@ -123,6 +139,48 @@ function MyVerticallyCenteredModal(props) {
     </Modal>
   );
 }
+
+
+const [activeDiv,setActiveDiv] = useState("realises");
+
+  
+  const handleSwitch = (e, selected, button, otherBtn) => {
+    e.preventDefault();
+    const clickedOne = document.getElementById(selected);
+    const activeOne = document.getElementsByClassName("activeOneInRadios");
+    const selectedbtn = document.getElementById(button);
+    const notSelected = document.getElementById(otherBtn);
+    const nvBtn = document.getElementById("nouveauBtnRadios");
+    setActiveDiv(selected);
+    if(selected != 'realises'){
+       nvBtn.style.display = 'none'
+    }
+    else{
+      nvBtn.style.display = 'flex';
+    }
+
+    if (clickedOne.classList.contains("unActive")) {
+      activeOne[0].classList.add("unActive");
+      activeOne[0].classList.remove("activeOneInRadios");
+      clickedOne.classList.remove("unActive");
+      clickedOne.classList.add("activeOneInRadios");
+
+      selectedbtn.classList.toggle("activeHistoriqueBtn");
+      selectedbtn.classList.toggle("notActiveHistoriqueBtn");
+
+      notSelected.classList.toggle("activeHistoriqueBtn");
+      notSelected.classList.toggle("notActiveHistoriqueBtn");
+      setFilteredCat(undefined);
+      setFilteredType(undefined);
+    }
+  };
+
+  const [modalAddDemande,setModalAddDemande] = useState(false);
+
+  const handleAddDemandee = (e,radio) =>{
+     setSelectedRadio(radio);
+     setModalAddDemande(true);
+  }
   
   return (
     <>
@@ -136,6 +194,7 @@ function MyVerticallyCenteredModal(props) {
           onClick={() => setModalShowAdd(true)}
           title="Add"
           className="cssbuttons-io-button"
+          id="nouveauBtnRadios"
         >
           <svg
             height="25"
@@ -153,13 +212,39 @@ function MyVerticallyCenteredModal(props) {
         </button>
         <AddModal modalShowAdd={modalShowAdd} setModalShowAdd={setModalShowAdd}   />
       </div>
+      <div className="historiquebtnsDiv">
+        <button
+          id="realisesBtn"
+          onClick={(e) =>
+            handleSwitch(
+              e,
+              "realises",
+              "realisesBtn",
+              "demandesBtn"
+            )
+          }
+          className="historiqueBtns activeHistoriqueBtn"
+        >
+          Realisées
+        </button>
+        <button
+          id="demandesBtn"
+          onClick={(e) =>
+            handleSwitch(e, "demandes", "demandesBtn", "realisesBtn")
+          }
+          className="historiqueBtns notActiveHistoriqueBtn"
+        >
+          Demandées
+        </button>
+      </div>
+      {activeDiv === "realises" && 
       <div className="radiosFilterDiv">
       <Autocomplete
       disablePortal
       onChange={(e)=>handleChangeFilterType(e)}
       // className="medecinFilter"
       id="combo-box-demo1"
-      options={uniqueTypes}
+      options={filteredArrayTypes}
       autoHighlight
       sx={{ width: 300 }}
       renderInput={(params) => <TextField {...params} label="Type" />}
@@ -169,13 +254,15 @@ function MyVerticallyCenteredModal(props) {
       disablePortal
       onChange={(e)=>handleChangeFilterCat(e)}
       id="combo-box-demo"
-      options={uniqueCategories}
+      options={filteredArrayCats}
       autoHighlight
       sx={{ width: 300 }}
       renderInput={(params) => <TextField {...params} label="Categorie" />}
     />
       </div>
-      <div className="allRadiosDiv">
+      }
+
+      <div id="realises" className="allRadiosDiv activeOneInRadios">
       <div className="tableTitleDivPersonnel">
           <label className="tableTitleLabel">Nom</label>
           <label className="tableTitleLabel">Date</label>
@@ -185,6 +272,7 @@ function MyVerticallyCenteredModal(props) {
         <div className="tableRowsPersonnel">
           { filteredCat === undefined && filteredType === undefined ?
             radios.map((radio,index)=>{
+            if(radio.demande === false){  
             return(
               <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
@@ -193,10 +281,11 @@ function MyVerticallyCenteredModal(props) {
             <label className="labellast">{radio.categorie}</label>
           </div>
             )
+            }
           }) :
           filteredCat != undefined && filteredType === undefined ?
           radios.map((radio,index)=>{
-            if(radio.categorie === filteredCat){
+            if(radio.categorie === filteredCat && radio.demande === false){
             return(
               <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
@@ -209,7 +298,7 @@ function MyVerticallyCenteredModal(props) {
           }) : 
           filteredCat === undefined && filteredType != undefined ?
           radios.map((radio,index)=>{
-            if(radio.type === filteredType){
+            if(radio.type === filteredType && radio.demande === false){
             return(
               <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
@@ -221,7 +310,7 @@ function MyVerticallyCenteredModal(props) {
             }
           }) : 
           radios.map((radio,index)=>{
-            if(radio.type === filteredType && radio.categorie === filteredCat){
+            if(radio.type === filteredType && radio.categorie === filteredCat && radio.demande === false){
             return(
               <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
@@ -235,10 +324,36 @@ function MyVerticallyCenteredModal(props) {
           }
         </div>
       </div>
+      
+      <div id="demandes" className="allRadiosDiv unActive">
+      <div className="tableTitleDivPersonnel">
+          <label className="tableTitleLabel">Nom</label>
+          <label className="tableTitleLabel">Date</label>
+          <label className="tableTitleLabel">Type</label>
+          <label className="tableTitleLabell">Catégorie</label>
+        </div>
+        <div className="tableRowsPersonnel">
+        {radios.map((radio,index)=>{
+            if(radio.demande === true){  
+            return(
+              <div onClick={(e)=>handleAddDemandee(e,radio)} key={index} className="tableRowPers">
+            <label className="labelRowPers2">{radio.nom}</label>
+            <label className="labelRowPers1">{radio.date}</label>
+            <label className="labelRowPers">{radio.type}</label>
+            <label className="labellast">{radio.categorie}</label>
+          </div>
+            )
+            }
+          })
+        }
+        </div>
+      </div>
+
       <MyVerticallyCenteredModal
         show={modalShowRadio}
         onHide={() => setModalShowRadio(false)}
       />
+      <AddDemandeeModal modalAddDemande={modalAddDemande}  setModalAddDemande={setModalAddDemande}  radio={selectedRadio} />
       </div>
     </>
   );

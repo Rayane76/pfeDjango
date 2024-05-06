@@ -6,6 +6,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import AddChirurgieModal from "./AddChirurgieModal";
+import AddDemandeChirModal from "./AddDemandeChirModal";
 import { useState } from "react";
 
 
@@ -14,6 +15,7 @@ export default function Operations(){
     const chirurgies = [
         {
             nom: "Chirurgie 1",
+            demande: false,
             date: "14-02-2018",
             categorie: "Vasculaire",
             rapport: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis vel eros donec ac odio tempor orci dapibus ultrices. Tellus id interdum velit laoreet. Et ultrices neque ornare aenean euismod elementum nisi. Non blandit massa enim nec dui. Lobortis mattis aliquam faucibus purus in massa tempor nec. Urna porttitor rhoncus dolor purus non enim praesent elementum facilisis. Sed nisi lacus sed viverra. Consectetur adipiscing elit duis tristique sollicitudin nibh sit amet commodo. Viverra maecenas accumsan lacus vel facilisis volutpat est velit egestas. Lobortis mattis aliquam faucibus purus in massa tempor nec feugiat. Eget dolor morbi non arcu risus. Feugiat sed lectus vestibulum mattis ullamcorper velit. Risus pretium quam vulputate dignissim suspendisse in. Auctor urna nunc id cursus metus aliquam.",
@@ -21,11 +23,20 @@ export default function Operations(){
         },
         {
             nom: "Chirurgie 2",
+            demande: false,
             date: "11-10-2020",
             categorie: "Thoracique",
             rapport: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis vel eros donec ac odio tempor orci dapibus ultrices. Tellus id interdum velit laoreet. Et ultrices neque ornare aenean euismod elementum nisi. Non blandit massa enim nec dui. Lobortis mattis aliquam faucibus purus in massa tempor nec. Urna porttitor rhoncus dolor purus non enim praesent elementum facilisis. Sed nisi lacus sed viverra. Consectetur adipiscing elit duis tristique sollicitudin nibh sit amet commodo. Viverra maecenas accumsan lacus vel facilisis volutpat est velit egestas. Lobortis mattis aliquam faucibus purus in massa tempor nec feugiat. Eget dolor morbi non arcu risus. Feugiat sed lectus vestibulum mattis ullamcorper velit. Risus pretium quam vulputate dignissim suspendisse in. Auctor urna nunc id cursus metus aliquam.",
             medecin: "DR. Bekkat Said"
         },
+        {
+          nom: "Chirurgie 3",
+          demande: true,
+          date: "11-11-2023",
+          categorie: "Thoracique",
+          rapport:"",
+          medecin: "DR. Bekkat Said"
+      },
 
     ]
 
@@ -37,7 +48,8 @@ export default function Operations(){
         return dateB - dateA;
       });
 
-      const uniqueCategories = [...new Set(chirurgies.map((chirurgie) => chirurgie.categorie))];
+      const uniqueCategories = [...new Set(chirurgies.map((chirurgie) => chirurgie.demande === false && chirurgie.categorie))];
+      const filteredArrayCategories = uniqueCategories.filter(item => item !== false);
 
       const [modalShowChirurgie, setModalShowChirurgie] = useState(false);
       const [modalShowAdd, setModalShowAdd] = useState(false);
@@ -85,7 +97,46 @@ export default function Operations(){
         );
       }
 
+      const [activeDiv,setActiveDiv] = useState("chirRealises");
 
+      const handleSwitch = (e, selected, button, otherBtn) => {
+        e.preventDefault();
+        const clickedOne = document.getElementById(selected);
+        const activeOne = document.getElementsByClassName("activeOneInChirurgies");
+        const selectedbtn = document.getElementById(button);
+        const notSelected = document.getElementById(otherBtn);
+        const nvBtn = document.getElementById("nouveauBtnChir");
+        setActiveDiv(selected);
+
+        if(selected != 'chirRealises'){
+          nvBtn.style.display = 'none'
+       }
+       else{
+         nvBtn.style.display = 'flex';
+       }
+    
+        if (clickedOne.classList.contains("unActive")) {
+          activeOne[0].classList.add("unActive");
+          activeOne[0].classList.remove("activeOneInChirurgies");
+          clickedOne.classList.remove("unActive");
+          clickedOne.classList.add("activeOneInChirurgies");
+    
+          selectedbtn.classList.toggle("activeHistoriqueBtn");
+          selectedbtn.classList.toggle("notActiveHistoriqueBtn");
+    
+          notSelected.classList.toggle("activeHistoriqueBtn");
+          notSelected.classList.toggle("notActiveHistoriqueBtn");
+          setFilteredCat(undefined);
+        }
+      };
+
+      const [modalAddDemande,setModalAddDemande] = useState(false);
+
+      const handleAddDemandee = (e,chirurgie) =>{
+         setSelectedChirurgie(chirurgie);
+         setModalAddDemande(true);
+      }
+      
 
 
     return(
@@ -99,6 +150,7 @@ export default function Operations(){
             onClick={() => setModalShowAdd(true)}
             title="Add"
             className="cssbuttons-io-button"
+            id="nouveauBtnChir"
           >
             <svg
               height="25"
@@ -116,18 +168,45 @@ export default function Operations(){
           </button>
           <AddChirurgieModal modalShowAdd={modalShowAdd} setModalShowAdd={setModalShowAdd}   />
         </div>
+        <div className="historiquebtnsDiv">
+        <button
+          id="realisesChirBtn"
+          onClick={(e) =>
+            handleSwitch(
+              e,
+              "chirRealises",
+              "realisesChirBtn",
+              "demandesChirBtn"
+            )
+          }
+          className="historiqueBtns activeHistoriqueBtn"
+        >
+          Realisées
+        </button>
+        <button
+          id="demandesChirBtn"
+          onClick={(e) =>
+            handleSwitch(e, "chirDemandes", "demandesChirBtn", "realisesChirBtn")
+          }
+          className="historiqueBtns notActiveHistoriqueBtn"
+        >
+          Demandées
+        </button>
+      </div>
+      {activeDiv === "chirRealises" && 
         <div className="radiosFilterDiv">
         <Autocomplete
         disablePortal
         onChange={(e)=>handleChangeFilterCat(e)}
         id="combo-box-demo"
-        options={uniqueCategories}
+        options={filteredArrayCategories}
         autoHighlight
         sx={{ width: 300 }}
         renderInput={(params) => <TextField {...params} label="Categorie" />}
       />
         </div>
-        <div className="allRadiosDiv">
+      }
+        <div id="chirRealises" className="allRadiosDiv activeOneInChirurgies">
         <div className="tableTitleDivPersonnel">
             <label className="tableTitleLabel">Nom</label>
             <label className="tableTitleLabel">Date</label>
@@ -137,9 +216,33 @@ export default function Operations(){
           <div className="tableRowsPersonnel">
             { 
               chirurgies.map((chirurgie,index)=>{
-              if(chirurgie.categorie === filteredCat || filteredCat === undefined){  
+              if((chirurgie.categorie === filteredCat || filteredCat === undefined) && chirurgie.demande === false){  
               return(
                 <div onClick={(e)=>handleClickChirurgie(e,chirurgie)} key={index} className="tableRowPers">
+              <label className="labelRowPers2">{chirurgie.nom}</label>
+              <label className="labelRowPers1">{chirurgie.date}</label>
+              <label className="labelRowPers">{chirurgie.medecin}</label>
+              <label className="labellast">{chirurgie.categorie}</label>
+            </div>
+              )
+              }
+            }) 
+            }
+          </div>
+        </div>
+        <div id="chirDemandes" className="allRadiosDiv unActive">
+        <div className="tableTitleDivPersonnel">
+            <label className="tableTitleLabel">Nom</label>
+            <label className="tableTitleLabel">Date</label>
+            <label className="tableTitleLabel">Medecin</label>
+            <label className="tableTitleLabell">Catégorie</label>
+          </div>
+          <div className="tableRowsPersonnel">
+          { 
+              chirurgies.map((chirurgie,index)=>{
+              if(chirurgie.demande === true){  
+              return(
+                <div onClick={(e)=>handleAddDemandee(e,chirurgie)} key={index} className="tableRowPers">
               <label className="labelRowPers2">{chirurgie.nom}</label>
               <label className="labelRowPers1">{chirurgie.date}</label>
               <label className="labelRowPers">{chirurgie.medecin}</label>
@@ -155,6 +258,7 @@ export default function Operations(){
           show={modalShowChirurgie}
           onHide={() => setModalShowChirurgie(false)}
         />
+        <AddDemandeChirModal modalAddDemande={modalAddDemande}  setModalAddDemande={setModalAddDemande}  chirurgie={selectedChirurgie} />
         </div>
 
     )

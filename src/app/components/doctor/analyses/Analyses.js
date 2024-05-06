@@ -7,20 +7,30 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import ModalAddAnalyse from "./ModalAddAnalyse";
+import AddDemandeeAnalyseModal from "./AddDemandeeAnalyseModal";
 
 export default function Analyses() {
   const analyses = [
     {
       nom: "Analyse1",
       date: "14-01-2018",
+      demande: false,
       document: "test.pdf",
       centre: "Bisker",
     },
     {
       nom: "Analyse2",
       date: "21-02-2020",
+      demande: false,
       document: "test.pdf",
       centre: "NomCentre",
+    },
+    {
+      nom: "Analyse3",
+      date: "21-02-2020",
+      demande: true,
+      document: "",
+      centre: "DR. Sekhiri Merouane",
     },
   ];
 
@@ -32,7 +42,8 @@ export default function Analyses() {
     return dateB - dateA;
   });
 
-  const uniqueNoms = [...new Set(analyses.map((analyse) => analyse.nom))];
+  const uniqueNoms = [...new Set(analyses.map((analyse) => analyse.demande === false && analyse.nom))];
+  const filteredArrayNoms = uniqueNoms.filter(item => item !== false);
 
   const [filteredNom, setFilteredNom] = useState(undefined);
   const [selectedAnalyse,setSelectedAnalyse] = useState(null);
@@ -81,6 +92,47 @@ export default function Analyses() {
   }
 
   const [showModalAdd,setShowModalAdd] = useState(false);
+  const [activeDiv,setActiveDiv] = useState("analysesRealises");
+
+
+
+  const handleSwitch = (e, selected, button, otherBtn) => {
+    e.preventDefault();
+    const clickedOne = document.getElementById(selected);
+    const activeOne = document.getElementsByClassName("activeOneInAnalyses");
+    const selectedbtn = document.getElementById(button);
+    const notSelected = document.getElementById(otherBtn);
+    const nvBtn = document.getElementById("nouveauBtnAnalyses");
+    setActiveDiv(selected);
+    if(selected != 'analysesRealises'){
+      nvBtn.style.display = 'none'
+   }
+   else{
+     nvBtn.style.display = 'flex';
+   }
+
+    if (clickedOne.classList.contains("unActive")) {
+      activeOne[0].classList.add("unActive");
+      activeOne[0].classList.remove("activeOneInAnalyses");
+      clickedOne.classList.remove("unActive");
+      clickedOne.classList.add("activeOneInAnalyses");
+
+      selectedbtn.classList.toggle("activeHistoriqueBtn");
+      selectedbtn.classList.toggle("notActiveHistoriqueBtn");
+
+      notSelected.classList.toggle("activeHistoriqueBtn");
+      notSelected.classList.toggle("notActiveHistoriqueBtn");
+      setFilteredNom(undefined);
+    }
+  };
+
+  const [modalAddDemande,setModalAddDemande] = useState(false);
+
+  const handleAddDemandee = (e,analyse) =>{
+     setSelectedAnalyse(analyse);
+     setModalAddDemande(true);
+  }
+  
 
 
   return (
@@ -95,6 +147,7 @@ export default function Analyses() {
            onClick={() => setShowModalAdd(true)}
           title="Add"
           className="cssbuttons-io-button"
+          id="nouveauBtnAnalyses"
         >
           <svg
             height="25"
@@ -112,27 +165,72 @@ export default function Analyses() {
         </button>
         </div>
         <ModalAddAnalyse showModalAdd={showModalAdd} setShowModalAdd={setShowModalAdd} />
+        <div className="historiquebtnsDiv">
+        <button
+          id="realisesAnalysesBtn"
+          onClick={(e) =>
+            handleSwitch(
+              e,
+              "analysesRealises",
+              "realisesAnalysesBtn",
+              "demandesAnalysesBtn"
+            )
+          }
+          className="historiqueBtns activeHistoriqueBtn"
+        >
+          Realisées
+        </button>
+        <button
+          id="demandesAnalysesBtn"
+          onClick={(e) =>
+            handleSwitch(e, "analysesDemandes", "demandesAnalysesBtn", "realisesAnalysesBtn")
+          }
+          className="historiqueBtns notActiveHistoriqueBtn"
+        >
+          Demandées
+        </button>
+      </div>
+        {activeDiv === "analysesRealises" && 
         <div className="analysesFilterDiv">
           <Autocomplete
             disablePortal
             onChange={(e) => handleChangeFilterNom(e)}
             id="combo-box-demo1"
-            options={uniqueNoms}
+            options={filteredArrayNoms}
             autoHighlight
             sx={{ width: 300 }}
             renderInput={(params) => <TextField {...params} label="Nom" />}
           />
         </div>
-        <div className="allRadiosDiv">
+        }
+        <div id="analysesRealises" className="allRadiosDiv activeOneInAnalyses">
           <div className="tableTitleDivAnalyses">
             <label className="tableTitleLabel">Nom</label>
             <label className="tableTitleLabell">Date</label>
           </div>
           <div className="tableRowsAnalyses">
             {analyses.map((analyse,index)=>{
-              if(filteredNom === analyse.nom || filteredNom === undefined){
+              if((filteredNom === analyse.nom || filteredNom === undefined) && analyse.demande === false){
               return(
               <div onClick={(e)=>handleClickAnalyse(e,analyse)} key={index} className="tableRowPers">
+            <label className="labelRowPers2">{analyse.nom}</label>
+            <label className="labelRowPers1">{analyse.date}</label>
+          </div>
+              )
+              }
+            })}
+          </div>
+        </div>
+        <div id="analysesDemandes" className="allRadiosDiv unActive">
+        <div className="tableTitleDivAnalyses">
+            <label className="tableTitleLabel">Nom</label>
+            <label className="tableTitleLabell">Date</label>
+          </div>
+          <div className="tableRowsAnalyses">
+          {analyses.map((analyse,index)=>{
+              if(analyse.demande === true){
+              return(
+              <div onClick={(e)=>handleAddDemandee(e,analyse)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{analyse.nom}</label>
             <label className="labelRowPers1">{analyse.date}</label>
           </div>
@@ -145,6 +243,7 @@ export default function Analyses() {
         show={modalShow}
         onHide={() => setModalShow(false)}
       />
+      <AddDemandeeAnalyseModal modalAddDemande={modalAddDemande}  setModalAddDemande={setModalAddDemande}  analyse={selectedAnalyse} />
       </div>
     </>
   );
