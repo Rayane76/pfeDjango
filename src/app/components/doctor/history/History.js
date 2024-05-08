@@ -20,18 +20,18 @@ export default function History() {
       ordonnance: [
         {
           medicament: "Medicament 1",
-          ratio: "2/jr",
-          duree: "7 jours",
+          ratio: "2",
+          duree: "7",
         },
         {
           medicament: "Medicament 2",
-          ratio: "2/jr",
-          duree: "10 jours",
+          ratio: "2",
+          duree: "10",
         },
         {
           medicament: "Medicament 3",
-          ratio: "1/jr",
-          duree: "3 jours",
+          ratio: "1",
+          duree: "3",
         }
 
       ]
@@ -47,13 +47,13 @@ export default function History() {
       ordonnance: [
         {
           medicament: "Medicament 1",
-          ratio: "2/jr",
-          duree: "7 jours",
+          ratio: "2",
+          duree: "7",
         },
         {
           medicament: "Medicament 2",
-          ratio: "2/jr",
-          duree: "10 jours",
+          ratio: "2",
+          duree: "10",
         },
       ]
     },

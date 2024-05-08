@@ -45,7 +45,7 @@ export default function AddDemandeChirModal({modalAddDemande,setModalAddDemande,
 
            <h4>Nom Chirurgie : {chirurgie != null && chirurgie.nom}</h4>
            <h4>Catégorie : {chirurgie != null && chirurgie.categorie}</h4>
-           <h4>Demandé par : {chirurgie != null && chirurgie.centre}</h4>
+           <h4>Demandé par : {chirurgie != null && chirurgie.medecin}</h4>
 
    
            
