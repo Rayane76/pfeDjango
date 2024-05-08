@@ -126,6 +126,13 @@ export default function Consultation(){
     const handleSave = (e) => {
        //maladie === nouvelle maladie postiha
        //alldemandes === fiha les demandes ta3 radio analyse chirurgie
+       if(maladie.nom != ""){
+        //hadi normalement l only required field bach t'posti
+       }
+
+       if(allDemandes.length > 0){
+        //hna dir l post ta3 les demandes
+       }
     }
 
 
