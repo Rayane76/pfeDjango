@@ -3,10 +3,11 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import "../../../styles/doctor/patient/radios.css";
 import { useState } from "react";
+import axiosService from '@/app/helpers/axios';
 
 
 
-export default function AddChirurgieModal({modalShowAdd, setModalShowAdd}){
+export default function AddChirurgieModal({modalShowAdd, setModalShowAdd,patient_id}){
 
     let today = new Date();
 
@@ -22,16 +23,33 @@ export default function AddChirurgieModal({modalShowAdd, setModalShowAdd}){
 
     const [chirurgieData,setChirurgieData] = useState({
         nom: "",
-        date: formattedDate,
-        categorie: "",
-        rapport: "",
-        medecin: "",
+        radio_category: "",
+        note: "",
+        type_doc:"C",
+        demande:false
       })
 
       const handleChangeAddChirurgie = (e)=>{
-        setAnalyseData((prev)=>({...prev,[e.target.name]:e.target.value}));
+        setChirurgieData((prev)=>({...prev,[e.target.name]:e.target.value}));
       }
 
+
+      
+
+
+        const handleSubmit = (e)=>{
+        e.preventDefault();
+
+        axiosService.post(`add_document/${patient_id}`,chirurgieData).then((res)=>{
+          console.log(res);
+          window.location.reload();
+
+        }).catch((err)=>{
+          console.log(err)})
+  
+        
+        
+        }
 
 
     return(
@@ -54,14 +72,14 @@ export default function AddChirurgieModal({modalShowAdd, setModalShowAdd}){
            </div>   
            <div className="d-flex justify-content-start align-items-center gap-4">
            <h4>Categorie Chirurgie : </h4>
-           <input onChange={(e)=>handleChangeAddChirurgie(e)} placeholder="Categorie Chirurgie ... " required name="categorie"></input>
+           <input onChange={(e)=>handleChangeAddChirurgie(e)} placeholder="Categorie Chirurgie ... " required name="radio_category"></input>
            </div>  
            <h4>Rapport : </h4>
-           <textarea rows={7} onChange={(e)=>handleChangeAddChirurgie(e)} className="textArea"></textarea>
+           <textarea rows={7} onChange={(e)=>handleChangeAddChirurgie(e)} name='note' className="textArea"></textarea>
            
          </Modal.Body>
          <Modal.Footer>
-         <Button>Ajouter</Button>
+         <Button onClick={(e)=>handleSubmit(e)}>Ajouter</Button>
            <Button variant="secondary" onClick={()=>setModalShowAdd(false)}>Fermer</Button>
          </Modal.Footer>
        </Modal>

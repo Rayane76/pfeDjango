@@ -12,15 +12,35 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import axiosService from "@/app/helpers/axios";
 
 
 export default function Consultation(){
 
-    const maladies = ["maladie1","maladie2","maladie3","maladie4","maladie5"];
 
-    const medicament = ["medicament1","medicament2","medicament3","medicament4","medicament5"];
+    const [maladies,setMaladies] = useState([])
+    const [medicaments,setMedicaments] = useState([])
 
-    
+    useEffect(()=>{
+      axiosService.get("/maladies").then((res)=>{
+        setMaladies(res.data);
+      }).catch((err)=>{
+        console.log(err);
+      })
+    },[])
+
+
+    useEffect(()=>{
+      axiosService.get("/medicaments").then((res)=>{
+
+        setMedicaments(res.data);
+      }).catch((err)=>{
+        console.log(err);
+      })
+
+
+    },[])
+
     let today = new Date();
 
     let day = today.getDate();
@@ -34,10 +54,8 @@ export default function Consultation(){
     let formattedDate = `${day}-${month}-${year}`;
 
     const [maladie,setMaladie] = useState({
-        nom: "",
+        id: [],
         affiche: false,
-        date: formattedDate,
-        medecin: "",
         note:"",
         ordonnance: []
     })
@@ -152,7 +170,7 @@ export default function Consultation(){
       disablePortal
       onChange={(e)=>setMaladie((prev)=>({...prev,nom:e.target.innerText}))}
       id="combo-box-demo"
-      options={maladies}
+      options={maladies.map((option) => option.name)}
       autoHighlight
       sx={{ width: 300 }}
       renderInput={(params) => <TextField {...params} label="Maladie" />}
@@ -179,7 +197,7 @@ export default function Consultation(){
       disablePortal
       onChange={(e)=> handleChangeMedicament(e)}
       id="combo-box-demo"
-      options={medicament}
+      options={medicaments.map((option) => option.name)}
       autoHighlight
       sx={{ width: 300 }}
       renderInput={(params) => <TextField {...params} label="Medicament" />}

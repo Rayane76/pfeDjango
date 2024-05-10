@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import "../../../styles/doctor/patient/radios.css";
 import DocumentSvg from "@/app/utils/svg/documentSvg";
 import TextField from "@mui/material/TextField";
@@ -8,31 +8,43 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import ModalAddAnalyse from "./ModalAddAnalyse";
 import AddDemandeeAnalyseModal from "./AddDemandeeAnalyseModal";
+import axiosService from '@/app/helpers/axios';
 
-export default function Analyses() {
-  const analyses = [
-    {
-      nom: "Analyse1",
-      date: "14-01-2018",
-      demande: false,
-      document: "test.pdf",
-      centre: "Bisker",
-    },
-    {
-      nom: "Analyse2",
-      date: "21-02-2020",
-      demande: false,
-      document: "test.pdf",
-      centre: "NomCentre",
-    },
-    {
-      nom: "Analyse3",
-      date: "21-02-2020",
-      demande: true,
-      document: "",
-      centre: "DR. Sekhiri Merouane",
-    },
-  ];
+
+export default function Analyses({patient_id}) {
+  const [analyses,setAnalyses] = useState([])
+  // const analyses = [
+  //   {
+  //     nom: "Analyse1",
+  //     date: "14-01-2018",
+  //     demande: false,
+  //     document: "test.pdf",
+  //     centre: "Bisker",
+  //   },
+  //   {
+  //     nom: "Analyse2",
+  //     date: "21-02-2020",
+  //     demande: false,
+  //     document: "test.pdf",
+  //     centre: "NomCentre",
+  //   },
+  //   {
+  //     nom: "Analyse3",
+  //     date: "21-02-2020",
+  //     demande: true,
+  //     document: "",
+  //     centre: "DR. Sekhiri Merouane",
+  //   },
+  // ];
+
+  useEffect(() => { 
+    axiosService.get(`analyses/${patient_id}`).then((res) => {
+      setAnalyses(res.data);
+    }
+    ).catch((err) => {
+      console.log(err);
+    })},[]);
+
 
   analyses.sort((a, b) => {
     // Convert dates to Date objects for comparison
@@ -164,7 +176,7 @@ export default function Analyses() {
           <span>Nouveau</span>
         </button>
         </div>
-        <ModalAddAnalyse showModalAdd={showModalAdd} setShowModalAdd={setShowModalAdd} />
+        <ModalAddAnalyse showModalAdd={showModalAdd} setShowModalAdd={setShowModalAdd} patient_id={patient_id}/>
         <div className="historiquebtnsDiv">
         <button
           id="realisesAnalysesBtn"

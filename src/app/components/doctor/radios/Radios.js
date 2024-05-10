@@ -5,59 +5,25 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddModal from "./AddModal";
 import AddDemandeeModal from "./AddDemandeeModal";
+import axiosService from "@/app/helpers/axios";
 
 
 
-export default function Radios() {
+export default function Radios({patient_id}) {
 
 
-  const radios = [
-    {
-      nom: "Radio1",
-      date: "14-12-2018",
-      demande: false,
-      type: "irm",
-      categorie: "Vasculaire",
-      document: "test.pdf",
-      rapport: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
-      centre: "YAKER"
-    },
-    {
-      nom: "Radio2",
-      date: "05-11-2020",
-      demande: false,
-      type: "scanner",
-      categorie: "Thorax-Abdomen-Pelvis",
-      document: "test.pdf",
-      rapport: "The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like). It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like",
-      centre: "MASSINISSA"
-    },
-    {
-      nom: "Radio3",
-      date: "12-01-2023",
-      demande: false,
-      type: "radiologie",
-      categorie: "Thorax-Abdomen-Pelvis",
-      document: "test.pdf",
-      rapport: "",
-      centre: "MASSINISSA"
-    },
-    {
-      nom: "Radio4",
-      date: "12-04-2024",
-      demande: true,
-      type: "echographie",
-      categorie: "Thorax-Abdomen-Pelvis",
-      document: "",
-      rapport: "",
-      centre: "DR. Hammou Ilyas",
+  const [radios,setRadios] = useState([])
+
+  useEffect(() => { 
+    axiosService.get(`radios/${patient_id}`).then((res) => {
+      setRadios(res.data);
     }
-  
-  
-  ];
+    ).catch((err) => {
+      console.log(err);
+    })},[]);
 
   radios.sort((a, b) => {
     // Convert dates to Date objects for comparison
@@ -93,6 +59,9 @@ const handleClickRadio = (e,radio) =>{
 }
 
 
+
+
+
 function MyVerticallyCenteredModal(props) {
   return (
     <Modal
@@ -110,26 +79,32 @@ function MyVerticallyCenteredModal(props) {
       <Modal.Body>
         <div className="modalDiv">
           <div className="modalBodyDiv1">
-            <h5>{selectedRadio != null && "Ajoute par : " + selectedRadio.centre}</h5>
+            <h5>{selectedRadio != null && "Ajoute par : " + selectedRadio.labo}</h5>
             <h5>{selectedRadio != null && "le : " + selectedRadio.date}</h5>
-            <h5>{selectedRadio != null && "Type : " + selectedRadio.type}</h5>
-            <h5>{selectedRadio != null && "Categorie : " + selectedRadio.categorie}</h5>
+            <h5>{selectedRadio != null && "Type : " + selectedRadio.radio_type}</h5>
+            <h5>{selectedRadio != null && "Categorie : " + selectedRadio.radio_category}</h5>
             {selectedRadio != null && selectedRadio.rapport!="" && 
             <>
             <h5>Rapport : </h5>
-            <p>{selectedRadio.rapport}</p>
+            <p>{selectedRadio.note}</p>
             </>
             }
           </div>
           <div className="modalBodyDiv2">
           {selectedRadio != null && 
           <embed
-              src={"/" + selectedRadio.document}
-              type="application/pdf"
+          src="http://127.0.0.1:8000/media/documents/Interro_20_.pdf"
+          type="application/pdf"
               width="100%"
               height="100%"
             />
+            
           }
+         {selectedRadio != null && <a href={"http://127.0.0.1:8000" + selectedRadio.document}
+        download
+      >
+        Click to download
+      </a>}
           </div>
         </div>
       </Modal.Body>
@@ -182,6 +157,9 @@ const [activeDiv,setActiveDiv] = useState("realises");
      setModalAddDemande(true);
   }
   
+
+
+
   return (
     <>
       <div className="radiosDiv">
@@ -210,7 +188,7 @@ const [activeDiv,setActiveDiv] = useState("realises");
           </svg>
           <span>Nouveau</span>
         </button>
-        <AddModal modalShowAdd={modalShowAdd} setModalShowAdd={setModalShowAdd}   />
+        <AddModal modalShowAdd={modalShowAdd} setModalShowAdd={setModalShowAdd} patient_id={patient_id}  />
       </div>
       <div className="historiquebtnsDiv">
         <button
@@ -245,6 +223,8 @@ const [activeDiv,setActiveDiv] = useState("realises");
       // className="medecinFilter"
       id="combo-box-demo1"
       options={filteredArrayTypes}
+      getOptionLabel={(option) => option ? option.radio_type : ''}
+
       autoHighlight
       sx={{ width: 300 }}
       renderInput={(params) => <TextField {...params} label="Type" />}
@@ -255,6 +235,8 @@ const [activeDiv,setActiveDiv] = useState("realises");
       onChange={(e)=>handleChangeFilterCat(e)}
       id="combo-box-demo"
       options={filteredArrayCats}
+      getOptionLabel={(option) => option ? option.radio_category : ''}
+
       autoHighlight
       sx={{ width: 300 }}
       renderInput={(params) => <TextField {...params} label="Categorie" />}
@@ -272,13 +254,14 @@ const [activeDiv,setActiveDiv] = useState("realises");
         <div className="tableRowsPersonnel">
           { filteredCat === undefined && filteredType === undefined ?
             radios.map((radio,index)=>{
-            if(radio.demande === false){  
+            if(radio.demande === false){ 
+              const formattedDate = radio.date.substring(0, 10);
             return(
               <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
-            <label className="labelRowPers1">{radio.date}</label>
-            <label className="labelRowPers">{radio.type}</label>
-            <label className="labellast">{radio.categorie}</label>
+            <label className="labelRowPers1">{formattedDate}</label>
+            <label className="labelRowPers">{radio.radio_type}</label>
+            <label className="labellast">{radio.radio_category}</label>
           </div>
             )
             }
@@ -290,33 +273,33 @@ const [activeDiv,setActiveDiv] = useState("realises");
               <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
             <label className="labelRowPers1">{radio.date}</label>
-            <label className="labelRowPers">{radio.type}</label>
-            <label className="labellast">{radio.categorie}</label>
+            <label className="labelRowPers">{radio.radio_type}</label>
+            <label className="labellast">{radio.radio_category}</label>
           </div>
             )
             }
           }) : 
           filteredCat === undefined && filteredType != undefined ?
           radios.map((radio,index)=>{
-            if(radio.type === filteredType && radio.demande === false){
+            if(radio.radio_type === filteredType && radio.demande === false){
             return(
               <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
             <label className="labelRowPers1">{radio.date}</label>
-            <label className="labelRowPers">{radio.type}</label>
-            <label className="labellast">{radio.categorie}</label>
+            <label className="labelRowPers">{radio.radio_type}</label>
+            <label className="labellast">{radio.radio_category}</label>
           </div>
             )
             }
           }) : 
           radios.map((radio,index)=>{
-            if(radio.type === filteredType && radio.categorie === filteredCat && radio.demande === false){
+            if(radio.radio_type === filteredType && radio.radio_category=== filteredCat && radio.demande === false){
             return(
               <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
             <label className="labelRowPers1">{radio.date}</label>
-            <label className="labelRowPers">{radio.type}</label>
-            <label className="labellast">{radio.categorie}</label>
+            <label className="labelRowPers">{radio.radio_type}</label>
+            <label className="labellast">{radio.radio_category}</label>
           </div>
             )
             }
@@ -339,8 +322,8 @@ const [activeDiv,setActiveDiv] = useState("realises");
               <div onClick={(e)=>handleAddDemandee(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
             <label className="labelRowPers1">{radio.date}</label>
-            <label className="labelRowPers">{radio.type}</label>
-            <label className="labellast">{radio.categorie}</label>
+            <label className="labelRowPers">{radio.radio_type}</label>
+            <label className="labellast">{radio.radio_category}</label>
           </div>
             )
             }
