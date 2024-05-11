@@ -59,6 +59,18 @@ export default function ModalAddAnalyse({showModalAdd,setShowModalAdd,patient_id
         })
       }
 
+      const [selected,setSelected] = useState("ajouterRadioTitle")
+
+const handleSwitch = (clicked)=>{
+    if(selected != clicked){
+      setSelected(clicked);
+      const title1 = document.getElementsByClassName("ajouterRadioTitle");
+      const title2 = document.getElementsByClassName("demanderRadioTitle");
+
+      title1[0].classList.toggle("slctd");
+      title2[0].classList.toggle("slctd");
+    }
+}
 
     return(
         <Modal
@@ -70,7 +82,14 @@ export default function ModalAddAnalyse({showModalAdd,setShowModalAdd,patient_id
        >
          <Modal.Header closeButton>
            <Modal.Title id="contained-modal-title-vcenter">
-             Ajouter Analyse
+           <div className='d-flex'>
+              <div className='ajouterRadioTitle slctd' onClick={()=>handleSwitch("ajouterRadioTitle")}>
+                Ajouter Analyse
+              </div>
+              <div className='demanderRadioTitle' onClick={()=>handleSwitch("demanderRadioTitle")}>
+                Demander Analyse
+              </div>
+             </div>
            </Modal.Title>
          </Modal.Header>
          <Modal.Body>
@@ -78,6 +97,8 @@ export default function ModalAddAnalyse({showModalAdd,setShowModalAdd,patient_id
            <h4>Nom Analyse : </h4>
            <input onChange={(e)=>handleChangeAddRadio(e)} placeholder="Nom Analyse ... " required name="nom"></input>
            </div>
+           {selected === "ajouterRadioTitle" && 
+           <>
             <h4>Document : </h4>
             <div className="d-flex justify-content-center align-items-center">
             <label htmlFor="file" className="labelFile">
@@ -122,7 +143,8 @@ export default function ModalAddAnalyse({showModalAdd,setShowModalAdd,patient_id
    <input required onChange={(e)=>handleAddDocument(e)} className="input" name="document" id="file" type="file" />
            
    </div>
-   
+   </>
+           }
            
            
          </Modal.Body>

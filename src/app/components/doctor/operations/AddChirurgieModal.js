@@ -51,6 +51,19 @@ export default function AddChirurgieModal({modalShowAdd, setModalShowAdd,patient
         
         }
 
+        const [selected,setSelected] = useState("ajouterRadioTitle")
+
+        const handleSwitch = (clicked)=>{
+            if(selected != clicked){
+              setSelected(clicked);
+              const title1 = document.getElementsByClassName("ajouterRadioTitle");
+              const title2 = document.getElementsByClassName("demanderRadioTitle");
+        
+              title1[0].classList.toggle("slctd");
+              title2[0].classList.toggle("slctd");
+            }
+        }
+
 
     return(
         <Modal
@@ -62,7 +75,14 @@ export default function AddChirurgieModal({modalShowAdd, setModalShowAdd,patient
        >
          <Modal.Header closeButton>
            <Modal.Title id="contained-modal-title-vcenter">
-             Ajouter Chirurgie
+           <div className='d-flex'>
+              <div className='ajouterRadioTitle slctd' onClick={()=>handleSwitch("ajouterRadioTitle")}>
+                Ajouter Chirurgie
+              </div>
+              <div className='demanderRadioTitle' onClick={()=>handleSwitch("demanderRadioTitle")}>
+                Demander Chirurgie
+              </div>
+             </div>
            </Modal.Title>
          </Modal.Header>
          <Modal.Body>
@@ -74,9 +94,12 @@ export default function AddChirurgieModal({modalShowAdd, setModalShowAdd,patient
            <h4>Categorie Chirurgie : </h4>
            <input onChange={(e)=>handleChangeAddChirurgie(e)} placeholder="Categorie Chirurgie ... " required name="radio_category"></input>
            </div>  
+           {selected === "ajouterRadioTitle" && 
+           <>
            <h4>Rapport : </h4>
            <textarea rows={7} onChange={(e)=>handleChangeAddChirurgie(e)} name='note' className="textArea"></textarea>
-           
+           </>
+           }
          </Modal.Body>
          <Modal.Footer>
          <Button onClick={(e)=>handleSubmit(e)}>Ajouter</Button>

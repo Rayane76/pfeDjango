@@ -133,6 +133,19 @@ const handleSubmit = (e)=> {
 
 }
 
+const [selected,setSelected] = useState("ajouterRadioTitle")
+
+const handleSwitch = (clicked)=>{
+    if(selected != clicked){
+      setSelected(clicked);
+      const title1 = document.getElementsByClassName("ajouterRadioTitle");
+      const title2 = document.getElementsByClassName("demanderRadioTitle");
+
+      title1[0].classList.toggle("slctd");
+      title2[0].classList.toggle("slctd");
+    }
+}
+
 
     return(
         <Modal
@@ -144,7 +157,14 @@ const handleSubmit = (e)=> {
        >
          <Modal.Header closeButton>
            <Modal.Title id="contained-modal-title-vcenter">
-             Ajouter Radio
+             <div className='d-flex'>
+              <div className='ajouterRadioTitle slctd' onClick={()=>handleSwitch("ajouterRadioTitle")}>
+                Ajouter Radio
+              </div>
+              <div className='demanderRadioTitle' onClick={()=>handleSwitch("demanderRadioTitle")}>
+                Demander Radio
+              </div>
+             </div>
            </Modal.Title>
          </Modal.Header>
          <Modal.Body>
@@ -199,7 +219,8 @@ const handleSubmit = (e)=> {
        </FormControl>
            </div>
    
-           
+           {selected === "ajouterRadioTitle" && 
+           <>
             <h4>Rapport : </h4>
             <textarea rows={7} onChange={(e)=>handleChangeAddRadio(e)} className="textArea" name='note'>
           </textarea>
@@ -248,6 +269,8 @@ const handleSubmit = (e)=> {
    <input required onChange={(e)=>handleAddDocument(e)} className="input" name="document" id="file" type="file" />
            
    </div>
+</>
+           }
    
            
            
