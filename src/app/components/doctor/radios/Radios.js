@@ -12,13 +12,13 @@ import axiosService from "@/app/helpers/axios";
 
 
 
-export default function Radios({patient_id}) {
+export default function Radios(props) {
 
 
   const [radios,setRadios] = useState([])
 
   useEffect(() => { 
-    axiosService.get(`radios/${patient_id}`).then((res) => {
+    axiosService.get(`radios/${props.patient_id}`).then((res) => {
       setRadios(res.data);
     }
     ).catch((err) => {
@@ -168,6 +168,7 @@ const [activeDiv,setActiveDiv] = useState("realises");
         <DocumentSvg />
         <h1 className="radiosDivTitle">Radios</h1>
         </div>
+        {props.isAdmin === true && 
         <button
           onClick={() => setModalShowAdd(true)}
           title="Add"
@@ -188,7 +189,8 @@ const [activeDiv,setActiveDiv] = useState("realises");
           </svg>
           <span>Nouveau</span>
         </button>
-        <AddModal modalShowAdd={modalShowAdd} setModalShowAdd={setModalShowAdd} patient_id={patient_id}  />
+        }
+        {props.isAdmin === true && <AddModal modalShowAdd={modalShowAdd} setModalShowAdd={setModalShowAdd} patient_id={props.patient_id}  />}
       </div>
       <div className="historiquebtnsDiv">
         <button

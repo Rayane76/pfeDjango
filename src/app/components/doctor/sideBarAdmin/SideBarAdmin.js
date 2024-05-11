@@ -11,7 +11,7 @@ import AnalysesSvg from "@/app/utils/svg/sidebarIcons/analyses";
 import OperationsSvg from "@/app/utils/svg/sidebarIcons/operationsSvg";
 import ConsultationSvg from "@/app/utils/svg/sidebarIcons/consultationSvg";
 
-export default function SideBarAdmin() {
+export default function SideBarAdmin(props) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -67,6 +67,7 @@ export default function SideBarAdmin() {
             <OperationsSvg />
             Chirurgies
           </div>
+          {props.isAdmin === true && 
           <div
             className="field"
             onClick={(e) => handleClick(e, "consultation")}
@@ -74,6 +75,7 @@ export default function SideBarAdmin() {
             <ConsultationSvg />
             Consultation
           </div>
+          }
         </div>
       </div>
 
@@ -132,6 +134,7 @@ export default function SideBarAdmin() {
                   <OperationsSvg />
                   Chirurgies
                 </div>
+                {props.isAdmin === true && 
                 <div
                   className="field"
                   onClick={(e) => handleClick(e, "consultation")}
@@ -139,6 +142,7 @@ export default function SideBarAdmin() {
                   <ConsultationSvg />
                   Consultation
                 </div>
+                }
               </div>
             </div>
           </Offcanvas.Body>

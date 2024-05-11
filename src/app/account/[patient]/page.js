@@ -1,6 +1,6 @@
 'use client'
 import GeneralInfos from "@/app/components/doctor/generalInfos/GeneralInfos";
-import "../../../styles/doctor/patient/all.css"
+import "../../styles/doctor/patient/all.css"
 import Radios from "@/app/components/doctor/radios/Radios";
 import Analyses from "@/app/components/doctor/analyses/Analyses";
 import History from "@/app/components/doctor/history/History";
@@ -41,16 +41,13 @@ export default function Patient({ params }) {
          <History />
         </div>
         <div id="radios" className="radios unActive">
-         <Radios isAdmin={true} patient_id={id}/>
+         <Radios isAdmin={false} patient_id={id}/>
         </div>
         <div id="analyses" className="analyses unActive">
-          <Analyses isAdmin={true} patient_id={id} />
+          <Analyses isAdmin={false} patient_id={id} />
         </div>
         <div id="operations" className="operations unActive">
-         <Operations isAdmin={true} patient_id={id} />
-        </div>
-        <div id="consultation" className="consultation unActive">
-         <Consultation />
+         <Operations isAdmin={false} patient_id={id} />
         </div>
       </div>
     </>

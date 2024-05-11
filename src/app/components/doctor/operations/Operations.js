@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import axiosService from "@/app/helpers/axios";
 
 
-export default function Operations({patient_id}){
+export default function Operations(props){
 
     // const chirurgies = [
     //     {
@@ -45,7 +45,7 @@ export default function Operations({patient_id}){
 
     useEffect (()=>{
 
-      axiosService.get(`chirurgies/${patient_id}`).then((res) => {
+      axiosService.get(`chirurgies/${props.patient_id}`).then((res) => {
         console.log("CHur",res.data)
         setChirurgies(res.data);})
         .catch((err) => {
@@ -158,6 +158,7 @@ export default function Operations({patient_id}){
           <DocumentSvg />
           <h1 className="radiosDivTitle">Chirurgies</h1>
           </div>
+          {props.isAdmin === true && 
           <button
             onClick={() => setModalShowAdd(true)}
             title="Add"
@@ -178,7 +179,8 @@ export default function Operations({patient_id}){
             </svg>
             <span>Nouveau</span>
           </button>
-          <AddChirurgieModal modalShowAdd={modalShowAdd} setModalShowAdd={setModalShowAdd} patient_id={patient_id}  />
+          }
+          {props.isAdmin === true && <AddChirurgieModal modalShowAdd={modalShowAdd} setModalShowAdd={setModalShowAdd} patient_id={props.patient_id}  /> }
         </div>
         <div className="historiquebtnsDiv">
         <button

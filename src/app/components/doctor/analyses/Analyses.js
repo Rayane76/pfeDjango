@@ -11,7 +11,7 @@ import AddDemandeeAnalyseModal from "./AddDemandeeAnalyseModal";
 import axiosService from '@/app/helpers/axios';
 
 
-export default function Analyses({patient_id}) {
+export default function Analyses(props) {
   const [analyses,setAnalyses] = useState([])
   // const analyses = [
   //   {
@@ -38,7 +38,7 @@ export default function Analyses({patient_id}) {
   // ];
 
   useEffect(() => { 
-    axiosService.get(`analyses/${patient_id}`).then((res) => {
+    axiosService.get(`analyses/${props.patient_id}`).then((res) => {
       setAnalyses(res.data);
     }
     ).catch((err) => {
@@ -155,6 +155,7 @@ export default function Analyses({patient_id}) {
           <DocumentSvg />
           <h1 className="radiosDivTitle">Analyses</h1>
           </div>
+          {props.isAdmin === true && 
           <button
            onClick={() => setShowModalAdd(true)}
           title="Add"
@@ -175,8 +176,9 @@ export default function Analyses({patient_id}) {
           </svg>
           <span>Nouveau</span>
         </button>
+          }
         </div>
-        <ModalAddAnalyse showModalAdd={showModalAdd} setShowModalAdd={setShowModalAdd} patient_id={patient_id}/>
+        {props.isAdmin === true && <ModalAddAnalyse showModalAdd={showModalAdd} setShowModalAdd={setShowModalAdd} patient_id={props.patient_id}/> }
         <div className="historiquebtnsDiv">
         <button
           id="realisesAnalysesBtn"

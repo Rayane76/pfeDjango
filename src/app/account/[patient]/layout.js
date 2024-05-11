@@ -1,9 +1,9 @@
 import SideBarAdmin from "@/app/components/doctor/sideBarAdmin/SideBarAdmin"
 
 
-export default function AdminLayout({ children }) {
+export default function AccountLayout({ children }) {
     return <section>
-    <SideBarAdmin isAdmin={true} />
+    <SideBarAdmin isAdmin={false} />
     {children}
     </section>
   }

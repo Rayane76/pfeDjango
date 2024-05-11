@@ -1,11 +1,11 @@
-import "../../../styles/doctor/patient/generalInfos.css";
+import "../../../styles/doctor/patient/generalInfos.css"
 import TrendingFlatIcon from "@mui/icons-material/TrendingFlat";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import AddIcon from '@mui/icons-material/Add';
 
-export default function GeneralInfos({patient}) {
+export default function GeneralInfos(props) {
   const handleFlip = (e) => {
     e.preventDefault();
     var cards = document.querySelectorAll(".card");
@@ -38,39 +38,41 @@ export default function GeneralInfos({patient}) {
                   <h4 className="nameInfos">
                     <span className="fw-bold me-2">
                       Nom Complet: 
-                    </span> {patient.first_name} {patient.last_name}
+                    </span> {props.patient.first_name} {props.patient.last_name}
                     <br></br>
                     <span className="fw-bold me-2">
                       Naissance:
-                    </span>{patient.birth_date}
+                    </span>{props.patient.birth_date}
                     <br></br>
                     <span className="fw-bold me-2">
                       Sexe:
                     </span>
-                    {patient.gender} <br></br>
+                    {props.patient.gender} <br></br>
                     <span className="fw-bold me-2">
                       Adresse:
                     </span>
-                    {patient.address} <br></br>
+                    {props.patient.address} <br></br>
                     <span className="fw-bold me-2">
                       Groupe sanguin:
                     </span>
-                     {patient.blood_type} <br></br>
+                     {props.patient.blood_type} <br></br>
                      <span className="fw-bold me-2">
                       Contact d'urgence :
                     </span>
-                     {patient.emergency_number} <br></br>
+                     {props.patient.emergency_number} <br></br>
+                     {props.isAdmin === true &&
+                     <>
                      <span className="fw-bold me-2">
                      Situation: 
                      </span>
-                     {patient.married ? "married" : "non"} <br></br>
-                      { patient.married && (
+                     {props.patient.married ? "married" : "non"} <br></br>
+                      { props.patient.married && (
                                     <span className="fw-bold me-2">
                                     Nombre d'enfants: 2 <br></br>
                                         </span>
                                             )}
-
-                     
+                    </>
+                     }
                   </h4>
                 </div>
                 <div className="more" onClick={(e) => handleFlip(e)}>
