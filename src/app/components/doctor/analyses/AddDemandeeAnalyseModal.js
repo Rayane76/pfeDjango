@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import "../../../styles/doctor/patient/radios.css";
 import { useState } from "react";
+import axiosService from '@/app/helpers/axios';
 
 
 export default function AddDemandeeAnalyseModal({modalAddDemande,setModalAddDemande,analyse}){
@@ -23,9 +24,37 @@ export default function AddDemandeeAnalyseModal({modalAddDemande,setModalAddDema
     
     const handleAddDocument = (e)=>{
         setDoc(e.target.files[0]);
-        const formData = new FormData();
-        formData.append("file",e.target.files[0]);
+        
     }
+
+
+
+    const handleSubmit = (e)=> {
+      e.preventDefault();
+
+      const formData = new FormData();
+      formData.append("document", doc);
+
+      axiosService.put(`medical_doc/${analyse.id}`,formData,{
+        headers :{
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then((res) => {
+        console.log(res.data);
+        setModalAddDemande(false);
+        window.location.reload();
+
+      }).catch((err) => {
+        console.log(err);
+      })
+
+
+    
+    
+    }
+
+
+    
 
     return(
         <Modal
@@ -95,7 +124,7 @@ export default function AddDemandeeAnalyseModal({modalAddDemande,setModalAddDema
            
          </Modal.Body>
          <Modal.Footer>
-         <Button>Ajouter</Button>
+         <Button onClick={handleSubmit} >Ajouter</Button>
            <Button variant="secondary" onClick={()=>setModalAddDemande(false)}>Fermer</Button>
          </Modal.Footer>
        </Modal>

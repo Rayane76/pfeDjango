@@ -23,7 +23,7 @@ export default function AddDemandeeModal({modalAddDemande,setModalAddDemande,rad
 
     const [rapport,setRapport] = useState("");
     const handleChangeAddRadio = (e)=>{
-       setRapport(e.target.value);
+      setRapport(e.target.value);
     }
 
 
@@ -35,6 +35,28 @@ export default function AddDemandeeModal({modalAddDemande,setModalAddDemande,rad
         formData.append("file",e.target.files[0]);
     }
 
+
+    const handleSubmit = (e)=> {
+      e.preventDefault();
+
+      const formData = new FormData();
+      formData.append("document", doc);
+
+      axiosService.put(`medical_doc/${radio.id}`,formData,{
+        headers :{
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then((res) => {
+        console.log(res.data);
+        setModalAddDemande(false);
+      }).catch((err) => {
+        console.log(err);
+      })
+
+
+    
+    
+    }
 
 
     return(
@@ -53,9 +75,9 @@ export default function AddDemandeeModal({modalAddDemande,setModalAddDemande,rad
          <Modal.Body>
 
            <h4>Nom Radio : {radio != null && radio.nom}</h4>
-           <h4>Type : {radio != null && radio.type}</h4>
-           <h4>Catégorie : {radio != null && radio.categorie}</h4>
-           <h4>Demandé par : {radio != null && radio.centre}</h4>
+           <h4>Type : {radio != null && radio.radio_type}</h4>
+           <h4>Catégorie : {radio != null && radio.radio_category}</h4>
+           <h4>Demandé par : {radio != null && radio.doctor }</h4>
 
    
            

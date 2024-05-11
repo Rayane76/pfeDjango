@@ -3,9 +3,10 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import "../../../styles/doctor/patient/radios.css";
 import { useState } from "react";
+import axiosService from '@/app/helpers/axios';
 
 
-export default function ModalAddAnalyse({showModalAdd,setShowModalAdd}){
+export default function ModalAddAnalyse({showModalAdd,setShowModalAdd,patient_id}){
 
     let today = new Date();
 
@@ -21,21 +22,42 @@ export default function ModalAddAnalyse({showModalAdd,setShowModalAdd}){
 
     const [analyseData,setAnalyseData] = useState({
         nom: "",
-        date: formattedDate,
         document: null,
-        centre:""
+      
       })
+
+    
+
 
       const handleChangeAddRadio = (e)=>{
         setAnalyseData((prev)=>({...prev,[e.target.name]:e.target.value}));
       }
       
       const handleAddDocument = (e)=>{
-          setAnalyseData((prev)=>({...prev,[e.target.name]: e.target.files[0]}));
+          setAnalyseData((prev)=>({...prev,document: e.target.files[0]}));
            const formData = new FormData();
            formData.append("file",e.target.files[0]);
       }
 
+
+      const handleUpload = () => {
+        const formData = new FormData();
+        formData.append("nom", analyseData.nom);
+        formData.append("document", analyseData.document);
+        formData.append("type_doc","A")
+        axiosService.post(`add_document/${patient_id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then((res) => {
+          console.log(res.data);
+          window.location.reload();
+
+        }).catch((err) => {
+          console.log(err);
+        })
+      }
 
 
     return(
@@ -105,7 +127,7 @@ export default function ModalAddAnalyse({showModalAdd,setShowModalAdd}){
            
          </Modal.Body>
          <Modal.Footer>
-         <Button>Ajouter</Button>
+         <Button onClick={handleUpload}>Ajouter</Button>
            <Button variant="secondary" onClick={()=>setShowModalAdd(false)}>Fermer</Button>
          </Modal.Footer>
        </Modal>

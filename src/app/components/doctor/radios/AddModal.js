@@ -7,9 +7,10 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import "../../../styles/doctor/patient/radios.css";
 import { useState } from "react";
+import axiosService from '@/app/helpers/axios';
 
 
-export default function AddModal({modalShowAdd,setModalShowAdd}){
+export default function AddModal({modalShowAdd,setModalShowAdd , patient_id}){
 
     const typeEtCategories = [
         {
@@ -66,11 +67,10 @@ let array = [];
 const [radioData,setRadioData] = useState({
   nom: "",
   date: formattedDate,
-  type:"",
-  categorie:"",
+  radio_type:"",
+  radio_category:"",
   document: null,
-  rapport:"",
-  centre:""
+  note:"",
 })
 
 const handleChangeAddRadio = (e)=>{
@@ -90,14 +90,48 @@ const handleChangeAddRadio = (e)=>{
 }
 
 const handleAddDocument = (e)=>{
-    setRadioData((prev)=>({...prev,[e.target.name]: e.target.files[0]}));
-     const formData = new FormData();
-     formData.append("file",e.target.files[0]);
+
+    setRadioData((prev)=>({...prev,document: e.target.files[0]}));
+    const formData = new FormData();
+    console.log("DOCUMENT",radioData.document)
+    formData.append("file",e.target.files[0]);
+    console.log("FORM DATA",formData);
 }
 
 
+const handleSubmit = (e)=> {
+
+  e.preventDefault();
+
+  const formData = new FormData();
+  formData.append("nom",radioData.nom);
+  formData.append("radio_type",radioData.type);
+  formData.append("radio_category",radioData.categorie);
+
+  console.log("DOCUMENT" , document.getElementById("file").files[0])
+  formData.append("document",document.getElementById("file").files[0]);
+  formData.append("note",radioData.note);
+  console.log("FORM DATA",formData)
 
 
+  axiosService.post(`add_document/${patient_id}`,formData,{
+    headers :{
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+  .then((res)=>{
+    console.log(res.data);
+    setModalShowAdd(false);
+
+    window.location.reload();
+
+
+  }).catch((err)=>{ 
+    console.log(err);
+})
+
+
+}
 
 
     return(
@@ -167,7 +201,8 @@ const handleAddDocument = (e)=>{
    
            
             <h4>Rapport : </h4>
-            <textarea rows={7} onChange={(e)=>handleChangeAddRadio(e)} className="textArea"></textarea>
+            <textarea rows={7} onChange={(e)=>handleChangeAddRadio(e)} className="textArea" name='note'>
+          </textarea>
    
             <h4>Document : </h4>
             <div className="d-flex justify-content-center align-items-center">
@@ -218,7 +253,7 @@ const handleAddDocument = (e)=>{
            
          </Modal.Body>
          <Modal.Footer>
-         <Button>Ajouter</Button>
+         <Button onClick={(e)=>handleSubmit(e)} >Ajouter</Button>
            <Button variant="secondary" onClick={()=>setModalShowAdd(false)}>Fermer</Button>
          </Modal.Footer>
        </Modal>
