@@ -12,7 +12,7 @@ export default function Hero(){
                  <div className="descLogDiv">
                     <h1>Plateforme de gestion médicale algérienne</h1>
                     <div className="logBtnsDiv">
-                       <Button variant="primary" className="btn" onClick={()=>router.push("/login")}>Se connecter</Button>
+                       <Button variant="primary" className="btn" onClick={()=>router.push("/register")}>S'inscrire</Button>
                        <Button variant="secondary" className="btn">Plus d'informations</Button>
                     </div>
                  </div>

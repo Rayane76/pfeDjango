@@ -20,7 +20,7 @@ export default function Navbar(){
            <div className="navBtnsDiv">
              <a href="/" className="navBtn navBtnMrg">Home</a>
              <a href="/login" className="navBtn navBtnMrg">Login</a>
-             <a href="/register" className="navBtn">Register</a>
+             <a href="/scan" className="navBtn">Scan</a>
              <FaBars className="menuIcon" onClick={handleShow} />
              <Offcanvas show={show} onHide={handleClose} placement="end">
         <Offcanvas.Header closeButton>
@@ -30,7 +30,7 @@ export default function Navbar(){
            <div className="canvasBtnsDiv">
              <a href="/" className="navBtnCanvas">Home</a>
              <a href="/login" className="navBtnCanvas">Login</a>
-             <a href="/register" className="navBtnCanvas">Register</a>
+             <a href="/scan" className="navBtnCanvas">Scan</a>
             </div> 
         </Offcanvas.Body>
       </Offcanvas>
