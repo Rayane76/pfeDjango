@@ -10,17 +10,20 @@ export default function Hero(){
             <div className="hero">
               <div className="descImageDiv">
                  <div className="descLogDiv">
-                    <h1>Plateforme de gestion medicale algerienne</h1>
+                    <h1>Plateforme de gestion médicale algérienne</h1>
                     <div className="logBtnsDiv">
                        <Button variant="primary" className="btn" onClick={()=>router.push("/login")}>Se connecter</Button>
                        <Button variant="secondary" className="btn">Plus d'informations</Button>
                     </div>
                  </div>
                  <div>
+                    <img src="/home.png" className="imgHome"></img>
+                 </div>
+                 <div>
    
                  </div>
               </div>
-            </div>
-        </>
+           </div>
+      </>
     )
 }

@@ -1,3 +1,29 @@
 .about{
-    height: 100vh;
+    height: 80vh;
+    display: flex;
+    justify-content: space-between;
+}
+
+.aboutImg{
+    height: 70%;
+    width: 100%;
+    margin-top:  25%;
+    margin-left: 35%;
+}
+
+.infos{
+    display: flex;
+    flex-direction: column;
+    margin-top: 9%;
+    margin-right: 10%;
+}
+
+.tx{
+    color: #495574;
+    font-family: Open Sans, Arial, Sans-serif;
+}
+
+
+.fml{
+    font-family: Open Sans, Arial, Sans-serif;
 }

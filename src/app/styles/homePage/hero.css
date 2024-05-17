@@ -7,11 +7,19 @@
 
 
 .hero{
-    min-height: 100vh;
+    min-height: 80vh;
     padding-top: 20px;
+    background-color: #f9faff;
 }
 
 
+/* linear-gradient(91.15deg,#0c419a,#1058d1 99.02%); */
+
+
+.imgHome{
+    height: 90%;
+    width: 80%;
+}
 
 
 .descImageDiv{
@@ -22,6 +30,7 @@
    width: 50%;
    margin-left: 10%;
    margin-top: 8%;
+   font-family: Open Sans, Arial, Sans-serif;
 }
 
 .logBtnsDiv{
@@ -32,4 +41,10 @@
 .btn{
     padding: 10px;
     margin-right: 20px;
+}
+
+.btn1{
+    padding: 10px;
+    margin-right: 20px;
+    background: linear-gradient(91.15deg,#0c419a,#1058d1 99.02%); ;
 }
