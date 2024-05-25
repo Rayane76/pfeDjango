@@ -1,0 +1,138 @@
+.regPage{
+    background-color: #F9F9F9;
+    height: 100vh;
+}
+
+.progressBar{
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    width: 15%;
+    background-color: white;
+    border-style: none solid none none;
+    border-width: 1px;
+    border-color: rgb(170, 169, 169);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.step{
+    border-radius: 50%;
+    background-color: rgb(255, 255, 255);
+    height: 40px;
+    width: 40px;
+    position: relative;
+    margin-bottom: 70px;
+    display: flex;
+    justify-content: center;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    align-items: center;
+    color: black;
+}
+
+.stepl{
+        border-radius: 50%;
+        background-color: rgb(255, 255, 255);
+        height: 40px;
+        width: 40px;
+        position: relative;
+        margin-bottom: 70px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-style: solid;
+        border-color: black;
+        border-width: 1px;
+        align-items: center;
+        color: black;
+}
+
+.step::after{
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 45%;
+    height: 71px;
+    width: 3px;
+    background-color: black;
+}
+
+.activeStep{
+   background-color: black !important;
+   color: white !important;
+}
+
+
+.ttl{
+    height: fit-content;
+    width: fit-content;
+    margin-bottom: 8%;
+    margin-top: 50px;
+}
+
+.regDiv{
+    width: 85%;
+    height: 100vh;
+    margin-left: 15%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.buttonsDiv{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 35%;
+    margin-top: 100px;
+}
+
+.retourBtn{
+   width: 200px;
+   padding: 10px;
+   background-color: white;
+   border: solid 1px black;
+   border-radius: 50px;
+}
+
+.continuerBtn{
+    width: 200px;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    border: solid 1px black;
+    border-radius: 50px;
+}
+
+.inputStep{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+.input{
+    border-radius: 8px;
+    height: 38px;
+    border: solid 1px rgb(126, 125, 125);
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.label{
+    margin-bottom: 5px;
+}
+
+.oneInputDiv{
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+}
+
+
+.notInStep{
+    display: none !important;
+}

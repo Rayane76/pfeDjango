@@ -15,7 +15,7 @@ export default function Navbar(){
         <>
          <div className="navbar">
            <div className="logoDiv">
-              <h1 className="title">NomProjet</h1>
+              <h1 className="title">MEDICA</h1>
            </div>
            <div className="navBtnsDiv">
              <a href="/" className="navBtn navBtnMrg">Home</a>
