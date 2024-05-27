@@ -119,13 +119,14 @@ export default function Operations(props){
         const notSelected = document.getElementById(otherBtn);
         const nvBtn = document.getElementById("nouveauBtnChir");
         setActiveDiv(selected);
-
+        if(props.isAdmin === true){
         if(selected != 'chirRealises'){
           nvBtn.style.display = 'none'
        }
        else{
          nvBtn.style.display = 'flex';
        }
+      }
     
         if (clickedOne.classList.contains("unActive")) {
           activeOne[0].classList.add("unActive");

@@ -1,280 +1,223 @@
-"use client";
-
-import { useState , useNavigate } from "react";
-import Navbar from "../components/navbar/Navbar";
-import "../styles/register.css";
+'use client'
+import { useEffect, useState } from "react";
+import "../styles/reg.css";
 import axios from "axios";
-import { useRouter } from 'next/navigation'
-import { getUser } from "../helpers/axios";
+import { useRouter } from "next/navigation";
+
+export default function Reg() {
+
+    const [currentStep, setCurrentStep] = useState(0);
+
+    const router = useRouter();
 
 
-export default function Register() {
+    const [allInfos,setAllInfos] = useState({
+        first_name: "",
+        last_name: "",
+        email: "",
+        numero_tel: "",
+        emergency_number: "",
+        birth_date: "",
+        gender: "",
+        blood_type: "",
+        address: "",
+        carte_id: "",
+        password: "",
+        role:"P",
+        situation: "",
+        nbr_children: "",
+    })
 
+    const handleInput = (e) => {
+        setAllInfos((prev)=>({...prev,[e.target.name]:e.target.value}));
+      }
 
-  const router = useRouter()
+      const [cfrm,setCfrm] = useState("");
 
-  // const user = getUser
-  // if(user){
-  //   router.push('/')
-  // }
-
-  const handleFirstNext = (e) => {
-    e.preventDefault();
-    const allSlides = document.querySelectorAll(".slide");
-    const allSteps = document.querySelectorAll(".step");
-    allSlides[0].style.marginLeft = "-25%";
-    allSteps[0].classList.add("passed");
-  };
-  const handleSecondNext = (e) => {
-    e.preventDefault();
-    const allSlides = document.querySelectorAll(".slide");
-    const allSteps = document.querySelectorAll(".step");
-
-    allSlides[0].style.marginLeft = "-50%";
-    allSteps[1].classList.add("passed");
-  };
-  const handleThirdNext = (e) => {
-    e.preventDefault();
-    const allSlides = document.querySelectorAll(".slide");
-    const allSteps = document.querySelectorAll(".step");
-
-    allSlides[0].style.marginLeft = "-75%";
-    allSteps[2].classList.add("passed");
-  };
-  const handleFirstPrev = (e) => {
-    e.preventDefault();
-    const allSlides = document.querySelectorAll(".slide");
-    const allSteps = document.querySelectorAll(".step");
-
-    allSlides[0].style.marginLeft = "0%";
-    allSteps[0].classList.remove("passed");
-  };
-  const handleSecondPrev = (e) => {
-    e.preventDefault();
-    const allSlides = document.querySelectorAll(".slide");
-    const allSteps = document.querySelectorAll(".step");
-
-    allSlides[0].style.marginLeft = "-25%";
-    allSteps[1].classList.remove("passed");
-  };
-  const handleThirdPrev = (e) => {
-    e.preventDefault();
-    const allSlides = document.querySelectorAll(".slide");
-    const allSteps = document.querySelectorAll(".step");
-
-    allSlides[0].style.marginLeft = "-50%";
-    allSteps[2].classList.remove("passed");
-  };
-
-
-
-
-const handleSubmit = (e) => {
-    e.preventDefault();
-    const allSteps = document.querySelectorAll(".step");
-    
-    console.log("DATA;",allInfos)
-    axios
-      .post("http://127.0.0.1:8000/api/register/",allInfos)
-      .then((res)=>{
-        localStorage.setItem("auth",JSON.stringify({
-          id:res.data.id ,
-          refresh:res.data.refresh,
-          access:res.data.access,
-          role:res.data.role
-        }))
-
-        router.push('/')
-      }).catch((err)=>{
-        console.log('err',err.request.response)
-
-      })
-  };
-
-  const [allInfos, setAllInfos] = useState({
-    first_name: "",
-    last_name: "",
-    email: "",
-    numero_tel: "",
-    emergency_number: "",
-    birth_date: "",
-    gender: "Male",
-    blood_type: "O+",
-    address: "",
-    carte_id: "",
-    password: "",
-    role:"P"
-  });
-
-  const handleInput = (e) => {
-    setAllInfos((prev)=>({...prev,[e.target.name]:e.target.value}));
-  }
-
-
-
-  
-  
-  return (
-    <>
-      <Navbar />
-      <div className="container">
-        <header>Sign Up</header>
-
-        <div className="progress-bar">
-          <div className="step">
-            <div className="name">Name</div>
-            <div className="number">
-              <span>1</span>
-            </div>
-            <i className="bx bx-check"></i>
-          </div>
-
-          <div className="step">
-            <div className="name">Contact</div>
-            <div className="number">
-              <span>2</span>
-            </div>
-            <i className="bx bx-check"></i>
-          </div>
-
-          <div className="step">
-            <div className="name">Birth</div>
-            <div className="number">
-              <span>3</span>
-            </div>
-            <i className="bx bx-check"></i>
-          </div>
-
-          <div className="step">
-            <div className="name">Submit</div>
-            <div className="number">
-              <span>4</span>
-            </div>
-            <i className="bx bx-check"></i>
-          </div>
+    const steps = [
+      <div className="inputStep">
+        <div className="oneInputDiv">
+          <label className="label">Nom : </label>
+          <input required name="last_name" className="input" onChange={(e)=>handleInput(e)} />
         </div>
+        <div className="oneInputDiv">
+          <label className="label">Prénom : </label>
+          <input required name="first_name" className="input" onChange={(e)=>handleInput(e)} />
+        </div>
+        <div className="oneInputDiv">
+          <label className="label">Email : </label>
+          <input required name="email" type="email" className="input" onChange={(e)=>handleInput(e)} />
+        </div>
+      </div>,
+  
+      <div className="inputStep">
+        <div className="oneInputDiv">
+          <label className="label">Adresse : </label>
+          <input required={currentStep === 1 ? true : false} name="address" className="input" onChange={(e)=>handleInput(e)} />
+        </div>
+        <div className="oneInputDiv">
+          <label className="label">Numéro de téléphone : </label>
+          <input  required={currentStep === 1 ? true : false}  name="numero_tel" className="input" onChange={(e)=>handleInput(e)} />
+        </div>
+        <div className="oneInputDiv">
+          <label className="label">Contact d'urgence : </label>
+          <input  required={currentStep === 1 ? true : false}  name="emergency_number" className="input" onChange={(e)=>handleInput(e)} />
+        </div>
+      </div>,
+  
+      <div className="inputStep">
+        <div className="oneInputDiv">
+          <label className="label">Date de naissance : </label>
+          <input  required={currentStep === 2 ? true : false}  name="birth_date" className="input" type="date" onChange={(e)=>handleInput(e)} />
+        </div>
+        <div className="oneInputDiv">
+          <label className="label">Sexe : </label>
+          <select required={currentStep === 2 ? true : false} value={allInfos.gender} name="gender" className="input" onChange={(e)=>handleInput(e)}>
+            <option value="" hidden>Choisir le sexe : </option>
+            <option value="Male">Homme</option>
+            <option value="Female">Femme</option>
+          </select>
 
-        <div className="form-outer">
-          <form action="#">
-            <div className="slide">
-              <div className="title">Basic Info :</div>
-              <div className="field">
-                <div className="label">First Name</div>
-                <input type="text" name="first_name" onChange={(e)=>handleInput(e)} />
-              </div>
-              <div className="field">
-                <div className="label">Last Name</div>
-                <input type="text" name="last_name" onChange={(e)=>handleInput(e)} />
-              </div>
-              <div className="field">
-                <div className="label">Address</div>
-                <input type="text" name="address" onChange={(e)=>handleInput(e)} />
-              </div>
-              {/* <div className="field">
-                <div className="label">Family Situation</div>
-                <select name="situation" value={allInfos.situation} onChange={(e)=> handleInput(e)}>
-                  <option hidden>Click to select</option>
-                  <option value="single">Single</option>
-                  <option value="married">Married</option>
-                  <option value="divorced">Divorced</option>
-                  <option value="widower">Widower</option>
-                </select>
-              </div>
-              {allInfos.situation != "single" && allInfos.situation != "" && 
-              <div className="field">
-                <div className="label">Number of Children</div>
-                <input type="text" name="children" onChange={(e)=>handleInput(e)} />
-              </div>
-              } */}
-              <div className="field">
-                <button className="next" onClick={(e) => handleFirstNext(e)}>
-                  Next
-                </button>
-              </div>
-            </div>
-
-            <div className="slide">
-              <div className="title">Contact Info :</div>
-              <div className="field">
-                <div className="label">Email Address</div>
-                <input type="text" name="email" onChange={(e)=>handleInput(e)} />
-              </div>
-              <div className="field">
-                <div className="label">Phone Number</div>
-                <input type="tel" name="numero_tel" onChange={(e)=>handleInput(e)} />
-              </div>
-              <div className="field">
-                <div className="label">Emergency Contact Number</div>
-                <input type="tel" name="emergency_number" onChange={(e)=>handleInput(e)} />
-              </div>
-              <div className="field btns">
-                <button className="prev" onClick={(e) => handleFirstPrev(e)}>
-                  Previous
-                </button>
-                <button className="next" onClick={(e) => handleSecondNext(e)}>
-                  Next
-                </button>
-              </div>
-            </div>
-
-            <div className="slide">
-              <div className="title">Date of Birth :</div>
-              <div className="field">
-                <div className="label">Date</div>
-                <input type="date" name="birth_date" onChange={(e)=>handleInput(e)} />
-              </div>
-              <div className="field">
-                <div className="label">Gender</div>
-                <select name="gender" value={allInfos.gender} onChange={(e)=>handleInput(e)}>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </select>
-              </div>
-              <div className="field">
-                <div className="label">Blood Type</div>
-                <select name="blood_type" value={allInfos.blood} onChange={(e)=>handleInput(e)}>
-                  <option value="O+">O +</option>
-                  <option value="O-">O -</option>
-                  <option value="A+">A +</option>
-                  <option value="A-">A -</option>
-                  <option value="B+">B +</option>
-                  <option value="B-">B -</option>
-                  <option value="AB+">AB +</option>
-                  <option value="AB-">AB -</option>
-                </select>
-              </div>
-              <div className="field btns">
-                <button className="prev" onClick={(e) => handleSecondPrev(e)}>
-                  Previous
-                </button>
-                <button className="next" onClick={(e) => handleThirdNext(e)}>
-                  Next
-                </button>
-              </div>
-            </div>
-
-            <div className="slide">
-              <div className="title">Login Details :</div>
-              <div className="field">
-                <div className="label">ID Card number</div>
-                <input type="text" name="carte_id" onChange={(e)=>handleInput(e)} />
-              </div>
-              <div className="field">
-                <div className="label">Password</div>
-                <input type="password" name="password" onChange={(e)=>handleInput(e)} />
-              </div>
-              <div className="field btns">
-                <button className="prev" onClick={(e) => handleThirdPrev(e)}>
-                  Previous
-                </button>
-                <button className="submit" onClick={(e) => handleSubmit(e)}>
-                  Submit
-                </button>
-              </div>
-            </div>
-          </form>
+        </div>
+        <div className="oneInputDiv">
+          <label className="label">Groupe sanguin : </label>
+          <select required={currentStep === 2 ? true : false} name="blood_type" value={allInfos.blood_type} className="input" onChange={(e)=>handleInput(e)}>
+            <option value="" hidden>Choisir le groupe sanguin : </option>
+            <option value="O+">O +</option>
+            <option value="O-">O -</option>
+            <option value="A+">A +</option>
+            <option value="A-">A -</option>
+            <option value="B+">B +</option>
+            <option value="B-">B -</option>
+            <option value="AB+">AB +</option>
+            <option value="AB-">AB -</option>
+          </select>
+        </div>
+      </div>,
+  
+      <div className="inputStep">
+        <div className="oneInputDiv">
+          <label className="label">Numéro d'identification national : </label>
+          <input required={currentStep === 3 ? true : false} name="carte_id" className="input" onChange={(e)=>handleInput(e)} />
+        </div>
+        <div className="oneInputDiv">
+          <label className="label">Situation familiale : </label>
+          <select required={currentStep === 3 ? true : false} name="situation" value={allInfos.situation} className="input" onChange={(e)=>{handleInput(e);setAllInfos((prev)=>({...prev,nbr_enfants:""}))}}>
+            <option value="" hidden>Choisir Situation familiale : </option>
+            <option value="celibataire">Célibataire</option>
+            <option value="mariee">Marié(e)</option>
+            <option value="divorcee">Divorcé(e)</option>
+            <option value="veuf">Veuf/Veuve</option>
+          </select>
+        </div>
+        <div className="oneInputDiv">
+          <label className="label">Nombre d'enfants : </label>
+          <input required={currentStep === 3 ? true : false} onChange={(e)=>handleInput(e)} value={allInfos.nbr_enfants} disabled={allInfos.situation === "" || allInfos.situation === "celibataire" ? true : false} name="nbr_enfants" type="number" className="input" />
+        </div>
+      </div>,
+  
+      <div className="inputStep">
+        <div className="oneInputDiv">
+          <label className="label">Mot de passe : </label>
+          <input type="password" required={currentStep === 4 ? true : false} onChange={(e)=>handleInput(e)} name="password" className="input" />
+        </div>
+        <div className="oneInputDiv">
+          <label className="label">Confirmer mot de passe : </label>
+          <input type="password" required={currentStep === 4 ? true : false} onChange={(e)=>setCfrm(e.target.value)} className="input" />
         </div>
       </div>
-    </>
+    ];
+
+
+
+
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (currentStep < steps.length - 1) {
+          setCurrentStep(currentStep + 1);
+        }
+        else{
+          if(allInfos.password === cfrm){
+           await axios
+           .post("http://127.0.0.1:8000/api/register/",allInfos)
+           .then((res)=>{
+            console.log(res);
+            localStorage.setItem("auth",JSON.stringify({
+            id:res.data.id ,
+            refresh:res.data.refresh,
+            access:res.data.access,
+            role:res.data.role
+        }));
+        router.push('/account/' + res.data.id)
+      }).catch((err)=>{
+        console.log('err',err)
+      })
+          }
+          else{
+             
+          }
+        }
+      }
+    
+      const handleBack = (e) => {
+        e.preventDefault();
+        if (currentStep > 0) {
+          setCurrentStep(currentStep - 1);
+        }
+      };
+
+
+  return (
+    <div className="regPage">
+      <div className="progressBar">
+        <div className="pBarSteps">
+          <div className="stepTitle">
+          Nom
+          <div className={currentStep >= 1 ? "step activeStep" : "step"}>1</div>
+          </div>
+          <div  className="stepTitle">
+          Contact
+          <div className={currentStep >= 2 ? "step activeStep" : "step"}>2</div>
+          </div>
+          <div  className="stepTitle">
+          Naissance
+          <div className={currentStep >= 3 ? "step activeStep" : "step"}>3</div>
+          </div>
+          <div className="stepTitle">
+          Situation
+          <div className={currentStep >= 4 ? "step activeStep" : "step"}>4</div>
+          </div>
+          <div className="stepTitle">
+          Soumettre
+          <div className="stepl">5</div>
+          </div>
+        </div>
+      </div>
+
+
+
+     <form onSubmit={(e)=>handleSubmit(e)}>
+      <div className="regDiv">
+        
+        <h1 className="ttl">Inscription</h1>
+
+
+
+        {steps.map((step, index) => (
+        <div key={index} className={`inputStep ${index === currentStep ? 'inStep' : 'notInStep'}`}>
+          {step}
+        </div>
+      ))}
+
+
+        <div className="buttonsDiv">
+          <button onClick={handleBack} disabled={currentStep === 0} className="retourBtn">Retour</button>
+          <button type="submit" className="continuerBtn">
+          {currentStep === steps.length -1 ? "Submit" : "Continuer"}
+          </button>
+        </div>
+      </div>
+      </form>
+    </div>
   );
 }

@@ -1,4 +1,4 @@
-"use client";
+'use client'
 import "../../../styles/doctor/patient/historique.css";
 import HistoriqueSvg from "@/app/utils/svg/historique";
 import TextField from "@mui/material/TextField";
@@ -7,98 +7,35 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useState } from "react";
 
-export default function History() {
-  const maladies = [
-    {
-      id: "1",
-      affiche: false,
-      nom: "maladie1",
-      date: "14-02-2009",
-      medecin: "Dr. Bendriss Asma",
-      categorie: "cardiaque",
-      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-      ordonnance: [
-        {
-          medicament: "Medicament 1",
-          ratio: "2",
-          duree: "7",
-        },
-        {
-          medicament: "Medicament 2",
-          ratio: "2",
-          duree: "10",
-        },
-        {
-          medicament: "Medicament 3",
-          ratio: "1",
-          duree: "3",
-        }
+export default function History(props) {
+  const maladies = props.patient.maladies;
+    // {
+    //   id: "1",
+    //   affiche: false,
+    //   nom: "maladie1",
+    //   date: "14-02-2009",
+    //   medecin: "Dr. Bendriss Asma",
+    //   categorie: "cardiaque",
+    //   note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+    //   ordonnance: [
+    //     {
+    //       medicament: "Medicament 1",
+    //       ratio: "2",
+    //       duree: "7",
+    //     },
+    //     {
+    //       medicament: "Medicament 2",
+    //       ratio: "2",
+    //       duree: "10",
+    //     },
+    //     {
+    //       medicament: "Medicament 3",
+    //       ratio: "1",
+    //       duree: "3",
+    //     }
 
-      ]
-    },
-    {
-      id: "2",
-      nom: "maladie2",
-      affiche: true,
-      date: "11-06-2012",
-      medecin: "Dr. Omar Fouad",
-      categorie: "renal",
-      note: "Note maladie 2",
-      ordonnance: [
-        {
-          medicament: "Medicament 1",
-          ratio: "2",
-          duree: "7",
-        },
-        {
-          medicament: "Medicament 2",
-          ratio: "2",
-          duree: "10",
-        },
-      ]
-    },
-    {
-      id: "3",
-      nom: "maladie3",
-      affiche: false,
-      date: "30-12-2019",
-      medecin: "Dr. Bougara Ali",
-      categorie: "osseuse",
-      note: "",
-      ordonnance: [],
-    },
-    {
-      id: "4",
-      nom: "maladie4",
-      affiche: true,
-      date: "05-01-2023",
-      medecin: "Dr. Djeha Hakim",
-      categorie: "abcd",
-      note: "Note maladie 4",
-      ordonnance: [],
-    },
-    {
-      id: "5",
-      affiche: false,
-      nom: "maladie5",
-      date: "12-11-2020",
-      medecin: "Dr. Assim Ahmed",
-      categorie: "osseuse",
-      note: "",
-      ordonnance: [
-        {
-          medicament: "Medicament 1",
-          ratio: "2/jr",
-          duree: "5 jours",
-        },
-        {
-          medicament: "Medicament 2",
-          ratio: "2/jr",
-          duree: "10 jours",
-        },
-      ],
-    },
-  ];
+    //   ]
+    // },
 
   const familiaux = [
     {

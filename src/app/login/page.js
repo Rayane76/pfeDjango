@@ -1,11 +1,11 @@
 'use client'
-import "../styles/register.css"
-import Navbar from "../components/navbar/Navbar"
 import { useState } from "react"
+import "../styles/log.css"
+import { useRouter } from "next/navigation"
 import axios from "axios"
-import { useRouter } from 'next/navigation'
 
-export default function Login(){
+
+export default function Log(){
     const router = useRouter()
 
     const [data,setData] = useState({
@@ -17,11 +17,10 @@ export default function Login(){
         setData((prev)=>({...prev,[e.target.name]:e.target.value}));
     }
 
-    const handleSubmit = (e) =>{
+    
+    const handleSubmit = async (e) =>{
         e.preventDefault()
-
-        console.log("DATA",data)
-        axios
+        await axios
         .post("http://127.0.0.1:8000/api/login/",data)
         .then((res)=>{
             localStorage.setItem("auth",JSON.stringify({
@@ -30,45 +29,38 @@ export default function Login(){
                 access:res.data.access,
                 role:res.data.role
             }))
-
-            router.push('/')
-
-
+            router.push('/account/' + res.data.id)
         })
         .catch((err)=>{
-            console.log('err',err.request.response)
+            console.log('err',err)
         })
 
     }
+
+
     return(
-        <>
-          <Navbar />
-          <div className="container">
-        <header>Sign Up</header>
-        <div className="form-outer">
-            <form action="#">
-                <div className="slide">
-                    <div className="field">
-                        <div className="label">Matricule</div>
-                        <input type="text" name="id" onChange={(e)=>handleInput(e)} />
-                    </div>
-                    <div className="field">
-                        <div className="label">Password</div>
-                        <input type="password" name="password" onChange={(e)=>handleInput(e)}/>
-                    </div>
-                    <div>
-                        <div className="label">Don't have an account ? <a href="/register">Register</a></div>
-                    </div>
-                    <div className="field">
-                        <button className="next" onClick={(e) => handleSubmit(e)}>Submit</button>
-                    </div>
-                    <div>
-                    <div className="label">Doctor or Labo ? <a href="/loginAsAdmin">Login here</a></div>
-                    </div>
-                    </div>
-                    </form>
-                    </div>
+        
+        <div className="logPage">
+           <h1 className="ttl">Connexion</h1>
+           <form onSubmit={(e)=>handleSubmit(e)} style={{width:"100%"}}>
+           <div className="inputStep">
+            <div className="oneInputDiv">
+            <label className="label">Matricule : </label>
+            <input onChange={(e)=>handleInput(e)} name="id" required className="input" />
+            </div>
+            <div className="oneInputDiv">
+            <label className="label">Mot de passe : </label>
+            <input onChange={(e)=>handleInput(e)} type="password" name="password" required className="input" />
+            </div>
+
+            <a href="/" className="cnt">Docteur/labo ? Connecter vous ici</a>
+           </div>
+
+
+           <div className="d-flex justify-content-center">
+            <button type="submit" className="continuerBtn">Se connecter</button>
+           </div>
+           </form>
         </div>
-        </>
     )
 }

@@ -8,11 +8,10 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import ModalAddAnalyse from "./ModalAddAnalyse";
 import AddDemandeeAnalyseModal from "./AddDemandeeAnalyseModal";
-import axiosService from '@/app/helpers/axios';
 
 
 export default function Analyses(props) {
-  const [analyses,setAnalyses] = useState([])
+  const analyses = [];
   // const analyses = [
   //   {
   //     nom: "Analyse1",
@@ -36,14 +35,6 @@ export default function Analyses(props) {
   //     centre: "DR. Sekhiri Merouane",
   //   },
   // ];
-
-  useEffect(() => { 
-    axiosService.get(`analyses/${props.patient_id}`).then((res) => {
-      setAnalyses(res.data);
-    }
-    ).catch((err) => {
-      console.log(err);
-    })},[]);
 
 
   analyses.sort((a, b) => {
@@ -116,12 +107,14 @@ export default function Analyses(props) {
     const notSelected = document.getElementById(otherBtn);
     const nvBtn = document.getElementById("nouveauBtnAnalyses");
     setActiveDiv(selected);
+    if(props.isAdmin === true){
     if(selected != 'analysesRealises'){
       nvBtn.style.display = 'none'
    }
    else{
      nvBtn.style.display = 'flex';
    }
+  }
 
     if (clickedOne.classList.contains("unActive")) {
       activeOne[0].classList.add("unActive");

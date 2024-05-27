@@ -1,9 +1,9 @@
+'use client'
 import "../../../styles/doctor/patient/generalInfos.css"
 import TrendingFlatIcon from "@mui/icons-material/TrendingFlat";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import AddIcon from '@mui/icons-material/Add';
 
 export default function GeneralInfos(props) {
   const handleFlip = (e) => {
@@ -65,12 +65,11 @@ export default function GeneralInfos(props) {
                      <span className="fw-bold me-2">
                      Situation: 
                      </span>
-                     {props.patient.married ? "married" : "non"} <br></br>
-                      { props.patient.married && (
+                     {props.patient.situation} <br></br>
                                     <span className="fw-bold me-2">
-                                    Nombre d'enfants: 2 <br></br>
+                                    Nombre d'enfants: {props.patient.nbr_children} <br></br>
                                         </span>
-                                            )}
+                                            
                     </>
                      }
                   </h4>
@@ -101,14 +100,14 @@ export default function GeneralInfos(props) {
                 <div className="maladiesDiv">
                 <h4 className="nameInfos">Maladies :</h4>
                  <ul>
-                  <li className="disease">Heart disease</li>
-                  <li className="disease">Arthritis</li>
-                  <li className="disease">Type 2 Diabetes</li>
-                  <li className="disease">Asthma</li>
-                  <li className="disease">Kidney disease</li>
+                  {props.patient.maladies.map((maladie,index)=>{
+                    if(maladie.isChronic === true){
+                      return(
+                        <li key={index} className="disease">{maladie.name}</li>
+                      )
+                    }
+                  })}
                   <li className="disease showMore" onClick={(e)=> handleShow(e,"disease")}>Show more <ExpandMoreIcon /></li>
-                  <li className="hiddenFirst moredisease">Shellfish</li>
-                  <li className="hiddenFirst moredisease">Shellfish</li>
                   <li className="hiddenFirst moredisease showMore" onClick={(e)=> handleShow(e,"disease")}>Back <ExpandLessIcon /></li>
                  </ul>
                 </div>

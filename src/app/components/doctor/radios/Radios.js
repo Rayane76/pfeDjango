@@ -8,22 +8,10 @@ import Modal from 'react-bootstrap/Modal';
 import { useEffect, useState } from "react";
 import AddModal from "./AddModal";
 import AddDemandeeModal from "./AddDemandeeModal";
-import axiosService from "@/app/helpers/axios";
-
-
 
 export default function Radios(props) {
 
-
-  const [radios,setRadios] = useState([])
-
-  useEffect(() => { 
-    axiosService.get(`radios/${props.patient_id}`).then((res) => {
-      setRadios(res.data);
-    }
-    ).catch((err) => {
-      console.log(err);
-    })},[]);
+  const radios = []
 
   radios.sort((a, b) => {
     // Convert dates to Date objects for comparison
@@ -127,12 +115,14 @@ const [activeDiv,setActiveDiv] = useState("realises");
     const notSelected = document.getElementById(otherBtn);
     const nvBtn = document.getElementById("nouveauBtnRadios");
     setActiveDiv(selected);
+    if(props.isAdmin === true){
     if(selected != 'realises'){
        nvBtn.style.display = 'none'
     }
     else{
       nvBtn.style.display = 'flex';
     }
+  }
 
     if (clickedOne.classList.contains("unActive")) {
       activeOne[0].classList.add("unActive");

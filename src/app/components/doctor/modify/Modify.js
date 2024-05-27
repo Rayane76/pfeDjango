@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useState } from "react";
 
-export default function Modify() {
+export default function Modify(props) {
   const [selectedDiv, setSelectedDiv] = useState("modifyAllergies");
   const [modalShowAllergie, setModalShowAllergie] = useState(false);
   const [modalShowAnt, setModalShowAnt] = useState(false);
