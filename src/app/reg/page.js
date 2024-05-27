@@ -1,10 +1,14 @@
 'use client'
 import { useEffect, useState } from "react";
 import "../styles/reg.css";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function Reg() {
 
     const [currentStep, setCurrentStep] = useState(0);
+
+    const router = useRouter();
 
 
     const [allInfos,setAllInfos] = useState({
@@ -69,16 +73,16 @@ export default function Reg() {
         <div className="oneInputDiv">
           <label className="label">Sexe : </label>
           <select required={currentStep === 2 ? true : false} value={allInfos.gender} name="gender" className="input" onChange={(e)=>handleInput(e)}>
-            <option hidden>Choisir le sexe : </option>
-            <option value="male">Homme</option>
-            <option value="femele">Femme</option>
+            <option value="" hidden>Choisir le sexe : </option>
+            <option value="Male">Homme</option>
+            <option value="Female">Femme</option>
           </select>
 
         </div>
         <div className="oneInputDiv">
           <label className="label">Groupe sanguin : </label>
           <select required={currentStep === 2 ? true : false} name="blood_type" value={allInfos.blood_type} className="input" onChange={(e)=>handleInput(e)}>
-            <option hidden>Choisir le groupe sanguin : </option>
+            <option value="" hidden>Choisir le groupe sanguin : </option>
             <option value="O+">O +</option>
             <option value="O-">O -</option>
             <option value="A+">A +</option>
@@ -98,8 +102,8 @@ export default function Reg() {
         </div>
         <div className="oneInputDiv">
           <label className="label">Situation familiale : </label>
-          <select required={currentStep === 3 ? true : false} name="situation" value={allInfos.situation} className="input" onChange={(e)=>handleInput(e)}>
-            <option hidden>Choisir Situation familiale : </option>
+          <select required={currentStep === 3 ? true : false} name="situation" value={allInfos.situation} className="input" onChange={(e)=>{handleInput(e);setAllInfos((prev)=>({...prev,nbr_enfants:""}))}}>
+            <option value="" hidden>Choisir Situation familiale : </option>
             <option value="celibataire">Célibataire</option>
             <option value="mariee">Marié(e)</option>
             <option value="divorcee">Divorcé(e)</option>
@@ -108,27 +112,50 @@ export default function Reg() {
         </div>
         <div className="oneInputDiv">
           <label className="label">Nombre d'enfants : </label>
-          <input required={currentStep === 3 ? true : false} onChange={(e)=>handleInput(e)} disabled={allInfos.situation === "" || allInfos.situation === "celibataire" ? true : false} name="nbr_enfants" type="number" className="input" />
+          <input required={currentStep === 3 ? true : false} onChange={(e)=>handleInput(e)} value={allInfos.nbr_enfants} disabled={allInfos.situation === "" || allInfos.situation === "celibataire" ? true : false} name="nbr_enfants" type="number" className="input" />
         </div>
       </div>,
   
       <div className="inputStep">
         <div className="oneInputDiv">
           <label className="label">Mot de passe : </label>
-          <input required={currentStep === 4 ? true : false} onChange={(e)=>handleInput(e)} name="password" className="input" />
+          <input type="password" required={currentStep === 4 ? true : false} onChange={(e)=>handleInput(e)} name="password" className="input" />
         </div>
         <div className="oneInputDiv">
           <label className="label">Confirmer mot de passe : </label>
-          <input required={currentStep === 4 ? true : false} onChange={(e)=>setCfrm(e.target.value)} className="input" />
+          <input type="password" required={currentStep === 4 ? true : false} onChange={(e)=>setCfrm(e.target.value)} className="input" />
         </div>
       </div>
     ];
 
 
-      const handleSubmit = (e) => {
+
+
+      const handleSubmit = async (e) => {
         e.preventDefault();
         if (currentStep < steps.length - 1) {
           setCurrentStep(currentStep + 1);
+        }
+        else{
+          if(allInfos.password === cfrm){
+           await axios
+           .post("http://127.0.0.1:8000/api/register/",allInfos)
+           .then((res)=>{
+            console.log(res);
+            localStorage.setItem("auth",JSON.stringify({
+            id:res.data.id ,
+            refresh:res.data.refresh,
+            access:res.data.access,
+            role:res.data.role
+        }));
+        router.push('/account/' + res.data.id)
+      }).catch((err)=>{
+        console.log('err',err)
+      })
+          }
+          else{
+             
+          }
         }
       }
     
@@ -143,17 +170,27 @@ export default function Reg() {
   return (
     <div className="regPage">
       <div className="progressBar">
-        <div className="d-flex flex-column align-items-center">
+        <div className="pBarSteps">
+          <div className="stepTitle">
           Nom
           <div className={currentStep >= 1 ? "step activeStep" : "step"}>1</div>
+          </div>
+          <div  className="stepTitle">
           Contact
           <div className={currentStep >= 2 ? "step activeStep" : "step"}>2</div>
+          </div>
+          <div  className="stepTitle">
           Naissance
           <div className={currentStep >= 3 ? "step activeStep" : "step"}>3</div>
+          </div>
+          <div className="stepTitle">
           Situation
           <div className={currentStep >= 4 ? "step activeStep" : "step"}>4</div>
+          </div>
+          <div className="stepTitle">
           Soumettre
           <div className="stepl">5</div>
+          </div>
         </div>
       </div>
 
@@ -175,7 +212,7 @@ export default function Reg() {
 
         <div className="buttonsDiv">
           <button onClick={handleBack} disabled={currentStep === 0} className="retourBtn">Retour</button>
-          <button type="submit" disabled={currentStep === steps.length - 1} className="continuerBtn">
+          <button type="submit" className="continuerBtn">
           {currentStep === steps.length -1 ? "Submit" : "Continuer"}
           </button>
         </div>
