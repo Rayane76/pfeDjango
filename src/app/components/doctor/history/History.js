@@ -8,33 +8,34 @@ import Modal from 'react-bootstrap/Modal';
 import { useState } from "react";
 
 export default function History(props) {
-  const maladies = props.patient.maladies;
-    // {
-    //   id: "1",
-    //   affiche: false,
-    //   nom: "maladie1",
-    //   date: "14-02-2009",
-    //   medecin: "Dr. Bendriss Asma",
-    //   categorie: "cardiaque",
-    //   note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-    //   ordonnance: [
-    //     {
-    //       medicament: "Medicament 1",
-    //       ratio: "2",
-    //       duree: "7",
-    //     },
-    //     {
-    //       medicament: "Medicament 2",
-    //       ratio: "2",
-    //       duree: "10",
-    //     },
-    //     {
-    //       medicament: "Medicament 3",
-    //       ratio: "1",
-    //       duree: "3",
-    //     }
-
-    //   ]
+  const maladies = [
+    {
+      id: "1",
+      affiche: false,
+      nom: "maladie1",
+      date: "14-02-2009",
+      medecin: "Dr. Bendriss Asma",
+      categorie: "cardiaque",
+      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+      ordonnance: [
+        {
+          medicament: "Medicament 1",
+          ratio: "2",
+          duree: "7",
+        },
+        {
+          medicament: "Medicament 2",
+          ratio: "2",
+          duree: "10",
+        },
+        {
+          medicament: "Medicament 3",
+          ratio: "1",
+          duree: "3",
+        }
+      ]
+    }
+      ]
     // },
 
   const familiaux = [

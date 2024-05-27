@@ -237,4 +237,32 @@
   .tableRowsAnt{
     width: 100%;
   }
+
+
+
+
+  .tableTitleLabel{
+    font-size: 14px;
+  }
+  
+  .labelRow{
+    font-size: 14px;
+  }
+  
+  .labelRowAnt2{
+    font-size: 14px;
+    width: 39%;
+  }
+
+  .labelRowAnt1{
+    font-size: 14px;
+    width: 29%;
+  }
+  
+  .labelRowAnt{
+    font-size: 14px;
+    width: 35%;
+  }
+  
+
 }
