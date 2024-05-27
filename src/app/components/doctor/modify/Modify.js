@@ -119,8 +119,7 @@ export default function Modify(props) {
           className="cssbuttons-io-button"
         >
           <svg
-            height="25"
-            width="25"
+            className="css-btn-svg"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
           >

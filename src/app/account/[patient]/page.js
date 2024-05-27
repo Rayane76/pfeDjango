@@ -22,7 +22,7 @@ export default async function Patient({ params }) {
 
      const patient = await getPatient(id);
 
-     
+      console.log(patient)
 
   return (
     <>

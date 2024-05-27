@@ -203,3 +203,38 @@
   transition: 0s;
   transform: rotate(-10deg);
 }
+
+.css-btn-svg{
+  height: 25px;
+  width: 25px;
+}
+
+@media screen and (max-width: 768px) {
+  .modifyDivTitleDiv{
+    margin: 0;
+  }
+  .modifyDivTitle{
+    font-size: 20px;
+  }
+  .cssbuttons-io-button{
+    margin-right: 0;
+    width: 100px;
+    font-size: 14px;
+  }
+  .modifybtnsDiv{
+    margin-right: 0;
+    margin-bottom: 80px;
+  }
+  .tableTitleDivAllergie{
+    width: 100%;
+  }
+  .tableTitleDivAntecedents{
+    width: 100%;
+  }
+  .tableRows{
+    width: 100%;
+  }
+  .tableRowsAnt{
+    width: 100%;
+  }
+}
