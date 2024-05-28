@@ -11,33 +11,9 @@ import AddDemandeeAnalyseModal from "./AddDemandeeAnalyseModal";
 
 
 export default function Analyses(props) {
-  const analyses = [];
-  // const analyses = [
-  //   {
-  //     nom: "Analyse1",
-  //     date: "14-01-2018",
-  //     demande: false,
-  //     document: "test.pdf",
-  //     centre: "Bisker",
-  //   },
-  //   {
-  //     nom: "Analyse2",
-  //     date: "21-02-2020",
-  //     demande: false,
-  //     document: "test.pdf",
-  //     centre: "NomCentre",
-  //   },
-  //   {
-  //     nom: "Analyse3",
-  //     date: "21-02-2020",
-  //     demande: true,
-  //     document: "",
-  //     centre: "DR. Sekhiri Merouane",
-  //   },
-  // ];
 
 
-  analyses.sort((a, b) => {
+  props.analyses.sort((a, b) => {
     // Convert dates to Date objects for comparison
     const dateA = new Date(a.date.split("-").reverse().join("-"));
     const dateB = new Date(b.date.split("-").reverse().join("-"));
@@ -45,7 +21,7 @@ export default function Analyses(props) {
     return dateB - dateA;
   });
 
-  const uniqueNoms = [...new Set(analyses.map((analyse) => analyse.demande === false && analyse.nom))];
+  const uniqueNoms = [...new Set(props.analyses.map((analyse) => analyse.isDemande === false && analyse.nom))];
   const filteredArrayNoms = uniqueNoms.filter(item => item !== false);
 
   const [filteredNom, setFilteredNom] = useState(undefined);
@@ -78,7 +54,7 @@ export default function Analyses(props) {
            <div className="analyseModalDiv">
              {selectedAnalyse != null && 
               <embed
-              src={"/" + selectedAnalyse.document}
+              src={"/files/" + selectedAnalyse.document}
               type="application/pdf"
               width="100%"
               height="100%"
@@ -216,8 +192,8 @@ export default function Analyses(props) {
             <label className="tableTitleLabell">Date</label>
           </div>
           <div className="tableRowsAnalyses">
-            {analyses.map((analyse,index)=>{
-              if((filteredNom === analyse.nom || filteredNom === undefined) && analyse.demande === false){
+            {props.analyses.map((analyse,index)=>{
+              if((filteredNom === analyse.nom || filteredNom === undefined) && analyse.isDemande === false){
               return(
               <div onClick={(e)=>handleClickAnalyse(e,analyse)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{analyse.nom}</label>
@@ -234,8 +210,8 @@ export default function Analyses(props) {
             <label className="tableTitleLabell">Date</label>
           </div>
           <div className="tableRowsAnalyses">
-          {analyses.map((analyse,index)=>{
-              if(analyse.demande === true){
+          {props.analyses.map((analyse,index)=>{
+              if(analyse.isDemande === true){
               return(
               <div onClick={(e)=>handleAddDemandee(e,analyse)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{analyse.nom}</label>
@@ -250,7 +226,7 @@ export default function Analyses(props) {
         show={modalShow}
         onHide={() => setModalShow(false)}
       />
-      <AddDemandeeAnalyseModal modalAddDemande={modalAddDemande}  setModalAddDemande={setModalAddDemande}  analyse={selectedAnalyse} />
+      <AddDemandeeAnalyseModal modalAddDemande={modalAddDemande} patient_id={props.patient_id} setModalAddDemande={setModalAddDemande}  analyse={selectedAnalyse} />
       </div>
     </>
   );

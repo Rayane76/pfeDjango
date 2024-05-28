@@ -73,25 +73,6 @@
     height: 100%;
 }
 
-@media screen and (max-width : 768px) {
-    .modalDiv{
-        display: block;
-        height: auto;
-    }
-
-    .modalBodyDiv1{
-        height: auto;
-        width: 100%;
-    }
-    .modalBodyDiv2{
-        height: 600px;
-        width: 100%;
-    }
-    .modal-content{
-        height: fit-content;
-    }
-}
-
 
 
 .tableTitleDivAnalyses{
@@ -156,4 +137,41 @@
   .slctd{
     text-decoration: underline;
     color: rgb(10, 88, 172);
+  }
+
+
+
+  @media screen and (max-width: 768px) {
+    .modalDiv{
+      display: block;
+      height: auto;
+  }
+
+  .modalBodyDiv1{
+      height: auto;
+      width: 100%;
+  }
+  .modalBodyDiv2{
+      height: 600px;
+      width: 100%;
+  }
+  .modal-content{
+      height: fit-content;
+  }
+
+    .radiosDivTitleDiv{
+      margin: 0;
+    }
+    .radiosDivTitle{
+      font-size: 20px;
+    }
+    .tableTitleDivAnalyses{
+      width: 100%;
+    }
+    .tableRowsAnalyses{
+      width: 100%;
+    }
+    .radiosFilterDiv{
+      margin-right: 0;
+    }
   }

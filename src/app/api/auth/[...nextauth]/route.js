@@ -39,6 +39,10 @@ async function login(credentials){
              console.log("Wrong Password")
              return
             }
+            if(!medecin.isValide){
+             console.log("Not Valid yet !")
+             return
+            }
     
             return {id : medecin._id.toString() , role: "M"}
         }
@@ -54,6 +58,11 @@ async function login(credentials){
              console.log("Wrong Password")
              return
             }
+
+            if(!labo.isValide){
+                console.log("Not Valid yet !")
+                return
+               }
     
             return {id : labo._id.toString() , role: "L"}
         }
@@ -69,6 +78,11 @@ async function login(credentials){
              console.log("Wrong Password")
              return
             }
+
+            if(!centre.isValide){
+                console.log("Not Valid yet !")
+                return
+               }
     
             return {id : centre._id.toString() , role: "C"}
         }

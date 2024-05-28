@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useState } from "react";
 
-export default function Modify({ patient }) {
+export default function Modify({ allergies , antecedents }) {
   const [selectedDiv, setSelectedDiv] = useState("modifyAllergies");
   const [modalShowAllergie, setModalShowAllergie] = useState(false);
   const [modalShowAnt, setModalShowAnt] = useState(false);
@@ -194,7 +194,7 @@ export default function Modify({ patient }) {
           <label style={{ height: "24px", width: "24px" }}></label>
         </div>
         <div className="tableRows">
-         {patient.allergies.map((allergie,index)=>{
+         {allergies.map((allergie,index)=>{
           return(
             <div key={index} className="tableRow">
             <label className="labelRow">{allergie.name}</label>
@@ -213,10 +213,10 @@ export default function Modify({ patient }) {
           <label style={{ height: "24px", width: "24px" }}></label>
         </div>
         <div className="tableRowsAnt">
-         {patient.antecedents.map((antecedent,index)=>{
+         {antecedents.map((antecedent,index)=>{
           return(
             <div key={index} className="tableRow">
-            <label className="labelRowAnt2">{antecedent.name}</label>
+            <label className="labelRowAnt2">{antecedent.nom}</label>
             <label className="labelRowAnt1">{antecedent.membre}</label>
             <label className="labelRowAnt">{antecedent.categorie}</label>
             <DeleteIcon className="labelIcon" />

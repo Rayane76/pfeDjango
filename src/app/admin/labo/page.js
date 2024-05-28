@@ -2,7 +2,8 @@
 import "../../styles/doctor/home.css";
 import { useState } from "react";
 
-export default function Doctor() {
+export default function Labo() {
+
   return (
     <>
       <div>
@@ -13,6 +14,7 @@ export default function Doctor() {
           </label>
           <input placeholder="matricule ..." required></input>
           </form>
+
         </div>
       </div>
     </>

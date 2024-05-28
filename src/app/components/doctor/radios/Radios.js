@@ -11,9 +11,7 @@ import AddDemandeeModal from "./AddDemandeeModal";
 
 export default function Radios(props) {
 
-  const radios = []
-
-  radios.sort((a, b) => {
+  props.radios.sort((a, b) => {
     // Convert dates to Date objects for comparison
     const dateA = new Date(a.date.split('-').reverse().join('-'));
     const dateB = new Date(b.date.split('-').reverse().join('-'));
@@ -21,9 +19,9 @@ export default function Radios(props) {
     return dateB - dateA;
   });
 
-  const uniqueCategories = [...new Set(radios.map((radio) => radio.demande === false && radio.categorie))];
+  const uniqueCategories = [...new Set(props.radios.map((radio) => radio.isDemande === false && radio.categorie))];
   const filteredArrayCats = uniqueCategories.filter(item => item !== false);
-  const uniqueTypes = [...new Set(radios.map((radio)=> radio.demande === false && radio.type))];
+  const uniqueTypes = [...new Set(props.radios.map((radio)=> radio.isDemande === false && radio.type))];
   const filteredArrayTypes = uniqueTypes.filter(item => item !== false);
   const [modalShowRadio, setModalShowRadio] = useState(false);
   const [modalShowAdd, setModalShowAdd] = useState(false);
@@ -67,32 +65,27 @@ function MyVerticallyCenteredModal(props) {
       <Modal.Body>
         <div className="modalDiv">
           <div className="modalBodyDiv1">
-            <h5>{selectedRadio != null && "Ajoute par : " + selectedRadio.labo}</h5>
+            <h5>{selectedRadio != null && "Ajoute par : " + selectedRadio.centre}</h5>
             <h5>{selectedRadio != null && "le : " + selectedRadio.date}</h5>
-            <h5>{selectedRadio != null && "Type : " + selectedRadio.radio_type}</h5>
-            <h5>{selectedRadio != null && "Categorie : " + selectedRadio.radio_category}</h5>
+            <h5>{selectedRadio != null && "Type : " + selectedRadio.type}</h5>
+            <h5>{selectedRadio != null && "Categorie : " + selectedRadio.categorie}</h5>
             {selectedRadio != null && selectedRadio.rapport!="" && 
             <>
             <h5>Rapport : </h5>
-            <p>{selectedRadio.note}</p>
+            <p>{selectedRadio.rapport}</p>
             </>
             }
           </div>
           <div className="modalBodyDiv2">
           {selectedRadio != null && 
           <embed
-          src="http://127.0.0.1:8000/media/documents/Interro_20_.pdf"
+          src={"/files/" + selectedRadio.document}
           type="application/pdf"
               width="100%"
               height="100%"
             />
             
           }
-         {selectedRadio != null && <a href={"http://127.0.0.1:8000" + selectedRadio.document}
-        download
-      >
-        Click to download
-      </a>}
           </div>
         </div>
       </Modal.Body>
@@ -215,7 +208,7 @@ const [activeDiv,setActiveDiv] = useState("realises");
       // className="medecinFilter"
       id="combo-box-demo1"
       options={filteredArrayTypes}
-      getOptionLabel={(option) => option ? option.radio_type : ''}
+      getOptionLabel={(option) => option ? option.type : ''}
 
       autoHighlight
       sx={{ width: 300 }}
@@ -227,7 +220,7 @@ const [activeDiv,setActiveDiv] = useState("realises");
       onChange={(e)=>handleChangeFilterCat(e)}
       id="combo-box-demo"
       options={filteredArrayCats}
-      getOptionLabel={(option) => option ? option.radio_category : ''}
+      getOptionLabel={(option) => option ? option.categorie : ''}
 
       autoHighlight
       sx={{ width: 300 }}
@@ -245,53 +238,53 @@ const [activeDiv,setActiveDiv] = useState("realises");
         </div>
         <div className="tableRowsPersonnel">
           { filteredCat === undefined && filteredType === undefined ?
-            radios.map((radio,index)=>{
-            if(radio.demande === false){ 
-              const formattedDate = radio.date.substring(0, 10);
+            props.radios.map((radio,index)=>{
+            if(radio.isDemande === false){ 
+              {/* const formattedDate = radio.date.substring(0, 10); */}
             return(
               <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
-            <label className="labelRowPers1">{formattedDate}</label>
-            <label className="labelRowPers">{radio.radio_type}</label>
-            <label className="labellast">{radio.radio_category}</label>
+            <label className="labelRowPers1">{radio.date}</label>
+            <label className="labelRowPers">{radio.type}</label>
+            <label className="labellast">{radio.categorie}</label>
           </div>
             )
             }
           }) :
           filteredCat != undefined && filteredType === undefined ?
-          radios.map((radio,index)=>{
-            if(radio.categorie === filteredCat && radio.demande === false){
+          props.radios.map((radio,index)=>{
+            if(radio.categorie === filteredCat && radio.isDemande === false){
             return(
               <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
             <label className="labelRowPers1">{radio.date}</label>
-            <label className="labelRowPers">{radio.radio_type}</label>
-            <label className="labellast">{radio.radio_category}</label>
+            <label className="labelRowPers">{radio.type}</label>
+            <label className="labellast">{radio.categorie}</label>
           </div>
             )
             }
           }) : 
           filteredCat === undefined && filteredType != undefined ?
-          radios.map((radio,index)=>{
-            if(radio.radio_type === filteredType && radio.demande === false){
+          props.radios.map((radio,index)=>{
+            if(radio.type === filteredType && radio.isDemande === false){
             return(
               <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
             <label className="labelRowPers1">{radio.date}</label>
-            <label className="labelRowPers">{radio.radio_type}</label>
-            <label className="labellast">{radio.radio_category}</label>
+            <label className="labelRowPers">{radio.type}</label>
+            <label className="labellast">{radio.categorie}</label>
           </div>
             )
             }
           }) : 
-          radios.map((radio,index)=>{
-            if(radio.radio_type === filteredType && radio.radio_category=== filteredCat && radio.demande === false){
+          props.radios.map((radio,index)=>{
+            if(radio.type === filteredType && radio.categorie=== filteredCat && radio.isDemande === false){
             return(
               <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
             <label className="labelRowPers1">{radio.date}</label>
-            <label className="labelRowPers">{radio.radio_type}</label>
-            <label className="labellast">{radio.radio_category}</label>
+            <label className="labelRowPers">{radio.type}</label>
+            <label className="labellast">{radio.categorie}</label>
           </div>
             )
             }
@@ -308,14 +301,14 @@ const [activeDiv,setActiveDiv] = useState("realises");
           <label className="tableTitleLabell">Catégorie</label>
         </div>
         <div className="tableRowsPersonnel">
-        {radios.map((radio,index)=>{
-            if(radio.demande === true){  
+        {props.radios.map((radio,index)=>{
+            if(radio.isDemande === true){  
             return(
               <div onClick={(e)=>handleAddDemandee(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
             <label className="labelRowPers1">{radio.date}</label>
-            <label className="labelRowPers">{radio.radio_type}</label>
-            <label className="labellast">{radio.radio_category}</label>
+            <label className="labelRowPers">{radio.type}</label>
+            <label className="labellast">{radio.categorie}</label>
           </div>
             )
             }
@@ -328,7 +321,7 @@ const [activeDiv,setActiveDiv] = useState("realises");
         show={modalShowRadio}
         onHide={() => setModalShowRadio(false)}
       />
-      <AddDemandeeModal modalAddDemande={modalAddDemande}  setModalAddDemande={setModalAddDemande}  radio={selectedRadio} />
+      <AddDemandeeModal modalAddDemande={modalAddDemande} patient_id={props.patient_id}  setModalAddDemande={setModalAddDemande}  radio={selectedRadio} />
       </div>
     </>
   );

@@ -7,50 +7,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useState } from "react";
 
-export default function History({ patient }) {
-  const maladies = [
-    {
-      id: "1",
-      affiche: false,
-      nom: "maladie1",
-      date: "14-02-2009",
-      medecin: "Dr. Bendriss Asma",
-      categorie: "cardiaque",
-      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-      ordonnance: [
-        {
-          medicament: "Medicament 1",
-          ratio: "2",
-          duree: "7",
-        },
-        {
-          medicament: "Medicament 2",
-          ratio: "2",
-          duree: "10",
-        },
-        {
-          medicament: "Medicament 3",
-          ratio: "1",
-          duree: "3",
-        }
-      ]
-    }
-      ]
-    // },
-
-  const familiaux = [
-    {
-    antecedent: "Cancer du colon",
-    membre: "pere",
-    categorie: "cardiaque"
-    },
-      {
-      antecedent: "diabete",
-      membre: "mere",
-      categorie: "chronique"
-      },
-
-]
+export default function History({ maladies , antecedents }) {
 
    maladies.sort((a, b) => {
     // Convert dates to Date objects for comparison
@@ -107,7 +64,7 @@ export default function History({ patient }) {
 
   const uniqueCategories = [...new Set(maladies.map((maladie) => maladie.categorie))];
   const uniqueMedecins = [...new Set(maladies.map((maladie)=>maladie.medecin))];
-  const uniqueFam = [...new Set(familiaux.map((ant)=>ant.categorie))];
+  const uniqueFam = [...new Set(antecedents.map((ant)=>ant.categorie))];
 
 
   const [modalShow, setModalShow] = useState(false);
@@ -299,7 +256,7 @@ export default function History({ patient }) {
           <label className="tableTitleLabelF">Catégorie</label>
         </div>
         <div className="tableRowsFamilial">
-          {familiaux.map((ant,index)=>{
+          {antecedents.map((ant,index)=>{
             if(ant.categorie === filteredCat || filteredCat === undefined){
             return(
               <div key={index} className="tableRow">

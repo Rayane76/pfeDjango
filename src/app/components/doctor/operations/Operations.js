@@ -7,52 +7,12 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import AddChirurgieModal from "./AddChirurgieModal";
 import AddDemandeChirModal from "./AddDemandeChirModal";
-import { useEffect, useState } from "react";
-import axiosService from "@/app/helpers/axios";
+import { useState } from "react";
 
 
 export default function Operations(props){
 
-    // const chirurgies = [
-    //     {
-    //         nom: "Chirurgie 1",
-    //         demande: false,
-    //         date: "14-02-2018",
-    //         categorie: "Vasculaire",
-    //         rapport: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis vel eros donec ac odio tempor orci dapibus ultrices. Tellus id interdum velit laoreet. Et ultrices neque ornare aenean euismod elementum nisi. Non blandit massa enim nec dui. Lobortis mattis aliquam faucibus purus in massa tempor nec. Urna porttitor rhoncus dolor purus non enim praesent elementum facilisis. Sed nisi lacus sed viverra. Consectetur adipiscing elit duis tristique sollicitudin nibh sit amet commodo. Viverra maecenas accumsan lacus vel facilisis volutpat est velit egestas. Lobortis mattis aliquam faucibus purus in massa tempor nec feugiat. Eget dolor morbi non arcu risus. Feugiat sed lectus vestibulum mattis ullamcorper velit. Risus pretium quam vulputate dignissim suspendisse in. Auctor urna nunc id cursus metus aliquam.",
-    //         medecin: "DR. Bouras Ahmed"
-    //     },
-    //     {
-    //         nom: "Chirurgie 2",
-    //         demande: false,
-    //         date: "11-10-2020",
-    //         categorie: "Thoracique",
-    //         rapport: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis vel eros donec ac odio tempor orci dapibus ultrices. Tellus id interdum velit laoreet. Et ultrices neque ornare aenean euismod elementum nisi. Non blandit massa enim nec dui. Lobortis mattis aliquam faucibus purus in massa tempor nec. Urna porttitor rhoncus dolor purus non enim praesent elementum facilisis. Sed nisi lacus sed viverra. Consectetur adipiscing elit duis tristique sollicitudin nibh sit amet commodo. Viverra maecenas accumsan lacus vel facilisis volutpat est velit egestas. Lobortis mattis aliquam faucibus purus in massa tempor nec feugiat. Eget dolor morbi non arcu risus. Feugiat sed lectus vestibulum mattis ullamcorper velit. Risus pretium quam vulputate dignissim suspendisse in. Auctor urna nunc id cursus metus aliquam.",
-    //         medecin: "DR. Bekkat Said"
-    //     },
-    //     {
-    //       nom: "Chirurgie 3",
-    //       demande: true,
-    //       date: "11-11-2023",
-    //       categorie: "Thoracique",
-    //       rapport:"",
-    //       medecin: "DR. Bekkat Said"
-    //   },
-
-    // ]
-
-    const [chirurgies,setChirurgies] = useState([]);
-
-    useEffect (()=>{
-
-      axiosService.get(`chirurgies/${props.patient_id}`).then((res) => {
-        console.log("CHur",res.data)
-        setChirurgies(res.data);})
-        .catch((err) => {
-          console.log(err);
-        })},[])
-
-    chirurgies.sort((a, b) => {
+    props.chirurgies.sort((a, b) => {
         // Convert dates to Date objects for comparison
         const dateA = new Date(a.date.split('-').reverse().join('-'));
         const dateB = new Date(b.date.split('-').reverse().join('-'));
@@ -60,7 +20,7 @@ export default function Operations(props){
         return dateB - dateA;
       });
 
-      const uniqueCategories = [...new Set(chirurgies.map((chirurgie) => chirurgie.demande === false && chirurgie.categorie))];
+      const uniqueCategories = [...new Set(props.chirurgies.map((chirurgie) => chirurgie.isDemande === false && chirurgie.categorie))];
       const filteredArrayCategories = uniqueCategories.filter(item => item !== false);
 
       const [modalShowChirurgie, setModalShowChirurgie] = useState(false);
@@ -92,7 +52,7 @@ export default function Operations(props){
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                  <h5>{selectedChirurgie != null && "Realisee par : " + selectedChirurgie.doctor}</h5>
+                  <h5>{selectedChirurgie != null && "Realisee par : " + selectedChirurgie.medecin}</h5>
                   <h5>{selectedChirurgie != null && "le : " + selectedChirurgie.date}</h5>
                   <h5>{selectedChirurgie != null && "Categorie : " + selectedChirurgie.categorie}</h5>
                   {selectedChirurgie != null && selectedChirurgie.rapport!="" && 
@@ -230,13 +190,13 @@ export default function Operations(props){
           </div>
           <div className="tableRowsPersonnel">
             { 
-              chirurgies.map((chirurgie,index)=>{
-              if((chirurgie.categorie === filteredCat || filteredCat === undefined) && chirurgie.demande === false){  
+              props.chirurgies.map((chirurgie,index)=>{
+              if((chirurgie.categorie === filteredCat || filteredCat === undefined) && chirurgie.isDemande === false){  
               return(
                 <div onClick={(e)=>handleClickChirurgie(e,chirurgie)} key={index} className="tableRowPers">
               <label className="labelRowPers2">{chirurgie.nom}</label>
               <label className="labelRowPers1">{chirurgie.date}</label>
-              <label className="labelRowPers">{chirurgie.doctor}</label>
+              <label className="labelRowPers">{chirurgie.medecin}</label>
               <label className="labellast">{chirurgie.categorie}</label>
             </div>
               )
@@ -254,8 +214,8 @@ export default function Operations(props){
           </div>
           <div className="tableRowsPersonnel">
           { 
-              chirurgies.map((chirurgie,index)=>{
-              if(chirurgie.demande === true){  
+              props.chirurgies.map((chirurgie,index)=>{
+              if(chirurgie.isDemande === true){  
               return(
                 <div onClick={(e)=>handleAddDemandee(e,chirurgie)} key={index} className="tableRowPers">
               <label className="labelRowPers2">{chirurgie.nom}</label>
@@ -273,7 +233,7 @@ export default function Operations(props){
           show={modalShowChirurgie}
           onHide={() => setModalShowChirurgie(false)}
         />
-        <AddDemandeChirModal modalAddDemande={modalAddDemande}  setModalAddDemande={setModalAddDemande}  chirurgie={selectedChirurgie} />
+        <AddDemandeChirModal modalAddDemande={modalAddDemande} patient_id={props.patient_id}  setModalAddDemande={setModalAddDemande}  chirurgie={selectedChirurgie} />
         </div>
 
     )

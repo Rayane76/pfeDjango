@@ -2,7 +2,8 @@
 import "../../styles/doctor/home.css";
 import { useState } from "react";
 
-export default function Doctor() {
+export default function Centre() {
+
   return (
     <>
       <div>

@@ -1,4 +1,3 @@
-'use client'
 import GeneralInfos from "@/app/components/doctor/generalInfos/GeneralInfos";
 import "../../../styles/doctor/patient/all.css"
 import Radios from "@/app/components/doctor/radios/Radios";
@@ -7,52 +6,51 @@ import History from "@/app/components/doctor/history/History";
 import Operations from "@/app/components/doctor/operations/Operations";
 import Consultation from "@/app/components/doctor/consultation/Consultation";
 import Modify from "@/app/components/doctor/modify/Modify";
-import { useEffect , useState } from "react";
-import axiosService from "@/app/helpers/axios";
-
-export default function Patient({ params }) {
-
-  const [patient,setPatient] = useState({});
-
-     const id = params.patient;
-
-  useEffect(() => {
-    
-    
-    axiosService.get(`/patient/${id}`).then((res) => {
-      console.log(res.data);
-      setPatient(res.data);
-    }).catch((err) => {
-      console.log(err);
-    })
 
 
-  }, []);
+async function getPatient(id){
+  const patient = await fetch(`${process.env.WEBSITE_URL}/api/users/patient/getPatient?id=${id}`);
+
+  return patient.json();
+}
+
+
+export default async function Patient({ params }) {
+
+  const id = params.patient;
+
+
+   const patient = await getPatient(id);
+
+    console.log(patient)
+
+
   return (
     <>
       <div className="doctorView">
         <div id="generalInfos" className="generalInfos active">
-           <GeneralInfos isAdmin={true} patient={patient} />
+           <GeneralInfos isAdmin={true} patient={patient.data} />
         </div>
         <div id="modify" className="modify unActive">
-           <Modify />
+           <Modify patient={patient.data} />
         </div>
         <div id="history" className="history unActive">
-         <History />
+         <History patient={patient.data} />
         </div>
         <div id="radios" className="radios unActive">
-         <Radios isAdmin={true} patient_id={id}/>
+         <Radios isAdmin={true} patient={patient.data} />
         </div>
         <div id="analyses" className="analyses unActive">
-          <Analyses isAdmin={true} patient_id={id} />
+          <Analyses isAdmin={true} patient={patient.data} />
         </div>
         <div id="operations" className="operations unActive">
-         <Operations isAdmin={true} patient_id={id} />
+         <Operations isAdmin={true} patient={patient.data} />
         </div>
         <div id="consultation" className="consultation unActive">
-         <Consultation />
+        <Consultation />
         </div>
       </div>
     </>
   );
 }
+
