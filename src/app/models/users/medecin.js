@@ -16,6 +16,14 @@ const MedecinSchema = new Schema({
         type: String,
         required: true,
     },
+    numero_tel: {
+        type: String,
+        required: true,
+    },
+    address: {
+        type: String,
+        required: true,
+    },
     carte_id:{
         type: String,
         required: true,

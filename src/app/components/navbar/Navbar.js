@@ -18,9 +18,9 @@ export default function Navbar(){
               <h1 className="title">MEDICA</h1>
            </div>
            <div className="navBtnsDiv">
-             <a href="/" className="navBtn navBtnMrg">Home</a>
-             <a href="/login" className="navBtn navBtnMrg">Login</a>
-             <a href="/scan" className="navBtn">Scan</a>
+             <a href="/" className="navBtn navBtnMrg">Accueil</a>
+             <a href="/login" className="navBtn navBtnMrg">Connexion</a>
+             <a href="/registerHealthCare" className="navBtn">Médecin/Centre</a>
              <FaBars className="menuIcon" onClick={handleShow} />
              <Offcanvas show={show} onHide={handleClose} placement="end">
         <Offcanvas.Header closeButton>
@@ -29,8 +29,8 @@ export default function Navbar(){
         <Offcanvas.Body>
            <div className="canvasBtnsDiv">
              <a href="/" className="navBtnCanvas">Home</a>
-             <a href="/login" className="navBtnCanvas">Login</a>
-             <a href="/scan" className="navBtnCanvas">Scan</a>
+             <a href="/login" className="navBtnCanvas">Connexion</a>
+             <a href="/registerHealthCare" className="navBtnCanvas">Médecin/Centre</a>
             </div> 
         </Offcanvas.Body>
       </Offcanvas>

@@ -11,7 +11,6 @@ export async function POST(req){
 
         const {allInfos} = await req.json();
 
-        console.log(allInfos);
 
         let patient = await Patient.findOne({carte_id: allInfos.carte_id})
         if (patient){
