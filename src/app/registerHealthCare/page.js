@@ -1,8 +1,22 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../styles/reg.css";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+
+
+function generateRandomString(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    const charactersLength = characters.length;
+  
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * charactersLength);
+      result += characters[randomIndex];
+    }
+  
+    return result;
+  }
 
 export default function RegisterHealthCare() {
 
@@ -46,11 +60,13 @@ export default function RegisterHealthCare() {
 
       const date = getCurrentDateFormatted();
 
+      const randomString = useRef(generateRandomString(10));
+
 
       const handleChangeCertificat = (e) => {
 
         
-        setAllInfos((prev)=>({...prev,certificat:date + e.target.files[0].name}));
+        setAllInfos((prev)=>({...prev,certificat:randomString.current + date + e.target.files[0].name}));
         setFil(e.target.files[0]);
       }
 
@@ -164,14 +180,37 @@ export default function RegisterHealthCare() {
           if(allInfos.password === cfrm){
             const formData = new FormData();
             formData.append("file",fil);
+            formData.append("random",randomString.current);
            await axios.post(
             "/api/users/addDocument",
             formData,
             {
               headers: { "Content-Type": "multipart/form-data" },
-            }).then((res)=>{
+            }).then(async (res)=>{
                 if(res.data.success === true){
-                    console.log("successfully added document")
+                    let url = ""
+                    if(allInfos.role === "medecin"){
+                     url = "/api/users/medecin/createMedecin"
+                    }
+                    else if(allInfos.role === "labo"){
+                        url = "/api/users/labo/createLabo"
+                    }
+                    else if (allInfos.role === "centre"){
+                        url = "/api/users/centre/createCentre"
+                    }
+                    await axios
+                    .post(url,{allInfos : allInfos})
+                    .then((res)=>{
+                                if(res.data.success === true){
+                                  alert("Demande enregistre avec success ! Vous pouvez utiliser le compte une fois il sera valide")  
+                                  router.push('/');
+                                }
+                                else{
+                                  console.log(res);
+                                }
+                          }).catch((err)=>{
+                            console.log('err',err)
+                          })
                 }
                 else{
                     console.log(res);
@@ -179,23 +218,9 @@ export default function RegisterHealthCare() {
             }).catch((e)=>{
                 console.log(e);
             })
+        }
+        else{
 
-    //        await axios
-    //        .post("/api/users/medecin/createMedecin",{allInfos : allInfos})
-    //        .then((res)=>{
-    //         if(res.data.success === true){
-    //           router.push('/login');
-    //         }
-    //         else{
-    //           console.log(res);
-    //         }
-    //   }).catch((err)=>{
-    //     console.log('err',err)
-    //   })
-    //       }
-    //       else{
-             
-    //       }
         }
       }
     }

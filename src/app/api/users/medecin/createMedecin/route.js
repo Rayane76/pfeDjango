@@ -20,6 +20,22 @@ export async function POST(req){
         
         const hashedPassword = await bcrypt.hash(allInfos.password, 10);
 
+        medecin = new Medecin({
+            first_name: allInfos.first_name,
+            last_name: allInfos.last_name,
+            email: allInfos.email,
+            numero_tel: allInfos.numero_tel,
+            address: allInfos.address,
+            carte_id: allInfos.carte_id,
+            certificat: allInfos.certificat,
+            specialite: allInfos.specialite,
+            role: "M",
+            password: hashedPassword,
+            isValide: false,
+        })
+
+        await medecin.save();
+
 
         
         return NextResponse.json({

@@ -10,6 +10,7 @@ export async function POST(req){
             const formData = await req.formData();
 
             const file = formData.get("file");
+            const random = formData.get("random");
 
             function getCurrentDateFormatted() {
                 const today = new Date();
@@ -23,7 +24,7 @@ export async function POST(req){
               
               const date = getCurrentDateFormatted()
 
-            const filePath = `./public/files/${date + file.name}`;
+            const filePath = `./public/files/${random + date + file.name}`;
 
             await pump(file.stream(), fs.createWriteStream(filePath));
 
