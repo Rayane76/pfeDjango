@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useState } from "react";
 
-export default function Modify(props) {
+export default function Modify({ patient }) {
   const [selectedDiv, setSelectedDiv] = useState("modifyAllergies");
   const [modalShowAllergie, setModalShowAllergie] = useState(false);
   const [modalShowAnt, setModalShowAnt] = useState(false);
@@ -194,21 +194,15 @@ export default function Modify(props) {
           <label style={{ height: "24px", width: "24px" }}></label>
         </div>
         <div className="tableRows">
-          <div className="tableRow">
-            <label className="labelRow">Lait</label>
-            <label className="labelRow">Oui</label>
+         {patient.allergies.map((allergie,index)=>{
+          return(
+            <div key={index} className="tableRow">
+            <label className="labelRow">{allergie.name}</label>
+            <label className="labelRow">{allergie.affiche}</label>
             <DeleteIcon className="labelIcon" />
           </div>
-          <div className="tableRow">
-            <label className="labelRow">Graines de sésame</label>
-            <label className="labelRow">Non</label>
-            <DeleteIcon className="labelIcon" />
-          </div>
-          <div className="tableRow">
-            <label className="labelRow">Poisson</label>
-            <label className="labelRow">Oui</label>
-            <DeleteIcon className="labelIcon" />
-          </div>
+          )
+         })}
         </div>
       </div>
       <div id="modifyAntecedents" className="tableDivAntecedents unActive">
@@ -219,24 +213,16 @@ export default function Modify(props) {
           <label style={{ height: "24px", width: "24px" }}></label>
         </div>
         <div className="tableRowsAnt">
-          <div className="tableRow">
-            <label className="labelRowAnt2">Cancer du côlon</label>
-            <label className="labelRowAnt1">Pere</label>
-            <label className="labelRowAnt">Cardiaque</label>
+         {patient.antecedents.map((antecedent,index)=>{
+          return(
+            <div key={index} className="tableRow">
+            <label className="labelRowAnt2">{antecedent.name}</label>
+            <label className="labelRowAnt1">{antecedent.membre}</label>
+            <label className="labelRowAnt">{antecedent.categorie}</label>
             <DeleteIcon className="labelIcon" />
           </div>
-          <div className="tableRow">
-            <label className="labelRowAnt2">Cancer du côlon</label>
-            <label className="labelRowAnt1">Pere</label>
-            <label className="labelRowAnt">Cardiaque</label>
-            <DeleteIcon className="labelIcon" />
-          </div>
-          <div className="tableRow">
-            <label className="labelRowAnt2">Cancer du côlon</label>
-            <label className="labelRowAnt1">Pere</label>
-            <label className="labelRowAnt">Cardiaque</label>
-            <DeleteIcon className="labelIcon" />
-          </div>
+          )
+         })}
         </div>
       </div>
     </div>

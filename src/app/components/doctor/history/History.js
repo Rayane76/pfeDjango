@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useState } from "react";
 
-export default function History(props) {
+export default function History({ patient }) {
   const maladies = [
     {
       id: "1",

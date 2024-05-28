@@ -86,13 +86,14 @@ export default function GeneralInfos(props) {
                 <div className="allergiesDiv">
                  <h4 className="alrgTitle">Allergies :</h4>
                  <ul>
-                  <li className="allergie">Cow’s milk</li>
-                  <li className="allergie">Eggs</li>
-                  <li className="allergie">Tree nuts</li>
-                  <li className="allergie">Peanuts</li>
+                  {props.patient.allergies.map((allergie,index)=>{
+                    if(allergie.affiche === true){
+                      return(
+                        <li key={index} className="allergie">{allergie.name}</li>
+                      )
+                    }
+                  })}
                   <li className="allergie showMore" onClick={(e)=> handleShow(e,"allergie")}>Show more <ExpandMoreIcon /></li>
-                  <li className="hiddenFirst moreallergie">Shellfish</li>
-                  <li className="hiddenFirst moreallergie">Shellfish</li>
                   <li className="hiddenFirst moreallergie showMore" onClick={(e)=> handleShow(e,"allergie")}>Back <ExpandLessIcon /></li>
                  </ul>
                  
