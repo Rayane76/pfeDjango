@@ -28,6 +28,10 @@ const MedecinSchema = new Schema({
         type: String,
         required: true,
     },
+    role: {
+        type: String,
+        default: "M"
+    },
     password: {
         type: String,
         required: true,

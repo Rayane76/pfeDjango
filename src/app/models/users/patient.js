@@ -59,6 +59,13 @@ const PatientSchema = new Schema({
         type: String,
         required: true,
     },
+    role: {
+        type: String,
+        default: "P"
+    },
+    qrCodeUrl: { 
+        type: String 
+     },
     allergies: [{
         name: {
             type: String,

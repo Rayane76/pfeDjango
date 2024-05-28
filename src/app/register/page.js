@@ -25,7 +25,7 @@ export default function Reg() {
         password: "",
         role:"P",
         situation: "",
-        nbr_children: "",
+        nbr_children: "0",
     })
 
     const handleInput = (e) => {
@@ -74,8 +74,8 @@ export default function Reg() {
           <label className="label">Sexe : </label>
           <select required={currentStep === 2 ? true : false} value={allInfos.gender} name="gender" className="input" onChange={(e)=>handleInput(e)}>
             <option value="" hidden>Choisir le sexe : </option>
-            <option value="Male">Homme</option>
-            <option value="Female">Femme</option>
+            <option value="male">Homme</option>
+            <option value="female">Femme</option>
           </select>
 
         </div>
@@ -102,7 +102,7 @@ export default function Reg() {
         </div>
         <div className="oneInputDiv">
           <label className="label">Situation familiale : </label>
-          <select required={currentStep === 3 ? true : false} name="situation" value={allInfos.situation} className="input" onChange={(e)=>{handleInput(e);setAllInfos((prev)=>({...prev,nbr_enfants:""}))}}>
+          <select required={currentStep === 3 ? true : false} name="situation" value={allInfos.situation} className="input" onChange={(e)=>{handleInput(e);setAllInfos((prev)=>({...prev,nbr_children:"0"}))}}>
             <option value="" hidden>Choisir Situation familiale : </option>
             <option value="celibataire">Célibataire</option>
             <option value="mariee">Marié(e)</option>
@@ -112,7 +112,7 @@ export default function Reg() {
         </div>
         <div className="oneInputDiv">
           <label className="label">Nombre d'enfants : </label>
-          <input required={currentStep === 3 ? true : false} onChange={(e)=>handleInput(e)} value={allInfos.nbr_enfants} disabled={allInfos.situation === "" || allInfos.situation === "celibataire" ? true : false} name="nbr_enfants" type="number" className="input" />
+          <input required={currentStep === 3 ? true : false} onChange={(e)=>handleInput(e)} value={allInfos.nbr_children} disabled={allInfos.situation === "" || allInfos.situation === "celibataire" ? true : false} name="nbr_children" type="number" className="input" />
         </div>
       </div>,
   
@@ -139,16 +139,14 @@ export default function Reg() {
         else{
           if(allInfos.password === cfrm){
            await axios
-           .post("http://127.0.0.1:8000/api/register/",allInfos)
+           .post("/api/users/patient/createPatient",{allInfos : allInfos})
            .then((res)=>{
-            console.log(res);
-            localStorage.setItem("auth",JSON.stringify({
-            id:res.data.id ,
-            refresh:res.data.refresh,
-            access:res.data.access,
-            role:res.data.role
-        }));
-        router.push('/account/' + res.data.id)
+            if(res.data.success === true){
+              router.push('/login');
+            }
+            else{
+              console.log(res);
+            }
       }).catch((err)=>{
         console.log('err',err)
       })

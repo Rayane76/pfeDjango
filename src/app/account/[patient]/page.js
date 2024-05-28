@@ -7,11 +7,11 @@ import Operations from "@/app/components/doctor/operations/Operations";
 import Modify from "@/app/components/doctor/modify/Modify";
 
 
-async function getPatient(id){
-  const patient = await fetch(`http://127.0.0.1:8000//api/patient/${id}`);
+// async function getPatient(id){
+//   const patient = await fetch(`http://127.0.0.1:8000//api/patient/${id}`);
 
-  return patient.json();
-}
+//   return patient.json();
+// }
 
 export default async function Patient({ params }) {
 
@@ -20,14 +20,13 @@ export default async function Patient({ params }) {
      const id = params.patient;
 
 
-     const patient = await getPatient(id);
+    //  const patient = await getPatient(id);
 
-      console.log(patient)
-
+    //   console.log(patient)
   return (
     <>
       <div className="doctorView">
-        <div id="generalInfos" className="generalInfos active">
+        {/* <div id="generalInfos" className="generalInfos active">
            <GeneralInfos isAdmin={true} patient={patient} />
         </div>
         <div id="modify" className="modify unActive">
@@ -44,7 +43,7 @@ export default async function Patient({ params }) {
         </div>
         <div id="operations" className="operations unActive">
          <Operations isAdmin={false} patient={patient} />
-        </div>
+        </div> */}
       </div>
     </>
   );

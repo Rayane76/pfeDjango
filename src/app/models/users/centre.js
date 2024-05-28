@@ -20,6 +20,10 @@ const CentreSchema = new Schema({
         type: String,
         required: true,
     },
+    role: {
+        type: String,
+        default: "C"
+    },
     isValide: {
         type: Boolean,
         required: true,

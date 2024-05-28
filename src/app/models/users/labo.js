@@ -20,6 +20,10 @@ const LaboSchema = new Schema({
         type: String,
         required: true,
     },
+    role: {
+        type: String,
+        default: "L"
+    },
     isValide: {
         type: Boolean,
         required: true,
