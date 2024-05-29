@@ -2,11 +2,30 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import "../../../styles/doctor/patient/radios.css";
-import { useState } from "react";
-import axiosService from '@/app/helpers/axios';
+import { useRef, useState } from "react";
+import { getSession } from "next-auth/react";
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 
-export default function AddDemandeeAnalyseModal({modalAddDemande,setModalAddDemande,analyse}){
+function generateRandomString(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  const charactersLength = characters.length;
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charactersLength);
+    result += characters[randomIndex];
+  }
+
+  return result;
+}
+
+
+export default function AddDemandeeAnalyseModal({modalAddDemande,setModalAddDemande,analyse,patient_id}){
+   
+  const router = useRouter();
+
     let today = new Date();
 
     let day = today.getDate();
@@ -19,37 +38,60 @@ export default function AddDemandeeAnalyseModal({modalAddDemande,setModalAddDema
     
     let formattedDate = `${day}-${month}-${year}`;
 
+    let fileDate = formattedDate.replace(/-/g, '');
+
+    const [radioName,setRadioName] = useState("");
+
+    const randomString = useRef(generateRandomString(10));
+
 
     const [doc,setDoc] = useState(null);
     
     const handleAddDocument = (e)=>{
-        setDoc(e.target.files[0]);
-        
+      setRadioName(randomString.current + fileDate + e.target.files[0].name)
+      setDoc(e.target.files[0]); 
     }
 
 
 
-    const handleSubmit = (e)=> {
+    const handleSubmit = async (e)=> {
+
       e.preventDefault();
 
+      const session = await getSession();
+
+      analyse.document = radioName;
+
+
       const formData = new FormData();
-      formData.append("document", doc);
-
-      axiosService.put(`medical_doc/${analyse.id}`,formData,{
-        headers :{
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then((res) => {
-        console.log(res.data);
-        setModalAddDemande(false);
-        window.location.reload();
-
-      }).catch((err) => {
-        console.log(err);
-      })
-
-
-    
+      formData.append("file",doc);
+      formData.append("random",randomString.current);
+      await axios.post(
+        "/api/users/addDocument",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }).then(async (res)=>{
+            if(res.data.success === true){
+               await axios.post("/api/users/patient/addDemandee",{data: analyse , field: "analyses" , id: patient_id , centrerole: session.user.role ,centreid: session.user.id})
+               .then((res)=>{
+                if(res.data.success === true){
+                   setModalAddDemande(false);
+                  router.refresh();
+                }
+                else{
+                  console.log(res);
+                }
+               }).catch((err)=>{
+                console.log(err);
+               })
+            }
+            else{
+               console.log(res);
+            }
+          }).catch((err)=>{
+            console.log(err);
+          })
     
     }
 
@@ -124,7 +166,7 @@ export default function AddDemandeeAnalyseModal({modalAddDemande,setModalAddDema
            
          </Modal.Body>
          <Modal.Footer>
-         <Button onClick={handleSubmit} >Ajouter</Button>
+         <Button onClick={(e)=>handleSubmit(e)} >Ajouter</Button>
            <Button variant="secondary" onClick={()=>setModalAddDemande(false)}>Fermer</Button>
          </Modal.Footer>
        </Modal>

@@ -23,8 +23,6 @@ function generateRandomString(length) {
 
 export default function AddDemandeeModal({modalAddDemande,setModalAddDemande,radio,patient_id}){
 
-  console.log(radio);
-
   const router = useRouter();
 
     let today = new Date();
@@ -96,23 +94,6 @@ export default function AddDemandeeModal({modalAddDemande,setModalAddDemande,rad
           }).catch((err)=>{
             console.log(err);
           })
-
-      // const formData = new FormData();
-      // formData.append("document", doc);
-
-      // axiosService.put(`medical_doc/${radio.id}`,formData,{
-      //   headers :{
-      //     'Content-Type': 'multipart/form-data'
-      //   }
-      // }).then((res) => {
-      //   console.log(res.data);
-      //   setModalAddDemande(false);
-      // }).catch((err) => {
-      //   console.log(err);
-      // })
-
-
-    
     
     }
 

@@ -2,11 +2,31 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import "../../../styles/doctor/patient/radios.css";
-import { useState } from "react";
-import axiosService from '@/app/helpers/axios';
+import { useRef, useState } from "react";
+import { getSession } from "next-auth/react";
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+
+
+
+function generateRandomString(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  const charactersLength = characters.length;
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charactersLength);
+    result += characters[randomIndex];
+  }
+
+  return result;
+}
+
 
 
 export default function ModalAddAnalyse({showModalAdd,setShowModalAdd,patient_id}){
+
+  const router = useRouter();
 
     let today = new Date();
 
@@ -19,13 +39,19 @@ export default function ModalAddAnalyse({showModalAdd,setShowModalAdd,patient_id
     month = month < 10 ? '0' + month : month;
     
     let formattedDate = `${day}-${month}-${year}`;
+    
+    let fileDate = formattedDate.replace(/-/g, '');
 
     const [analyseData,setAnalyseData] = useState({
         nom: "",
-        document: null,
-      
+        date: formattedDate,
+        document: "",
+        isDemande: false
       })
 
+      const [fil,setFil]= useState(null);
+
+      const randomString = useRef(generateRandomString(10));
     
 
 
@@ -34,34 +60,16 @@ export default function ModalAddAnalyse({showModalAdd,setShowModalAdd,patient_id
       }
       
       const handleAddDocument = (e)=>{
-          setAnalyseData((prev)=>({...prev,document: e.target.files[0]}));
-           const formData = new FormData();
-           formData.append("file",e.target.files[0]);
+          setAnalyseData((prev)=>({...prev,document: randomString.current + fileDate + e.target.files[0].name}));
+          setFil(e.target.files[0]);
       }
 
 
-      const handleUpload = () => {
-        const formData = new FormData();
-        formData.append("nom", analyseData.nom);
-        formData.append("document", analyseData.document);
-        formData.append("type_doc","A")
-        axiosService.post(`add_document/${patient_id}`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-        .then((res) => {
-          console.log(res.data);
-          window.location.reload();
-
-        }).catch((err) => {
-          console.log(err);
-        })
-      }
+      
 
       const [selected,setSelected] = useState("ajouterRadioTitle")
 
-const handleSwitch = (clicked)=>{
+    const handleSwitch = (clicked)=>{
     if(selected != clicked){
       setSelected(clicked);
       const title1 = document.getElementsByClassName("ajouterRadioTitle");
@@ -71,6 +79,81 @@ const handleSwitch = (clicked)=>{
       title2[0].classList.toggle("slctd");
     }
 }
+
+
+      
+const handleSubmit = async (e)=> {
+
+  e.preventDefault();
+
+  const session = await getSession();
+
+  if(selected === "demanderRadioTitle"){
+    analyseData.isDemande = true;
+    await axios.post("/api/users/patient/addToArrayField",{data: analyseData , field: "analyses" , id: patient_id , centrerole: session.user.role ,centreid: session.user.id})
+    .then((res)=>{
+     if(res.data.success === true){
+       setShowModalAdd(false);
+       setAnalyseData({
+        nom: "",
+        date: formattedDate,
+        document: "",
+        isDemande: false
+      });
+       router.refresh();
+     }
+     else{
+       console.log(res);
+     }
+    }).catch((err)=>{
+     console.log(err);
+    })
+  }
+
+  else{
+
+  const formData = new FormData();
+  formData.append("file",fil);
+  formData.append("random",randomString.current);
+  await axios.post(
+    "/api/users/addDocument",
+    formData,
+    {
+      headers: { "Content-Type": "multipart/form-data" },
+    }).then(async (res)=>{
+        if(res.data.success === true){
+           await axios.post("/api/users/patient/addToArrayField",{data: analyseData , field: "analyses" , id: patient_id , centrerole: session.user.role ,centreid: session.user.id})
+           .then((res)=>{
+            if(res.data.success === true){
+              setShowModalAdd(false);
+              setAnalyseData({
+                nom: "",
+                date: formattedDate,
+                document: "",
+                isDemande: false
+              })
+              router.refresh();
+            }
+            else{
+              console.log(res);
+            }
+           }).catch((err)=>{
+            console.log(err);
+           })
+        }
+        else{
+           console.log(res);
+        }
+      }).catch((err)=>{
+        console.log(err);
+      })
+
+    }
+
+}
+
+
+
 
     return(
         <Modal
@@ -138,7 +221,7 @@ const handleSwitch = (clicked)=>{
        analyseData.document === null ?
        "Drag and drop your file here or click to select a file!"
        :
-       analyseData.document.name
+       analyseData.document
        }</p></label>
    <input required onChange={(e)=>handleAddDocument(e)} className="input" name="document" id="file" type="file" />
            
@@ -149,7 +232,7 @@ const handleSwitch = (clicked)=>{
            
          </Modal.Body>
          <Modal.Footer>
-         <Button onClick={handleUpload}>Ajouter</Button>
+         <Button onClick={(e)=>handleSubmit(e)}>Ajouter</Button>
            <Button variant="secondary" onClick={()=>setShowModalAdd(false)}>Fermer</Button>
          </Modal.Footer>
        </Modal>

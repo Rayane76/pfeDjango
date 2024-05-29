@@ -174,7 +174,7 @@ const [activeDiv,setActiveDiv] = useState("realises");
           <span>Nouveau</span>
         </button>
         }
-        {isAdmin === true && <AddModal modalShowAdd={modalShowAdd} radios={radios} setModalShowAdd={setModalShowAdd} patient_id={patient_id}  />}
+        {isAdmin === true && <AddModal modalShowAdd={modalShowAdd} setModalShowAdd={setModalShowAdd} patient_id={patient_id}  />}
       </div>
       <div className="historiquebtnsDiv">
         <button

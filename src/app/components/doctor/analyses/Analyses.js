@@ -10,10 +10,10 @@ import ModalAddAnalyse from "./ModalAddAnalyse";
 import AddDemandeeAnalyseModal from "./AddDemandeeAnalyseModal";
 
 
-export default function Analyses(props) {
+export default function Analyses({ isAdmin , patient_id , analyses }) {
 
 
-  props.analyses.sort((a, b) => {
+  analyses.sort((a, b) => {
     // Convert dates to Date objects for comparison
     const dateA = new Date(a.date.split("-").reverse().join("-"));
     const dateB = new Date(b.date.split("-").reverse().join("-"));
@@ -21,7 +21,7 @@ export default function Analyses(props) {
     return dateB - dateA;
   });
 
-  const uniqueNoms = [...new Set(props.analyses.map((analyse) => analyse.isDemande === false && analyse.nom))];
+  const uniqueNoms = [...new Set(analyses.map((analyse) => analyse.isDemande === false && analyse.nom))];
   const filteredArrayNoms = uniqueNoms.filter(item => item !== false);
 
   const [filteredNom, setFilteredNom] = useState(undefined);
@@ -83,7 +83,7 @@ export default function Analyses(props) {
     const notSelected = document.getElementById(otherBtn);
     const nvBtn = document.getElementById("nouveauBtnAnalyses");
     setActiveDiv(selected);
-    if(props.isAdmin === true){
+    if(isAdmin === true){
     if(selected != 'analysesRealises'){
       nvBtn.style.display = 'none'
    }
@@ -124,7 +124,7 @@ export default function Analyses(props) {
           <DocumentSvg />
           <h1 className="radiosDivTitle">Analyses</h1>
           </div>
-          {props.isAdmin === true && 
+          {isAdmin === true && 
           <button
            onClick={() => setShowModalAdd(true)}
           title="Add"
@@ -147,7 +147,7 @@ export default function Analyses(props) {
         </button>
           }
         </div>
-        {props.isAdmin === true && <ModalAddAnalyse showModalAdd={showModalAdd} setShowModalAdd={setShowModalAdd} patient_id={props.patient_id}/> }
+        {isAdmin === true && <ModalAddAnalyse showModalAdd={showModalAdd} setShowModalAdd={setShowModalAdd} patient_id={patient_id}/> }
         <div className="historiquebtnsDiv">
         <button
           id="realisesAnalysesBtn"
@@ -192,7 +192,7 @@ export default function Analyses(props) {
             <label className="tableTitleLabell">Date</label>
           </div>
           <div className="tableRowsAnalyses">
-            {props.analyses.map((analyse,index)=>{
+            {analyses.map((analyse,index)=>{
               if((filteredNom === analyse.nom || filteredNom === undefined) && analyse.isDemande === false){
               return(
               <div onClick={(e)=>handleClickAnalyse(e,analyse)} key={index} className="tableRowPers">
@@ -210,7 +210,7 @@ export default function Analyses(props) {
             <label className="tableTitleLabell">Date</label>
           </div>
           <div className="tableRowsAnalyses">
-          {props.analyses.map((analyse,index)=>{
+          {analyses.map((analyse,index)=>{
               if(analyse.isDemande === true){
               return(
               <div onClick={(e)=>handleAddDemandee(e,analyse)} key={index} className="tableRowPers">
@@ -226,7 +226,7 @@ export default function Analyses(props) {
         show={modalShow}
         onHide={() => setModalShow(false)}
       />
-      <AddDemandeeAnalyseModal modalAddDemande={modalAddDemande} patient_id={props.patient_id} setModalAddDemande={setModalAddDemande}  analyse={selectedAnalyse} />
+      <AddDemandeeAnalyseModal modalAddDemande={modalAddDemande} patient_id={patient_id} setModalAddDemande={setModalAddDemande}  analyse={selectedAnalyse} />
       </div>
     </>
   );

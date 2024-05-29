@@ -7,7 +7,6 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import "../../../styles/doctor/patient/radios.css";
 import { useRef, useState } from "react";
-import axiosService from '@/app/helpers/axios';
 import { getSession } from "next-auth/react";
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -28,7 +27,7 @@ function generateRandomString(length) {
 }
 
 
-export default function AddModal({modalShowAdd,setModalShowAdd , radios , patient_id}){
+export default function AddModal({modalShowAdd,setModalShowAdd,patient_id}){
 
   const router = useRouter();
 
@@ -196,34 +195,6 @@ const handleSubmit = async (e)=> {
       })
 
     }
-
-//   const formData = new FormData();
-//   formData.append("nom",radioData.nom);
-//   formData.append("radio_type",radioData.type);
-//   formData.append("radio_category",radioData.categorie);
-
-//   console.log("DOCUMENT" , document.getElementById("file").files[0])
-//   formData.append("document",document.getElementById("file").files[0]);
-//   formData.append("note",radioData.note);
-//   console.log("FORM DATA",formData)
-
-
-//   axiosService.post(`add_document/${patient_id}`,formData,{
-//     headers :{
-//       'Content-Type': 'multipart/form-data'
-//     }
-//   })
-//   .then((res)=>{
-//     console.log(res.data);
-//     setModalShowAdd(false);
-
-//     window.location.reload();
-
-
-//   }).catch((err)=>{ 
-//     console.log(err);
-// })
-
 
 }
 
