@@ -13,27 +13,27 @@ export default function Consultation(){
 
 
     const [maladies,setMaladies] = useState([])
-    const [medicaments,setMedicaments] = useState([])
+    // const [medicaments,setMedicaments] = useState([])
 
-    useEffect(()=>{
-      axiosService.get("/maladies").then((res)=>{
-        setMaladies(res.data);
-      }).catch((err)=>{
-        console.log(err);
-      })
-    },[])
-
-
-    useEffect(()=>{
-      axiosService.get("/medicaments").then((res)=>{
-
-        setMedicaments(res.data);
-      }).catch((err)=>{
-        console.log(err);
-      })
+    // useEffect(()=>{
+    //   axiosService.get("/maladies").then((res)=>{
+    //     setMaladies(res.data);
+    //   }).catch((err)=>{
+    //     console.log(err);
+    //   })
+    // },[])
 
 
-    },[])
+    // useEffect(()=>{
+    //   axiosService.get("/medicaments").then((res)=>{
+
+    //     setMedicaments(res.data);
+    //   }).catch((err)=>{
+    //     console.log(err);
+    //   })
+
+
+    // },[])
 
     let today = new Date();
 

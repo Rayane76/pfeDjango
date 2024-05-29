@@ -139,7 +139,6 @@ const PatientSchema = new Schema({
         type: {
             type: String,
             required: true,
-            enum: ["IRM","Scanner","Radiologie","Echographie","ImagerieFemme","Panoramique","Nucléaire","Densitométrie"]
         },
         categorie: {
             type: String,
@@ -151,7 +150,13 @@ const PatientSchema = new Schema({
         },
         document: {
             type: String,
-            required: true,
+            validate: {
+                validator: function(v) {
+                  // Make document required only if isDemande is false
+                  return this.isDemande ? true : !!v;
+                },
+                message: 'Document is required if isDemande is false'
+              }
         },
         rapport: {
             type: String,
@@ -173,7 +178,13 @@ const PatientSchema = new Schema({
         },
         document: {
             type: String,
-            required: true,
+            validate: {
+                validator: function(v) {
+                  // Make document required only if isDemande is false
+                  return this.isDemande ? true : !!v;
+                },
+                message: 'Document is required if isDemande is false'
+              }
         },
         centre: {
             type: String,
@@ -199,7 +210,13 @@ const PatientSchema = new Schema({
         },
         rapport: {
             type: String,
-            required: true,
+            validate: {
+                validator: function(v) {
+                  // Make document required only if isDemande is false
+                  return this.isDemande ? true : !!v;
+                },
+                message: 'Document is required if isDemande is false'
+              }
         },
         medecin: {
             type: String,

@@ -9,7 +9,9 @@ import Modify from "@/app/components/doctor/modify/Modify";
 
 
 async function getPatient(id){
-  const patient = await fetch(`${process.env.WEBSITE_URL}/api/users/patient/getPatient?id=${id}`);
+  const patient = await fetch(`${process.env.WEBSITE_URL}/api/users/patient/getPatient?id=${id}`,{
+    cache:"no-store"
+  });
 
   return patient.json();
 }
@@ -17,7 +19,7 @@ async function getPatient(id){
 
 export default async function Patient({ params }) {
 
-  const id = params.patient;
+   const id = params.patient;
 
 
    const patient = await getPatient(id);
@@ -32,22 +34,22 @@ export default async function Patient({ params }) {
            <GeneralInfos isAdmin={true} patient={patient.data} />
         </div>
         <div id="modify" className="modify unActive">
-           <Modify patient={patient.data} />
+           <Modify patient_id={patient.data._id} allergies={patient.data.allergies} antecedents={patient.data.antecedents} />
         </div>
         <div id="history" className="history unActive">
-         <History patient={patient.data} />
+         <History maladies={patient.data.maladies} antecedents={patient.data.antecedents} />
         </div>
         <div id="radios" className="radios unActive">
-         <Radios isAdmin={true} patient={patient.data} />
+         <Radios isAdmin={true} patient_id={patient.data._id} radios={patient.data.radios} />
         </div>
         <div id="analyses" className="analyses unActive">
-          <Analyses isAdmin={true} patient={patient.data} />
+          <Analyses isAdmin={true} patient_id={patient.data._id} analyses={patient.data.analyses} />
         </div>
         <div id="operations" className="operations unActive">
-         <Operations isAdmin={true} patient={patient.data} />
+         <Operations isAdmin={true} patient_id={patient.data._id} chirurgies={patient.data.chirurgies} />
         </div>
         <div id="consultation" className="consultation unActive">
-        <Consultation />
+        <Consultation patient_id={patient.data._id} />
         </div>
       </div>
     </>

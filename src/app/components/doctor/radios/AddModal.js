@@ -6,11 +6,31 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import "../../../styles/doctor/patient/radios.css";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import axiosService from '@/app/helpers/axios';
+import { getSession } from "next-auth/react";
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 
-export default function AddModal({modalShowAdd,setModalShowAdd , patient_id}){
+
+function generateRandomString(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  const charactersLength = characters.length;
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charactersLength);
+    result += characters[randomIndex];
+  }
+
+  return result;
+}
+
+
+export default function AddModal({modalShowAdd,setModalShowAdd , radios , patient_id}){
+
+  const router = useRouter();
 
     const typeEtCategories = [
         {
@@ -58,19 +78,24 @@ day = day < 10 ? '0' + day : day;
 month = month < 10 ? '0' + month : month;
 
 let formattedDate = `${day}-${month}-${year}`;
+
+let fileDate = formattedDate.replace(/-/g, '');
+
+const [fil,setFil]= useState(null);
       
 
-      const [cats,setCats] = useState([]);
+const [cats,setCats] = useState([]);
 let array = [];
 
 
 const [radioData,setRadioData] = useState({
   nom: "",
   date: formattedDate,
-  radio_type:"",
-  radio_category:"",
-  document: null,
-  note:"",
+  type: "",
+  categorie: "",
+  document: "",
+  rapport:"",
+  isDemande: false,
 })
 
 const handleChangeAddRadio = (e)=>{
@@ -89,46 +114,81 @@ const handleChangeAddRadio = (e)=>{
   }
 }
 
-const handleAddDocument = (e)=>{
 
-    setRadioData((prev)=>({...prev,document: e.target.files[0]}));
-    const formData = new FormData();
-    console.log("DOCUMENT",radioData.document)
-    formData.append("file",e.target.files[0]);
-    console.log("FORM DATA",formData);
+const randomString = useRef(generateRandomString(10));
+
+const handleAddDocument = (e)=>{
+    setRadioData((prev)=>({...prev,document: randomString.current + fileDate + e.target.files[0].name}));
+    setFil(e.target.files[0]);
 }
 
 
-const handleSubmit = (e)=> {
+const handleSubmit = async (e)=> {
 
   e.preventDefault();
 
+  const session = await getSession();
+
   const formData = new FormData();
-  formData.append("nom",radioData.nom);
-  formData.append("radio_type",radioData.type);
-  formData.append("radio_category",radioData.categorie);
+  formData.append("file",fil);
+  formData.append("random",randomString.current);
+  await axios.post(
+    "/api/users/addDocument",
+    formData,
+    {
+      headers: { "Content-Type": "multipart/form-data" },
+    }).then(async (res)=>{
+        if(res.data.success === true){
+           await axios.post("/api/users/patient/addToArrayField",{data: radioData , field: "radios" , id: patient_id , centrerole: session.user.role ,centreid: session.user.id})
+           .then((res)=>{
+            if(res.data.success === true){
+              setModalShowAdd(false);
+              router.refresh();
+            }
+            else{
+              console.log(res);
+            }
+           }).catch((err)=>{
+            console.log(err);
+           })
+        }
+        else{
+           console.log(res);
+        }
+      }).catch((err)=>{
+        console.log(err);
+      })
 
-  console.log("DOCUMENT" , document.getElementById("file").files[0])
-  formData.append("document",document.getElementById("file").files[0]);
-  formData.append("note",radioData.note);
-  console.log("FORM DATA",formData)
+  console.log(session.user.id);
+
+  console.log(radioData);
+
+//   const formData = new FormData();
+//   formData.append("nom",radioData.nom);
+//   formData.append("radio_type",radioData.type);
+//   formData.append("radio_category",radioData.categorie);
+
+//   console.log("DOCUMENT" , document.getElementById("file").files[0])
+//   formData.append("document",document.getElementById("file").files[0]);
+//   formData.append("note",radioData.note);
+//   console.log("FORM DATA",formData)
 
 
-  axiosService.post(`add_document/${patient_id}`,formData,{
-    headers :{
-      'Content-Type': 'multipart/form-data'
-    }
-  })
-  .then((res)=>{
-    console.log(res.data);
-    setModalShowAdd(false);
+//   axiosService.post(`add_document/${patient_id}`,formData,{
+//     headers :{
+//       'Content-Type': 'multipart/form-data'
+//     }
+//   })
+//   .then((res)=>{
+//     console.log(res.data);
+//     setModalShowAdd(false);
 
-    window.location.reload();
+//     window.location.reload();
 
 
-  }).catch((err)=>{ 
-    console.log(err);
-})
+//   }).catch((err)=>{ 
+//     console.log(err);
+// })
 
 
 }
@@ -222,7 +282,7 @@ const handleSwitch = (clicked)=>{
            {selected === "ajouterRadioTitle" && 
            <>
             <h4>Rapport : </h4>
-            <textarea rows={7} onChange={(e)=>handleChangeAddRadio(e)} className="textArea" name='note'>
+            <textarea rows={7} onChange={(e)=>handleChangeAddRadio(e)} className="textArea" name='rapport'>
           </textarea>
    
             <h4>Document : </h4>
@@ -264,7 +324,7 @@ const handleSwitch = (clicked)=>{
        radioData.document === null ?
        "Drag and drop your file here or click to select a file!"
        :
-       radioData.document.name
+       radioData.document
        }</p></label>
    <input required onChange={(e)=>handleAddDocument(e)} className="input" name="document" id="file" type="file" />
            

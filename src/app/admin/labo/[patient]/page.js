@@ -30,19 +30,19 @@ export default async function Patient({ params }) {
            <GeneralInfos isAdmin={true} patient={patient.data} />
         </div>
         <div id="modify" className="modify unActive">
-           <Modify patient={patient.data} />
+           <Modify patient_id={patient.data._id} allergies={patient.data.allergies} antecedents={patient.data.antecedents} />
         </div>
         <div id="history" className="history unActive">
-         <History patient={patient.data} />
+         <History maladies={patient.data.maladies} antecedents={patient.data.antecedents} />
         </div>
         <div id="radios" className="radios unActive">
-         <Radios isAdmin={false} patient={patient.data} />
+         <Radios isAdmin={false} patient_id={patient.data._id} radios={patient.data.radios} />
         </div>
         <div id="analyses" className="analyses unActive">
-          <Analyses isAdmin={true} patient={patient.data} />
+          <Analyses isAdmin={true} patient_id={patient.data._id} analyses={patient.data.analyses} />
         </div>
         <div id="operations" className="operations unActive">
-         <Operations isAdmin={false} patient={patient.data} />
+         <Operations isAdmin={false} patient_id={patient.data._id} chirurgies={patient.data.chirurgies} />
         </div>
       </div>
     </>

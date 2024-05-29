@@ -9,9 +9,9 @@ import { useEffect, useState } from "react";
 import AddModal from "./AddModal";
 import AddDemandeeModal from "./AddDemandeeModal";
 
-export default function Radios(props) {
+export default function Radios({ isAdmin , patient_id , radios }) {
 
-  props.radios.sort((a, b) => {
+  radios.sort((a, b) => {
     // Convert dates to Date objects for comparison
     const dateA = new Date(a.date.split('-').reverse().join('-'));
     const dateB = new Date(b.date.split('-').reverse().join('-'));
@@ -19,9 +19,9 @@ export default function Radios(props) {
     return dateB - dateA;
   });
 
-  const uniqueCategories = [...new Set(props.radios.map((radio) => radio.isDemande === false && radio.categorie))];
+  const uniqueCategories = [...new Set(radios.map((radio) => radio.isDemande === false && radio.categorie))];
   const filteredArrayCats = uniqueCategories.filter(item => item !== false);
-  const uniqueTypes = [...new Set(props.radios.map((radio)=> radio.isDemande === false && radio.type))];
+  const uniqueTypes = [...new Set(radios.map((radio)=> radio.isDemande === false && radio.type))];
   const filteredArrayTypes = uniqueTypes.filter(item => item !== false);
   const [modalShowRadio, setModalShowRadio] = useState(false);
   const [modalShowAdd, setModalShowAdd] = useState(false);
@@ -49,6 +49,7 @@ const handleClickRadio = (e,radio) =>{
 
 
 function MyVerticallyCenteredModal(props) {
+  console.log(selectedRadio);
   return (
     <Modal
       {...props}
@@ -108,7 +109,7 @@ const [activeDiv,setActiveDiv] = useState("realises");
     const notSelected = document.getElementById(otherBtn);
     const nvBtn = document.getElementById("nouveauBtnRadios");
     setActiveDiv(selected);
-    if(props.isAdmin === true){
+    if(isAdmin === true){
     if(selected != 'realises'){
        nvBtn.style.display = 'none'
     }
@@ -151,7 +152,7 @@ const [activeDiv,setActiveDiv] = useState("realises");
         <DocumentSvg />
         <h1 className="radiosDivTitle">Radios</h1>
         </div>
-        {props.isAdmin === true && 
+        {isAdmin === true && 
         <button
           onClick={() => setModalShowAdd(true)}
           title="Add"
@@ -173,7 +174,7 @@ const [activeDiv,setActiveDiv] = useState("realises");
           <span>Nouveau</span>
         </button>
         }
-        {props.isAdmin === true && <AddModal modalShowAdd={modalShowAdd} setModalShowAdd={setModalShowAdd} patient_id={props.patient_id}  />}
+        {isAdmin === true && <AddModal modalShowAdd={modalShowAdd} radios={radios} setModalShowAdd={setModalShowAdd} patient_id={patient_id}  />}
       </div>
       <div className="historiquebtnsDiv">
         <button
@@ -238,7 +239,7 @@ const [activeDiv,setActiveDiv] = useState("realises");
         </div>
         <div className="tableRowsPersonnel">
           { filteredCat === undefined && filteredType === undefined ?
-            props.radios.map((radio,index)=>{
+            radios.map((radio,index)=>{
             if(radio.isDemande === false){ 
               {/* const formattedDate = radio.date.substring(0, 10); */}
             return(
@@ -252,7 +253,7 @@ const [activeDiv,setActiveDiv] = useState("realises");
             }
           }) :
           filteredCat != undefined && filteredType === undefined ?
-          props.radios.map((radio,index)=>{
+          radios.map((radio,index)=>{
             if(radio.categorie === filteredCat && radio.isDemande === false){
             return(
               <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
@@ -265,7 +266,7 @@ const [activeDiv,setActiveDiv] = useState("realises");
             }
           }) : 
           filteredCat === undefined && filteredType != undefined ?
-          props.radios.map((radio,index)=>{
+          radios.map((radio,index)=>{
             if(radio.type === filteredType && radio.isDemande === false){
             return(
               <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
@@ -277,7 +278,7 @@ const [activeDiv,setActiveDiv] = useState("realises");
             )
             }
           }) : 
-          props.radios.map((radio,index)=>{
+          radios.map((radio,index)=>{
             if(radio.type === filteredType && radio.categorie=== filteredCat && radio.isDemande === false){
             return(
               <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
@@ -301,7 +302,7 @@ const [activeDiv,setActiveDiv] = useState("realises");
           <label className="tableTitleLabell">Catégorie</label>
         </div>
         <div className="tableRowsPersonnel">
-        {props.radios.map((radio,index)=>{
+        {radios.map((radio,index)=>{
             if(radio.isDemande === true){  
             return(
               <div onClick={(e)=>handleAddDemandee(e,radio)} key={index} className="tableRowPers">
@@ -321,7 +322,7 @@ const [activeDiv,setActiveDiv] = useState("realises");
         show={modalShowRadio}
         onHide={() => setModalShowRadio(false)}
       />
-      <AddDemandeeModal modalAddDemande={modalAddDemande} patient_id={props.patient_id}  setModalAddDemande={setModalAddDemande}  radio={selectedRadio} />
+      <AddDemandeeModal modalAddDemande={modalAddDemande} patient_id={patient_id}  setModalAddDemande={setModalAddDemande}  radio={selectedRadio} />
       </div>
     </>
   );

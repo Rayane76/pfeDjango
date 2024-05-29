@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import "../../../styles/doctor/patient/radios.css";
 import { useState } from "react";
+import { getSession } from "next-auth/react";
 
 
 
@@ -36,22 +37,28 @@ export default function AddDemandeeModal({modalAddDemande,setModalAddDemande,rad
     }
 
 
-    const handleSubmit = (e)=> {
+    const handleSubmit = async (e)=> {
+
+      const session = await getSession();
+
+      console.log(session.user.id);
+
+
       e.preventDefault();
 
-      const formData = new FormData();
-      formData.append("document", doc);
+      // const formData = new FormData();
+      // formData.append("document", doc);
 
-      axiosService.put(`medical_doc/${radio.id}`,formData,{
-        headers :{
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then((res) => {
-        console.log(res.data);
-        setModalAddDemande(false);
-      }).catch((err) => {
-        console.log(err);
-      })
+      // axiosService.put(`medical_doc/${radio.id}`,formData,{
+      //   headers :{
+      //     'Content-Type': 'multipart/form-data'
+      //   }
+      // }).then((res) => {
+      //   console.log(res.data);
+      //   setModalAddDemande(false);
+      // }).catch((err) => {
+      //   console.log(err);
+      // })
 
 
     
