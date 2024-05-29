@@ -9,16 +9,20 @@ import DemandesPage from "@/app/components/superAdmin/demandes/DemandesPage";
 
 
 
-// async function getPatient(id){
-//     const patient = await fetch(`${process.env.WEBSITE_URL}/api/users/patient/getPatient?id=${id}`);
+async function getAdmins(){
+    const admins = await fetch(`${process.env.WEBSITE_URL}/api/users/getNotValide`,{
+        cache:"no-store"
+    });
   
-//     return patient.json();
-//   }
+    return admins.json();
+  }
 
 export default async function SuperAdmin(){
 
 
-    // const patient = await getPatient(id);
+    const admins = await getAdmins();
+
+    console.log(admins.data);
 
 
 
@@ -27,7 +31,7 @@ export default async function SuperAdmin(){
  <>
       <div className="doctorView">
       <div id="demandes" className="demandes active">
-           <DemandesPage medecins={[]} labos={[]} centres={[]} />
+           <DemandesPage medecins={admins.data.medecins} labos={admins.data.labos} centres={admins.data.centres} />
         </div>
         <div id="comptes" className="comptes unActive">
             <div>

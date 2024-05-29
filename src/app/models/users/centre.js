@@ -12,6 +12,14 @@ const CentreSchema = new Schema({
         type: String,
         required: true,
     },
+    numero_tel: {
+        type: String,
+        required: true,
+    },
+    address: {
+        type: String,
+        required: true,
+    },
     certificat: {
         type: String,
         required: true,
