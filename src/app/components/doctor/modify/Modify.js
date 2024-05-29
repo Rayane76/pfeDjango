@@ -5,8 +5,11 @@ import ModifyTitleSvg from "@/app/utils/svg/modifyTitle";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
-export default function Modify({ allergies , antecedents }) {
+export default function Modify({ patient_id , allergies , antecedents }) {
+  const router = useRouter();
   const [selectedDiv, setSelectedDiv] = useState("modifyAllergies");
   const [modalShowAllergie, setModalShowAllergie] = useState(false);
   const [modalShowAnt, setModalShowAnt] = useState(false);
@@ -41,70 +44,93 @@ export default function Modify({ allergies , antecedents }) {
     }
   };
 
-  const [data,setData] = useState({nom:"",affiche:false})
+  const [antecedent,setAntecedent] = useState({nom:"",membre:"",categorie:""});
 
-  const handleChange = (e) => {
-    setData((prev)=>({...prev,[e.target.name]:e.target.value}));
+  const [allergie,setAllergie] = useState({
+    name: "",
+    affiche: false,
+  })
+
+
+  
+  const handleAjouterAllergie = async (e)=>{
+      
+    allergies = [...allergies,allergie];
+    let allInfos = {
+      allergies: allergies
+    }
+    const res = await axios.post("/api/users/patient/updatePatient",{id: patient_id , allInfos: allInfos})
+    .then((res)=>{
+      if(res.data.success === true){
+        setModalShowAllergie(false);
+        router.refresh();
+      }
+       else{
+        console.log(res);
+       } 
+    }).catch((err)=>{
+      console.log(err);
+    })
   }
 
-  const handleAjouter = (e)=>{
-    console.log(data);
+  const handleAjouterAntecedent = async (e)=>{
+      
+    antecedents = [...antecedents,antecedent];
+    let allInfos = {
+      antecedents: antecedents
+    }
+    const res = await axios.post("/api/users/patient/updatePatient",{id: patient_id , allInfos: allInfos})
+    .then((res)=>{
+      if(res.data.success === true){
+        setModalShowAnt(false);
+        router.refresh();
+      }
+       else{
+        console.log(res);
+       } 
+    }).catch((err)=>{
+      console.log(err);
+    })
   }
 
-  function MyVerticallyCenteredModalAnt(props) {
-    return (
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Antécédent
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <h4>Ajouter nouvel antécédent</h4>
-          <div className="d-flex flex-column gap-3">
-            <div className="d-flex">
-              <label className="me-2">Antécédent : </label>
-              <input
-                name="ant"
-                type="text"
-                required
-                placeholder="antecedent ..."
-              ></input>
-            </div>
-            <div className="d-flex">
-              <label className="me-2">Membre : </label>
-              <input
-                name="membre"
-                type="text"
-                required
-                placeholder="membre"
-              ></input>
-            </div>
-            <div className="d-flex">
-              <label className="me-2">Catégorie : </label>
-              <input
-                name="categore"
-                type="text"
-                required
-                placeholder="categorie"
-              ></input>
-            </div>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button>Ajouter</Button>
-          <Button variant="secondary" onClick={props.onHide}>
-            Annuler
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    );
+
+  
+  const handleDeleteAntecedent = async (antecedentVar)=>{
+    antecedents = antecedents.filter((antec)=> antec._id != antecedentVar._id);
+    let allInfos = {
+      antecedents: antecedents
+    }
+    const res = await axios.post("/api/users/patient/updatePatient",{id: patient_id , allInfos: allInfos})
+    .then((res)=>{
+      if(res.data.success === true){
+        router.refresh();
+      }
+       else{
+        console.log(res);
+       } 
+    }).catch((err)=>{
+      console.log(err);
+    })
   }
+
+  const handleDeleteAllergie = async (allergieVar)=>{
+    allergies = allergies.filter((aller)=> aller._id != allergieVar._id);
+    let allInfos = {
+      allergies: allergies
+    }
+    const res = await axios.post("/api/users/patient/updatePatient",{id: patient_id , allInfos: allInfos})
+    .then((res)=>{
+      if(res.data.success === true){
+        router.refresh();
+      }
+       else{
+        console.log(res);
+       } 
+    }).catch((err)=>{
+      console.log(err);
+    })
+  }
+
 
   return (
     <div className="modifyDiv">
@@ -144,27 +170,78 @@ export default function Modify({ allergies , antecedents }) {
         <Modal.Body>
           <h4>Ajouter nouvelle allergie :</h4>
           <input
-            onChange={(e)=>handleChange(e)}
+            onChange={(e)=>setAllergie((prev)=>({...prev,name:e.target.value}))}
             className="me-4"
-            name="allergie"
+            name="name"
             type="text"
             required
             placeholder="allergie ..."
           ></input>
-          <input className="me-2" type="checkbox"></input>
+          <input name="affiche" className="me-2" onChange={(e)=>setAllergie((prev)=>({...prev,affiche: e.target.checked}))} type="checkbox"></input>
           <label>Afficher sur la carte ?</label>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={(e)=>handleAjouter(e)}>Ajouter</Button>
+          <Button onClick={(e)=>handleAjouterAllergie(e)}>Ajouter</Button>
           <Button variant="secondary" onClick={()=>setModalShowAllergie(false)}>
             Annuler
           </Button>
         </Modal.Footer>
       </Modal>
-        <MyVerticallyCenteredModalAnt
-          show={modalShowAnt}
-          onHide={() => setModalShowAnt(false)}
-        />
+
+<Modal
+      show={modalShowAnt}
+      onHide={() => setModalShowAnt(false)}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Antécédent
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h4>Ajouter nouvel antécédent</h4>
+          <div className="d-flex flex-column gap-3">
+            <div className="d-flex">
+              <label className="me-2">Antécédent : </label>
+              <input
+                name="nom"
+                type="text"
+                onChange={(e)=>setAntecedent((prev)=>({...prev,nom:e.target.value}))}
+                required
+                placeholder="antecedent ..."
+              ></input>
+            </div>
+            <div className="d-flex">
+              <label className="me-2">Membre : </label>
+              <input
+                name="membre"
+                onChange={(e)=>setAntecedent((prev)=>({...prev,membre:e.target.value}))}
+                type="text"
+                required
+                placeholder="membre"
+              ></input>
+            </div>
+            <div className="d-flex">
+              <label className="me-2">Catégorie : </label>
+              <input
+                name="categorie"
+                onChange={(e)=>setAntecedent((prev)=>({...prev,categorie:e.target.value}))}
+                type="text"
+                required
+                placeholder="categorie"
+              ></input>
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={()=>handleAjouterAntecedent()}>Ajouter</Button>
+          <Button variant="secondary" onClick={() => setModalShowAnt(false)}>
+            Annuler
+          </Button>
+        </Modal.Footer>
+      </Modal>
       </div>
 
       <div className="modifybtnsDiv">
@@ -198,8 +275,8 @@ export default function Modify({ allergies , antecedents }) {
           return(
             <div key={index} className="tableRow">
             <label className="labelRow">{allergie.name}</label>
-            <label className="labelRow">{allergie.affiche}</label>
-            <DeleteIcon className="labelIcon" />
+            <label className="labelRow">{allergie.affiche.toString()}</label>
+            <DeleteIcon className="labelIcon" onClick={()=>handleDeleteAllergie(allergie)} />
           </div>
           )
          })}
@@ -219,7 +296,7 @@ export default function Modify({ allergies , antecedents }) {
             <label className="labelRowAnt2">{antecedent.nom}</label>
             <label className="labelRowAnt1">{antecedent.membre}</label>
             <label className="labelRowAnt">{antecedent.categorie}</label>
-            <DeleteIcon className="labelIcon" />
+            <DeleteIcon className="labelIcon" onClick={()=>handleDeleteAntecedent(antecedent)} />
           </div>
           )
          })}

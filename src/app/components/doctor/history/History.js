@@ -260,7 +260,7 @@ export default function History({ maladies , antecedents }) {
             if(ant.categorie === filteredCat || filteredCat === undefined){
             return(
               <div key={index} className="tableRow">
-            <label className="labelRowFamilial2">{ant.antecedent}</label>
+            <label className="labelRowFamilial2">{ant.nom}</label>
             <label className="labelRowFamilial1">{ant.membre}</label>
             <label className="labelRowFamilial">{ant.categorie}</label>
           </div>

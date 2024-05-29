@@ -10,6 +10,7 @@ import Xray from "@/app/utils/svg/sidebarIcons/xray";
 import AnalysesSvg from "@/app/utils/svg/sidebarIcons/analyses";
 import OperationsSvg from "@/app/utils/svg/sidebarIcons/operationsSvg";
 import ConsultationSvg from "@/app/utils/svg/sidebarIcons/consultationSvg";
+import { BsQrCode } from "react-icons/bs";
 
 export default function SideBarAdmin(props) {
   const [show, setShow] = useState(false);
@@ -76,6 +77,17 @@ export default function SideBarAdmin(props) {
             Consultation
           </div>
           }
+          {props.qrCodeSection === true &&
+                <div 
+                className="field"
+                onClick={(e)=>handleClick(e, "qrCode")}
+                >
+                                <BsQrCode />
+                  Qrcode
+                </div>
+                
+                
+                }
         </div>
       </div>
 
@@ -142,6 +154,17 @@ export default function SideBarAdmin(props) {
                   <ConsultationSvg />
                   Consultation
                 </div>
+                }
+                {props.qrCodeSection === true &&
+                <div 
+                className="field"
+                onClick={(e)=>handleClick(e, "qrCode")}
+                >
+                  <BsQrCode />
+                  Qrcode
+                </div>
+                
+                
                 }
               </div>
             </div>

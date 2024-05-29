@@ -8,7 +8,9 @@ import Modify from "@/app/components/doctor/modify/Modify";
 
 
 async function getPatient(id){
-  const patient = await fetch(`${process.env.WEBSITE_URL}/api/users/patient/getPatient?id=${id}`);
+  const patient = await fetch(`${process.env.WEBSITE_URL}/api/users/patient/getPatient?id=${id}`,{
+    cache: "no-store"
+  });
 
   return patient.json();
 }
@@ -32,7 +34,7 @@ export default async function Patient({ params }) {
            <GeneralInfos isAdmin={true} patient={patient.data} />
         </div>
         <div id="modify" className="modify unActive">
-           <Modify allergies={patient.data.allergies} antecedents={patient.data.antecedents} />
+           <Modify patient_id={patient.data._id} allergies={patient.data.allergies} antecedents={patient.data.antecedents} />
         </div>
         <div id="history" className="history unActive">
          <History maladies={patient.data.maladies} antecedents={patient.data.antecedents} />
@@ -45,6 +47,11 @@ export default async function Patient({ params }) {
         </div>
         <div id="operations" className="operations unActive">
          <Operations isAdmin={false} patient_id={patient.data._id} chirurgies={patient.data.chirurgies} />
+        </div>
+        <div id="qrCode" className="qrCode unActive">
+            <div style={{height:"100vh",width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
+               <img style={{height:"300px",width:"300px"}} src={patient.data.qrCodeUrl} alt="qrcode"></img>
+            </div>
         </div>
       </div>
     </>
