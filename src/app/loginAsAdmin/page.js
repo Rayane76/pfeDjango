@@ -11,6 +11,7 @@ export default function LoginAsAdmin(){
     const router = useRouter()
 
     const [data,setData] = useState({
+        username: "",
         password:"",
         role: "",
         carte_id: "",
@@ -39,7 +40,7 @@ export default function LoginAsAdmin(){
                 router.push("/admin/doctor");
             }
         }
-          else{
+          else if(data.role === "labo" || data.role === "centre"){
             const res = await signIn("credentials",{
                 email: data.email,
                 password: data.password,
@@ -54,9 +55,23 @@ export default function LoginAsAdmin(){
                 if(session.user.role === "L"){
                     router.push("/admin/labo");
                 }
-                else{
+                else if (session.user.role === "C"){
                     router.push("/admin/centre");
                 }
+            }
+          }
+          else if(data.role === "superAdmin"){
+            const res = await signIn("credentials",{
+                username: data.username,
+                password: data.password,
+                user : data.role,
+                redirect: false
+            })
+            if(res.error){
+                console.log("invalid credentials")
+            }
+            else{
+                router.push("/admin/superAdmin");
             }
           }
 
@@ -89,14 +104,16 @@ export default function LoginAsAdmin(){
            <div className="inputStep">
            <div className="oneInputDiv">
             <label className="label">Choisir specialite : </label>
-            <select required name="role" value={data.role} className="input" onChange={(e)=>{setData({password:"",role: e.target.value,carte_id:"",email:""})}}>
+            <select required name="role" value={data.role} className="input" onChange={(e)=>{setData({username: "" , password:"",role: e.target.value,carte_id:"",email:""})}}>
             <option value="" hidden>Choisir specialite : </option>
             <option value="medecin">Medecin</option>
             <option value="labo">Laboratoire d'analyses</option>
             <option value="centre">Centre d'imagerie</option>
+            <option value="superAdmin">Admin</option>
           </select>
             </div>
-            {data.role === "medecin" ?
+            { data.role === "" ? "" :
+             data.role === "medecin" ?
             <>
             <div className="oneInputDiv">
             <label className="label">Numero carte nationale : </label>
@@ -107,7 +124,7 @@ export default function LoginAsAdmin(){
             <input value={data.password} onChange={(e)=>handleInput(e)} type="password" name="password" required className="input" />
             </div>
             </>
-             : data.role != "" ? <>
+             : data.role === "labo" || data.role === "centre" ? <>
              <div className="oneInputDiv">
             <label className="label">Email : </label>
             <input type="email" value={data.email} onChange={(e)=>handleInput(e)} name="email" required className="input" />
@@ -116,7 +133,21 @@ export default function LoginAsAdmin(){
             <label className="label">Mot de passe : </label>
             <input value={data.password} onChange={(e)=>handleInput(e)} type="password" name="password" required className="input" />
             </div>
-             </> : ""}
+             </> : 
+             data.role === "superAdmin" ? 
+             <>
+             <div className="oneInputDiv">
+            <label className="label">Nom d'utilisateur : </label>
+            <input type="text" value={data.username} onChange={(e)=>handleInput(e)} name="username" required className="input" />
+            </div>
+            <div className="oneInputDiv">
+            <label className="label">Mot de passe : </label>
+            <input value={data.password} onChange={(e)=>handleInput(e)} type="password" name="password" required className="input" />
+            </div>
+             </> 
+             : 
+             ""
+             }
            </div>
 
 

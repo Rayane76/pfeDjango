@@ -87,7 +87,7 @@ async function login(credentials){
             return {id : centre._id.toString() , role: "C"}
         }
 
-        else if (credentials.user === "admin"){
+        else if (credentials.user === "superAdmin"){
             const admin = await Admin.findOne({username: credentials.username});
             if(!admin){
               console.log("Wrond credentials")
