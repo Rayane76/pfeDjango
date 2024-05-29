@@ -2,13 +2,30 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import "../../../styles/doctor/patient/radios.css";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { getSession } from "next-auth/react";
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+
+function generateRandomString(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  const charactersLength = characters.length;
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charactersLength);
+    result += characters[randomIndex];
+  }
+
+  return result;
+}
 
 
+export default function AddDemandeeModal({modalAddDemande,setModalAddDemande,radio,patient_id}){
 
+  console.log(radio);
 
-export default function AddDemandeeModal({modalAddDemande,setModalAddDemande,radio}){
+  const router = useRouter();
 
     let today = new Date();
 
@@ -22,29 +39,63 @@ export default function AddDemandeeModal({modalAddDemande,setModalAddDemande,rad
     
     let formattedDate = `${day}-${month}-${year}`;
 
+    let fileDate = formattedDate.replace(/-/g, '');
+
     const [rapport,setRapport] = useState("");
     const handleChangeAddRadio = (e)=>{
       setRapport(e.target.value);
     }
 
+    const [radioName,setRadioName] = useState("");
+
+    const randomString = useRef(generateRandomString(10));
 
     const [doc,setDoc] = useState(null);
     
     const handleAddDocument = (e)=>{
+        setRadioName(randomString.current + fileDate + e.target.files[0].name)
         setDoc(e.target.files[0]);
-        const formData = new FormData();
-        formData.append("file",e.target.files[0]);
     }
 
 
     const handleSubmit = async (e)=> {
 
+      e.preventDefault();
+
       const session = await getSession();
 
-      console.log(session.user.id);
+      radio.document = radioName;
+      radio.rapport = rapport;
 
-
-      e.preventDefault();
+      const formData = new FormData();
+      formData.append("file",doc);
+      formData.append("random",randomString.current);
+      await axios.post(
+        "/api/users/addDocument",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }).then(async (res)=>{
+            if(res.data.success === true){
+               await axios.post("/api/users/patient/addDemandee",{data: radio , field: "radios" , id: patient_id , centrerole: session.user.role ,centreid: session.user.id})
+               .then((res)=>{
+                if(res.data.success === true){
+                   setModalAddDemande(false);
+                  router.refresh();
+                }
+                else{
+                  console.log(res);
+                }
+               }).catch((err)=>{
+                console.log(err);
+               })
+            }
+            else{
+               console.log(res);
+            }
+          }).catch((err)=>{
+            console.log(err);
+          })
 
       // const formData = new FormData();
       // formData.append("document", doc);
@@ -82,9 +133,9 @@ export default function AddDemandeeModal({modalAddDemande,setModalAddDemande,rad
          <Modal.Body>
 
            <h4>Nom Radio : {radio != null && radio.nom}</h4>
-           <h4>Type : {radio != null && radio.radio_type}</h4>
-           <h4>Catégorie : {radio != null && radio.radio_category}</h4>
-           <h4>Demandé par : {radio != null && radio.doctor }</h4>
+           <h4>Type : {radio != null && radio.type}</h4>
+           <h4>Catégorie : {radio != null && radio.categorie}</h4>
+           <h4>Demandé par : {radio != null && radio.centre}</h4>
 
    
            
@@ -140,7 +191,7 @@ export default function AddDemandeeModal({modalAddDemande,setModalAddDemande,rad
            
          </Modal.Body>
          <Modal.Footer>
-         <Button>Ajouter</Button>
+         <Button onClick={(e)=>handleSubmit(e)}>Ajouter</Button>
            <Button variant="secondary" onClick={()=>setModalAddDemande(false)}>Fermer</Button>
          </Modal.Footer>
        </Modal>

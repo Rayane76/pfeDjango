@@ -129,6 +129,33 @@ const handleSubmit = async (e)=> {
 
   const session = await getSession();
 
+  if(selected === "demanderRadioTitle"){
+    radioData.isDemande = true;
+    await axios.post("/api/users/patient/addToArrayField",{data: radioData , field: "radios" , id: patient_id , centrerole: session.user.role ,centreid: session.user.id})
+    .then((res)=>{
+     if(res.data.success === true){
+       setModalShowAdd(false);
+       setRadioData({
+        nom: "",
+        date: formattedDate,
+        type: "",
+        categorie: "",
+        document: "",
+        rapport:"",
+        isDemande: false,
+      })
+       router.refresh();
+     }
+     else{
+       console.log(res);
+     }
+    }).catch((err)=>{
+     console.log(err);
+    })
+  }
+
+  else{
+
   const formData = new FormData();
   formData.append("file",fil);
   formData.append("random",randomString.current);
@@ -143,6 +170,15 @@ const handleSubmit = async (e)=> {
            .then((res)=>{
             if(res.data.success === true){
               setModalShowAdd(false);
+              setRadioData({
+                nom: "",
+                date: formattedDate,
+                type: "",
+                categorie: "",
+                document: "",
+                rapport:"",
+                isDemande: false,
+              })
               router.refresh();
             }
             else{
@@ -159,9 +195,7 @@ const handleSubmit = async (e)=> {
         console.log(err);
       })
 
-  console.log(session.user.id);
-
-  console.log(radioData);
+    }
 
 //   const formData = new FormData();
 //   formData.append("nom",radioData.nom);
