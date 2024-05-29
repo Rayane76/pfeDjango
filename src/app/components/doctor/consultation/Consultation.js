@@ -5,14 +5,18 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from 'react-bootstrap/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useEffect, useState } from "react";
-import axiosService from "@/app/helpers/axios";
+import { useState } from "react";
+import { getSession } from "next-auth/react";
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 
-export default function Consultation(){
+export default function Consultation({patient_id}){
+
+  const router = useRouter();
 
 
-    const [maladies,setMaladies] = useState([])
+    // const [maladies,setMaladies] = useState([])
     // const [medicaments,setMedicaments] = useState([])
 
     // useEffect(()=>{
@@ -48,10 +52,12 @@ export default function Consultation(){
     let formattedDate = `${day}-${month}-${year}`;
 
     const [maladie,setMaladie] = useState({
-        id: [],
-        affiche: false,
-        note:"",
-        ordonnance: []
+       nom:"",
+       date: formattedDate,
+       categorie: "",
+       note: "",
+       affiche: false,
+       ordonnance: [],
     })
     
 
@@ -61,9 +67,7 @@ export default function Consultation(){
         e.target.style.height = `${e.target.scrollHeight}px`;
       };
 
-      useEffect(()=>{
-         console.log(maladie);
-      },[maladie])
+
     
     const handleChangeMedicament = (e)=>{
         if(e.target.innerText != undefined && e.target.innerText != ""){ 
@@ -102,11 +106,31 @@ export default function Consultation(){
 
 
 
-    const handleSave = (e) => {
-       //maladie === nouvelle maladie postiha
-       if(maladie.nom != ""){
-        //hadi normalement l only required field bach t'posti
-       }
+    const handleSave = async (e) => {
+      e.preventDefault();
+      const session = await getSession();
+
+      await axios.post("/api/users/patient/addToArrayField",{data: maladie , field: "maladies" , id: patient_id , centrerole: session.user.role ,centreid: session.user.id})
+      .then((res)=>{
+     if(res.data.success === true){
+      if(session.user.role === "M"){
+        router.push("/admin/doctor")
+      }
+      else if(session.user.role === "L"){
+        router.push("/admin/labo")
+      }
+      else if(session.user.role === "C"){
+        router.push("/admin/centre")
+      }
+
+     
+   }
+   else{
+     console.log(res);
+   }
+  }).catch((err)=>{
+   console.log(err);
+  })
     }
 
 
@@ -137,7 +161,9 @@ export default function Consultation(){
         <div className="consultationInfosDiv">
          <div className="d-flex align-items-center ms-4">
          <h4 className="fw-bold me-4">Maladie : </h4>
-         <Autocomplete
+         <input name="nom" onChange={(e)=>handleChange(e)} placeholder="nom maladie ... "></input>
+         <input name="categorie" onChange={(e)=>handleChange(e)} placeholder="categorie maladie ..."></input>
+         {/* <Autocomplete
       disablePortal
       onChange={(e)=>setMaladie((prev)=>({...prev,nom:e.target.innerText}))}
       id="combo-box-demo"
@@ -145,7 +171,7 @@ export default function Consultation(){
       autoHighlight
       sx={{ width: 300 }}
       renderInput={(params) => <TextField {...params} label="Maladie" />}
-    />
+    /> */}
     <input className="ms-4 me-2" onChange={(e)=>setMaladie((prev)=>({...prev,affiche: e.target.checked}))} type="checkbox"></input>
     <label>Afficher sur la carte ? </label>
 
@@ -156,7 +182,7 @@ export default function Consultation(){
         className="auto-height-textarea"
         value={maladie.note}
         name="note"
-        onChange={handleChange}
+        onChange={(e)=>handleChange(e)}
       />
          </div>
          <div className="d-flex align-items-center ms-4 mt-4">

@@ -10,9 +10,9 @@ import AddDemandeChirModal from "./AddDemandeChirModal";
 import { useState } from "react";
 
 
-export default function Operations(props){
+export default function Operations({ isAdmin , patient_id , chirurgies }){
 
-    props.chirurgies.sort((a, b) => {
+    chirurgies.sort((a, b) => {
         // Convert dates to Date objects for comparison
         const dateA = new Date(a.date.split('-').reverse().join('-'));
         const dateB = new Date(b.date.split('-').reverse().join('-'));
@@ -20,7 +20,7 @@ export default function Operations(props){
         return dateB - dateA;
       });
 
-      const uniqueCategories = [...new Set(props.chirurgies.map((chirurgie) => chirurgie.isDemande === false && chirurgie.categorie))];
+      const uniqueCategories = [...new Set(chirurgies.map((chirurgie) => chirurgie.isDemande === false && chirurgie.categorie))];
       const filteredArrayCategories = uniqueCategories.filter(item => item !== false);
 
       const [modalShowChirurgie, setModalShowChirurgie] = useState(false);
@@ -79,7 +79,7 @@ export default function Operations(props){
         const notSelected = document.getElementById(otherBtn);
         const nvBtn = document.getElementById("nouveauBtnChir");
         setActiveDiv(selected);
-        if(props.isAdmin === true){
+        if(isAdmin === true){
         if(selected != 'chirRealises'){
           nvBtn.style.display = 'none'
        }
@@ -119,7 +119,7 @@ export default function Operations(props){
           <DocumentSvg />
           <h1 className="radiosDivTitle">Chirurgies</h1>
           </div>
-          {props.isAdmin === true && 
+          {isAdmin === true && 
           <button
             onClick={() => setModalShowAdd(true)}
             title="Add"
@@ -141,7 +141,7 @@ export default function Operations(props){
             <span>Nouveau</span>
           </button>
           }
-          {props.isAdmin === true && <AddChirurgieModal modalShowAdd={modalShowAdd} setModalShowAdd={setModalShowAdd} patient_id={props.patient_id}  /> }
+          {isAdmin === true && <AddChirurgieModal modalShowAdd={modalShowAdd} setModalShowAdd={setModalShowAdd} patient_id={patient_id}  /> }
         </div>
         <div className="historiquebtnsDiv">
         <button
@@ -190,7 +190,7 @@ export default function Operations(props){
           </div>
           <div className="tableRowsPersonnel">
             { 
-              props.chirurgies.map((chirurgie,index)=>{
+              chirurgies.map((chirurgie,index)=>{
               if((chirurgie.categorie === filteredCat || filteredCat === undefined) && chirurgie.isDemande === false){  
               return(
                 <div onClick={(e)=>handleClickChirurgie(e,chirurgie)} key={index} className="tableRowPers">
@@ -214,7 +214,7 @@ export default function Operations(props){
           </div>
           <div className="tableRowsPersonnel">
           { 
-              props.chirurgies.map((chirurgie,index)=>{
+              chirurgies.map((chirurgie,index)=>{
               if(chirurgie.isDemande === true){  
               return(
                 <div onClick={(e)=>handleAddDemandee(e,chirurgie)} key={index} className="tableRowPers">
@@ -233,7 +233,7 @@ export default function Operations(props){
           show={modalShowChirurgie}
           onHide={() => setModalShowChirurgie(false)}
         />
-        <AddDemandeChirModal modalAddDemande={modalAddDemande} patient_id={props.patient_id}  setModalAddDemande={setModalAddDemande}  chirurgie={selectedChirurgie} />
+        <AddDemandeChirModal modalAddDemande={modalAddDemande} patient_id={patient_id}  setModalAddDemande={setModalAddDemande}  chirurgie={selectedChirurgie} />
         </div>
 
     )

@@ -3,11 +3,15 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import "../../../styles/doctor/patient/radios.css";
 import { useState } from "react";
-import axiosService from '@/app/helpers/axios';
+import { getSession } from "next-auth/react";
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 
 
 export default function AddChirurgieModal({modalShowAdd, setModalShowAdd,patient_id}){
+
+  const router = useRouter();
 
     let today = new Date();
 
@@ -23,10 +27,10 @@ export default function AddChirurgieModal({modalShowAdd, setModalShowAdd,patient
 
     const [chirurgieData,setChirurgieData] = useState({
         nom: "",
-        radio_category: "",
-        note: "",
-        type_doc:"C",
-        demande:false
+        categorie: "",
+        rapport: "",
+        date: formattedDate,
+        isDemande: false
       })
 
       const handleChangeAddChirurgie = (e)=>{
@@ -37,17 +41,33 @@ export default function AddChirurgieModal({modalShowAdd, setModalShowAdd,patient
       
 
 
-        const handleSubmit = (e)=>{
+        const handleSubmit = async (e)=>{
         e.preventDefault();
+        const session = await getSession();
 
-        axiosService.post(`add_document/${patient_id}`,chirurgieData).then((res)=>{
-          console.log(res);
-          window.location.reload();
+        if(selected === "demanderRadioTitle"){
+          chirurgieData.isDemande = true;
+        }
 
-        }).catch((err)=>{
-          console.log(err)})
-  
-        
+        await axios.post("/api/users/patient/addToArrayField",{data: chirurgieData , field: "chirurgies" , id: patient_id , centrerole: session.user.role ,centreid: session.user.id})
+        .then((res)=>{
+       if(res.data.success === true){
+        setModalShowAdd(false);
+       setChirurgieData({
+        nom: "",
+        categorie: "",
+        rapport: "",
+        date: formattedDate,
+        isDemande: false
+      });
+       router.refresh();
+     }
+     else{
+       console.log(res);
+     }
+    }).catch((err)=>{
+     console.log(err);
+    })
         
         }
 
@@ -92,12 +112,12 @@ export default function AddChirurgieModal({modalShowAdd, setModalShowAdd,patient
            </div>   
            <div className="d-flex justify-content-start align-items-center gap-4">
            <h4>Categorie Chirurgie : </h4>
-           <input onChange={(e)=>handleChangeAddChirurgie(e)} placeholder="Categorie Chirurgie ... " required name="radio_category"></input>
+           <input onChange={(e)=>handleChangeAddChirurgie(e)} placeholder="Categorie Chirurgie ... " required name="categorie"></input>
            </div>  
            {selected === "ajouterRadioTitle" && 
            <>
            <h4>Rapport : </h4>
-           <textarea rows={7} onChange={(e)=>handleChangeAddChirurgie(e)} name='note' className="textArea"></textarea>
+           <textarea rows={7} onChange={(e)=>handleChangeAddChirurgie(e)} name='rapport' className="textArea"></textarea>
            </>
            }
          </Modal.Body>
