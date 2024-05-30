@@ -21,7 +21,7 @@ export default function Analyses({ isAdmin , patient_id , analyses }) {
     return dateB - dateA;
   });
 
-  const uniqueNoms = [...new Set(analyses.map((analyse) => analyse.isDemande === false && analyse.nom))];
+  const uniqueNoms = [...new Set(analyses.map((analyse) => analyse.demande === false && analyse.nom))];
   const filteredArrayNoms = uniqueNoms.filter(item => item !== false);
 
   const [filteredNom, setFilteredNom] = useState(undefined);
@@ -193,7 +193,7 @@ export default function Analyses({ isAdmin , patient_id , analyses }) {
           </div>
           <div className="tableRowsAnalyses">
             {analyses.map((analyse,index)=>{
-              if((filteredNom === analyse.nom || filteredNom === undefined) && analyse.isDemande === false){
+              if((filteredNom === analyse.nom || filteredNom === undefined) && analyse.demande === false){
               return(
               <div onClick={(e)=>handleClickAnalyse(e,analyse)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{analyse.nom}</label>
@@ -211,7 +211,7 @@ export default function Analyses({ isAdmin , patient_id , analyses }) {
           </div>
           <div className="tableRowsAnalyses">
           {analyses.map((analyse,index)=>{
-              if(analyse.isDemande === true){
+              if(analyse.demande === true){
               return(
               <div onClick={(e)=>handleAddDemandee(e,analyse)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{analyse.nom}</label>

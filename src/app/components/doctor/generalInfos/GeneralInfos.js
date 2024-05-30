@@ -65,7 +65,7 @@ export default function GeneralInfos(props) {
                      <span className="fw-bold me-2">
                      Situation: 
                      </span>
-                     {props.patient.situation} <br></br>
+                     {props.patient.married} <br></br>
                                     <span className="fw-bold me-2">
                                     Nombre d'enfants: {props.patient.nbr_children} <br></br>
                                         </span>

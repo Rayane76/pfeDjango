@@ -1,6 +1,6 @@
 import axios from "axios";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
-import { cookies } from 'next/headers'
+import Cookies from 'universal-cookie';
 
 
 const axiosService = axios.create({
@@ -10,11 +10,11 @@ const axiosService = axios.create({
     }
 })
 
+const cookies = new Cookies();
 
 
 axiosService.interceptors.request.use(async(config)=>{
-    const cookieStore = cookies()
-    const {access} = JSON.parse(cookieStore.get("auth"));
+    const {access} = cookies.get("auth");
     config.headers.Authorization = `Bearer ${access}`
     return config
 })
@@ -25,8 +25,7 @@ axiosService.interceptors.response.use(
 )
 
 const refreshAuthLogic = async(failedRequest) =>{
-    const cookieStore = cookies()
-    const data = JSON.parse(cookieStore.get("auth"))
+    const data = cookies.get("auth")
     
     const {refresh,user_id} = data 
     return axios.post("/token/refresh/",data,{
@@ -37,12 +36,12 @@ const refreshAuthLogic = async(failedRequest) =>{
     }).then((resp)=>{
         const {access} = resp.data;
         failedRequest.response.config.headers["Authorization"] = "Bearer" + access;
-        cookieStore.set("auth",JSON.stringify({
+        cookies.set("auth",JSON.stringify({
             access,refresh,user_id
         }))
     })
     .catch(()=>{
-        cookieStore.remove("auth")
+        cookies.remove("auth")
     })
 }
 

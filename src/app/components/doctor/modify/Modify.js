@@ -7,6 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import axiosService from "@/app/helpers/axios";
 
 export default function Modify({ patient_id , allergies , antecedents }) {
   const router = useRouter();
@@ -44,7 +45,7 @@ export default function Modify({ patient_id , allergies , antecedents }) {
     }
   };
 
-  const [antecedent,setAntecedent] = useState({nom:"",membre:"",categorie:""});
+  const [antecedent,setAntecedent] = useState({name:"",membre:"",cateogry:""});
 
   const [allergie,setAllergie] = useState({
     name: "",
@@ -54,41 +55,25 @@ export default function Modify({ patient_id , allergies , antecedents }) {
 
   
   const handleAjouterAllergie = async (e)=>{
-      
-    allergies = [...allergies,allergie];
-    let allInfos = {
-      allergies: allergies
-    }
-    const res = await axios.post("/api/users/patient/updatePatient",{id: patient_id , allInfos: allInfos})
-    .then((res)=>{
-      if(res.data.success === true){
-        setModalShowAllergie(false);
-        router.refresh();
-      }
-       else{
-        console.log(res);
-       } 
-    }).catch((err)=>{
+    axiosService.post(`add_allergie/${patient_id}/`,allergie)
+    .then((res) => {
+      setModalShowAllergie(false);
+      router.refresh();
+
+    }).catch((err) => {
       console.log(err);
     })
+    
   }
 
   const handleAjouterAntecedent = async (e)=>{
-      
-    antecedents = [...antecedents,antecedent];
-    let allInfos = {
-      antecedents: antecedents
-    }
-    const res = await axios.post("/api/users/patient/updatePatient",{id: patient_id , allInfos: allInfos})
-    .then((res)=>{
-      if(res.data.success === true){
-        setModalShowAnt(false);
-        router.refresh();
-      }
-       else{
-        console.log(res);
-       } 
-    }).catch((err)=>{
+    
+    axiosService.post(`add_antecedent/${patient_id}/`,antecedent)
+    .then((res) => {
+      setModalShowAnt(false);
+      router.refresh();
+
+    }).catch((err) => {
       console.log(err);
     })
   }
@@ -96,37 +81,31 @@ export default function Modify({ patient_id , allergies , antecedents }) {
 
   
   const handleDeleteAntecedent = async (antecedentVar)=>{
-    antecedents = antecedents.filter((antec)=> antec._id != antecedentVar._id);
-    let allInfos = {
-      antecedents: antecedents
-    }
-    const res = await axios.post("/api/users/patient/updatePatient",{id: patient_id , allInfos: allInfos})
-    .then((res)=>{
-      if(res.data.success === true){
-        router.refresh();
+    axiosService.delete(`add_antecedent/${patient_id}/`,{
+      data: {
+        antecedent: antecedentVar.id
       }
-       else{
-        console.log(res);
-       } 
-    }).catch((err)=>{
+    })
+    .then((res) => {
+      setModalShowAnt(false);
+      router.refresh();
+
+    }).catch((err) => {
       console.log(err);
     })
   }
 
   const handleDeleteAllergie = async (allergieVar)=>{
-    allergies = allergies.filter((aller)=> aller._id != allergieVar._id);
-    let allInfos = {
-      allergies: allergies
-    }
-    const res = await axios.post("/api/users/patient/updatePatient",{id: patient_id , allInfos: allInfos})
-    .then((res)=>{
-      if(res.data.success === true){
-        router.refresh();
+    axiosService.delete(`add_allergie/${patient_id}/`,{
+      data: {
+        allergie: allergieVar.id
       }
-       else{
-        console.log(res);
-       } 
-    }).catch((err)=>{
+    })
+    .then((res) => {
+      setModalShowAllergie(false);
+      router.refresh();
+
+    }).catch((err) => {
       console.log(err);
     })
   }
@@ -206,9 +185,9 @@ export default function Modify({ patient_id , allergies , antecedents }) {
             <div className="d-flex">
               <label className="me-2">Antécédent : </label>
               <input
-                name="nom"
+                name="name"
                 type="text"
-                onChange={(e)=>setAntecedent((prev)=>({...prev,nom:e.target.value}))}
+                onChange={(e)=>setAntecedent((prev)=>({...prev,name:e.target.value}))}
                 required
                 placeholder="antecedent ..."
               ></input>
@@ -226,8 +205,8 @@ export default function Modify({ patient_id , allergies , antecedents }) {
             <div className="d-flex">
               <label className="me-2">Catégorie : </label>
               <input
-                name="categorie"
-                onChange={(e)=>setAntecedent((prev)=>({...prev,categorie:e.target.value}))}
+                name="cateogry"
+                onChange={(e)=>setAntecedent((prev)=>({...prev,cateogry:e.target.value}))}
                 type="text"
                 required
                 placeholder="categorie"
@@ -293,9 +272,9 @@ export default function Modify({ patient_id , allergies , antecedents }) {
          {antecedents.map((antecedent,index)=>{
           return(
             <div key={index} className="tableRow">
-            <label className="labelRowAnt2">{antecedent.nom}</label>
+            <label className="labelRowAnt2">{antecedent.name}</label>
             <label className="labelRowAnt1">{antecedent.membre}</label>
-            <label className="labelRowAnt">{antecedent.categorie}</label>
+            <label className="labelRowAnt">{antecedent.cateogry}</label>
             <DeleteIcon className="labelIcon" onClick={()=>handleDeleteAntecedent(antecedent)} />
           </div>
           )

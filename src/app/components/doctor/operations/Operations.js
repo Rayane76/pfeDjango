@@ -20,7 +20,7 @@ export default function Operations({ isAdmin , patient_id , chirurgies }){
         return dateB - dateA;
       });
 
-      const uniqueCategories = [...new Set(chirurgies.map((chirurgie) => chirurgie.isDemande === false && chirurgie.categorie))];
+      const uniqueCategories = [...new Set(chirurgies.map((chirurgie) => chirurgie.demande === false && chirurgie.radio_category))];
       const filteredArrayCategories = uniqueCategories.filter(item => item !== false);
 
       const [modalShowChirurgie, setModalShowChirurgie] = useState(false);
@@ -52,13 +52,13 @@ export default function Operations({ isAdmin , patient_id , chirurgies }){
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                  <h5>{selectedChirurgie != null && "Realisee par : " + selectedChirurgie.medecin}</h5>
+                  <h5>{selectedChirurgie != null && "Realisee par : " + selectedChirurgie.doctor}</h5>
                   <h5>{selectedChirurgie != null && "le : " + selectedChirurgie.date}</h5>
-                  <h5>{selectedChirurgie != null && "Categorie : " + selectedChirurgie.categorie}</h5>
-                  {selectedChirurgie != null && selectedChirurgie.rapport!="" && 
+                  <h5>{selectedChirurgie != null && "Categorie : " + selectedChirurgie.radio_category}</h5>
+                  {selectedChirurgie != null && selectedChirurgie.note!="" && 
                   <>
                   <h5>Rapport : </h5>
-                  <p>{selectedChirurgie.rapport}</p>
+                  <p>{selectedChirurgie.note}</p>
                   </>
                   }
             </Modal.Body>
@@ -191,13 +191,13 @@ export default function Operations({ isAdmin , patient_id , chirurgies }){
           <div className="tableRowsPersonnel">
             { 
               chirurgies.map((chirurgie,index)=>{
-              if((chirurgie.categorie === filteredCat || filteredCat === undefined) && chirurgie.isDemande === false){  
+              if((chirurgie.radio_category === filteredCat || filteredCat === undefined) && chirurgie.demande === false){  
               return(
                 <div onClick={(e)=>handleClickChirurgie(e,chirurgie)} key={index} className="tableRowPers">
               <label className="labelRowPers2">{chirurgie.nom}</label>
               <label className="labelRowPers1">{chirurgie.date}</label>
-              <label className="labelRowPers">{chirurgie.medecin}</label>
-              <label className="labellast">{chirurgie.categorie}</label>
+              <label className="labelRowPers">{chirurgie.doctor}</label>
+              <label className="labellast">{chirurgie.radio_category}</label>
             </div>
               )
               }
@@ -215,13 +215,13 @@ export default function Operations({ isAdmin , patient_id , chirurgies }){
           <div className="tableRowsPersonnel">
           { 
               chirurgies.map((chirurgie,index)=>{
-              if(chirurgie.isDemande === true){  
+              if(chirurgie.demande === true){  
               return(
                 <div onClick={(e)=>handleAddDemandee(e,chirurgie)} key={index} className="tableRowPers">
               <label className="labelRowPers2">{chirurgie.nom}</label>
               <label className="labelRowPers1">{chirurgie.date}</label>
-              <label className="labelRowPers">{chirurgie.medecin}</label>
-              <label className="labellast">{chirurgie.categorie}</label>
+              <label className="labelRowPers">{chirurgie.doctor}</label>
+              <label className="labellast">{chirurgie.radio_category}</label>
             </div>
               )
               }

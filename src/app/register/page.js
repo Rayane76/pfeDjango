@@ -3,8 +3,11 @@ import { useEffect, useState } from "react";
 import "../styles/reg.css";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Cookies from 'universal-cookie';
 
 export default function Reg() {
+
+  const cookies = new Cookies();
 
     const [currentStep, setCurrentStep] = useState(0);
 
@@ -23,8 +26,7 @@ export default function Reg() {
         address: "",
         carte_id: "",
         password: "",
-        role:"P",
-        situation: "",
+        married: "",
         nbr_children: "0",
     })
 
@@ -74,8 +76,8 @@ export default function Reg() {
           <label className="label">Sexe : </label>
           <select required={currentStep === 2 ? true : false} value={allInfos.gender} name="gender" className="input" onChange={(e)=>handleInput(e)}>
             <option value="" hidden>Choisir le sexe : </option>
-            <option value="male">Homme</option>
-            <option value="female">Femme</option>
+            <option value="Male">Homme</option>
+            <option value="Female">Femme</option>
           </select>
 
         </div>
@@ -94,6 +96,11 @@ export default function Reg() {
           </select>
         </div>
       </div>,
+
+// CELIBATAIRE = "Célibataire"
+// MARIE = "Marié(e)"
+// DIVORCE = "Divorcé(e)"
+// VEUF = "Veuf/Veuve"
   
       <div className="inputStep">
         <div className="oneInputDiv">
@@ -102,12 +109,12 @@ export default function Reg() {
         </div>
         <div className="oneInputDiv">
           <label className="label">Situation familiale : </label>
-          <select required={currentStep === 3 ? true : false} name="situation" value={allInfos.situation} className="input" onChange={(e)=>{handleInput(e);setAllInfos((prev)=>({...prev,nbr_children:"0"}))}}>
+          <select required={currentStep === 3 ? true : false} name="married" value={allInfos.situation} className="input" onChange={(e)=>{handleInput(e);setAllInfos((prev)=>({...prev,nbr_children:"0"}))}}>
             <option value="" hidden>Choisir Situation familiale : </option>
-            <option value="celibataire">Célibataire</option>
-            <option value="mariee">Marié(e)</option>
-            <option value="divorcee">Divorcé(e)</option>
-            <option value="veuf">Veuf/Veuve</option>
+            <option value="Célibataire">Célibataire</option>
+            <option value="Marié(e)">Marié(e)</option>
+            <option value="Divorcé(e)">Divorcé(e)</option>
+            <option value="Veuf/Veuve">Veuf/Veuve</option>
           </select>
         </div>
         <div className="oneInputDiv">
@@ -133,20 +140,24 @@ export default function Reg() {
 
       const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log(allInfos)
         if (currentStep < steps.length - 1) {
           setCurrentStep(currentStep + 1);
         }
         else{
           if(allInfos.password === cfrm){
            await axios
-           .post("/api/users/patient/createPatient",{allInfos : allInfos})
+           .post("http://127.0.0.1:8000/api/register/",allInfos)
            .then((res)=>{
-            if(res.data.success === true){
-              router.push('/login');
-            }
-            else{
-              console.log(res);
-            }
+            console.log(res);
+            cookies.set("auth",JSON.stringify({
+              id:res.data.id ,
+              refresh:res.data.refresh,
+              access:res.data.access,
+              role:res.data.role
+            }));
+          router.push("/account/" + res.data.id);
+              
       }).catch((err)=>{
         console.log('err',err)
       })

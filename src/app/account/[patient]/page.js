@@ -8,7 +8,7 @@ import Modify from "@/app/components/doctor/modify/Modify";
 
 
 async function getPatient(id){
-  const patient = await fetch(`${process.env.WEBSITE_URL}/api/users/patient/getPatient?id=${id}`,{
+  const patient = await fetch(`http://127.0.0.1:8000//api/patient/${id}`,{
     cache: "no-store"
   });
 
@@ -31,28 +31,28 @@ export default async function Patient({ params }) {
     <>
       <div className="doctorView">
         <div id="generalInfos" className="generalInfos active">
-           <GeneralInfos isAdmin={true} patient={patient.data} />
+           <GeneralInfos isAdmin={true} patient={patient} />
         </div>
         <div id="modify" className="modify unActive">
-           <Modify patient_id={patient.data._id} allergies={patient.data.allergies} antecedents={patient.data.antecedents} />
+           <Modify patient_id={patient.id} allergies={patient.allergies} antecedents={patient.antecedents} />
         </div>
         <div id="history" className="history unActive">
-         <History maladies={patient.data.maladies} antecedents={patient.data.antecedents} />
+           <History maladies={patient.consultations} antecedents={patient.antecedents} />
         </div>
         <div id="radios" className="radios unActive">
-         <Radios isAdmin={false} patient_id={patient.data._id} radios={patient.data.radios} />
+           <Radios isAdmin={false} patient_id={patient.id} radios={patient.radios} />
         </div>
         <div id="analyses" className="analyses unActive">
-          <Analyses isAdmin={false} patient_id={patient.data._id} analyses={patient.data.analyses} />
+           <Analyses isAdmin={false} patient_id={patient.id} analyses={patient.analyses} />
         </div>
         <div id="operations" className="operations unActive">
-         <Operations isAdmin={false} patient_id={patient.data._id} chirurgies={patient.data.chirurgies} />
+           <Operations isAdmin={false} patient_id={patient.id} chirurgies={patient.chirurgies} />
         </div>
-        <div id="qrCode" className="qrCode unActive">
+        {/* <div id="qrCode" className="qrCode unActive">
             <div style={{height:"100vh",width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
                <img style={{height:"300px",width:"300px"}} src={patient.data.qrCodeUrl} alt="qrcode"></img>
             </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

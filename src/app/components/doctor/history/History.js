@@ -62,9 +62,9 @@ export default function History({ maladies , antecedents }) {
      setFilteredMed(e.target.innerText);
   }
 
-  const uniqueCategories = [...new Set(maladies.map((maladie) => maladie.categorie))];
-  const uniqueMedecins = [...new Set(maladies.map((maladie)=>maladie.medecin))];
-  const uniqueFam = [...new Set(antecedents.map((ant)=>ant.categorie))];
+  const uniqueCategories = [...new Set(maladies.map((maladie) => maladie.maladie.maladie_type))];
+  const uniqueMedecins = [...new Set(maladies.map((maladie)=>maladie.doctor))];
+  const uniqueFam = [...new Set(antecedents.map((ant)=>ant.cateogry))];
 
 
   const [modalShow, setModalShow] = useState(false);
@@ -80,13 +80,13 @@ export default function History({ maladies , antecedents }) {
       >
         <Modal.Header closeButton>
           <Modal.Title id="titleMaladieModal">
-            {selectedMaladie != null && selectedMaladie.nom}
+            {selectedMaladie != null && selectedMaladie.maladie.name}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h4>{selectedMaladie != null && "Ajoute par : " + selectedMaladie.medecin}</h4>
+          <h4>{selectedMaladie != null && "Ajoute par : " + selectedMaladie.doctor}</h4>
           <h4>{selectedMaladie != null && "Date : " + selectedMaladie.date}</h4>
-          <h4>{selectedMaladie != null && "Categorie : " + selectedMaladie.categorie}</h4>
+          <h4>{selectedMaladie != null && "Categorie : " + selectedMaladie.maladie.maladie_type}</h4>
           {selectedMaladie != null && selectedMaladie.note != "" && 
           <>
           <h4>Note : </h4>
@@ -96,9 +96,9 @@ export default function History({ maladies , antecedents }) {
           {selectedMaladie != null && selectedMaladie.ordonnance.length > 0 && <>
             <h4>Ordonnance : </h4>
           <ul>
-             {selectedMaladie.ordonnance.map((med,index)=>{
+             {selectedMaladie.medicaments.map((med,index)=>{
               return(
-                <li key={index}>{med.medicament} : {med.ratio} pendant {med.duree} </li>
+                <li key={index}>{med.medicament} : {med.qte} pendant {med.duree} </li>
               )
              })}
           </ul>
@@ -199,11 +199,11 @@ export default function History({ maladies , antecedents }) {
             maladies.map((maladie,index)=>{
               
             return(
-                <div onClick={(e)=>handleClickedMaladie(e,maladie)} key={index} className={"tableRowPersH " + (maladie.affiche === true ? "importantRow" : "normalMaladie")}>
-            <label className="labelRowPers2">{maladie.nom}</label>
+                <div onClick={(e)=>handleClickedMaladie(e,maladie)} key={index} className={"tableRowPersH " + (maladie.maladie.isChronic === true ? "importantRow" : "normalMaladie")}>
+            <label className="labelRowPers2">{maladie.maladie.name}</label>
             <label className="labelRowPers1">{maladie.date}</label>
-            <label className="labelRowPers">{maladie.medecin}</label>
-            <label className="labellast">{maladie.categorie}</label>
+            <label className="labelRowPers">{maladie.doctor}</label>
+            <label className="labellast">{maladie.maladie.maladie_type}</label>
           </div>
             )
             
@@ -212,11 +212,11 @@ export default function History({ maladies , antecedents }) {
            maladies.map((maladie,index)=>{
             if(maladie.categorie === filteredCat){
             return(
-                <div onClick={(e)=>handleClickedMaladie(e,maladie)} key={index} className={"tableRowPersH " + (maladie.affiche === true ? "importantRow" : "normalMaladie")}>
-            <label className="labelRowPers2">{maladie.nom}</label>
+                <div onClick={(e)=>handleClickedMaladie(e,maladie)} key={index} className={"tableRowPersH " + (maladie.maladie.isChronic === true ? "importantRow" : "normalMaladie")}>
+                <label className="labelRowPers2">{maladie.maladie.name}</label>
             <label className="labelRowPers1">{maladie.date}</label>
-            <label className="labelRowPers">{maladie.medecin}</label>
-            <label className="labellast">{maladie.categorie}</label>
+            <label className="labelRowPers">{maladie.doctor}</label>
+            <label className="labellast">{maladie.maladie.maladie_type}</label>
           </div>
             )
             }
@@ -225,11 +225,11 @@ export default function History({ maladies , antecedents }) {
             maladies.map((maladie,index)=>{
             if(maladie.medecin === filteredMed){    
             return(
-                <div onClick={(e)=>handleClickedMaladie(e,maladie)} key={index} className={"tableRowPersH " + (maladie.affiche === true ? "importantRow" : "normalMaladie")}>
-            <label className="labelRowPers2">{maladie.nom}</label>
+                <div onClick={(e)=>handleClickedMaladie(e,maladie)} key={index} className={"tableRowPersH " + (maladie.maladie.isChronic === true ? "importantRow" : "normalMaladie")}>
+                <label className="labelRowPers2">{maladie.maladie.name}</label>
             <label className="labelRowPers1">{maladie.date}</label>
-            <label className="labelRowPers">{maladie.medecin}</label>
-            <label className="labellast">{maladie.categorie}</label>
+            <label className="labelRowPers">{maladie.doctor}</label>
+            <label className="labellast">{maladie.maladie.maladie_type}</label>
           </div>
             )
             }
@@ -237,11 +237,11 @@ export default function History({ maladies , antecedents }) {
             maladies.map((maladie,index)=>{
             if(maladie.categorie === filteredCat && maladie.medecin === filteredMed){    
             return(
-                <div onClick={(e)=>handleClickedMaladie(e,maladie)} key={index} className={"tableRowPersH " + (maladie.affiche === true ? "importantRow" : "normalMaladie")}>
-            <label className="labelRowPers2">{maladie.nom}</label>
+                <div onClick={(e)=>handleClickedMaladie(e,maladie)} key={index} className={"tableRowPersH " + (maladie.maladie.isChronic === true ? "importantRow" : "normalMaladie")}>
+                <label className="labelRowPers2">{maladie.maladie.name}</label>
             <label className="labelRowPers1">{maladie.date}</label>
-            <label className="labelRowPers">{maladie.medecin}</label>
-            <label className="labellast">{maladie.categorie}</label>
+            <label className="labelRowPers">{maladie.doctor}</label>
+            <label className="labellast">{maladie.maladie.maladie_type}</label>
           </div>
             )
             }
@@ -260,9 +260,9 @@ export default function History({ maladies , antecedents }) {
             if(ant.categorie === filteredCat || filteredCat === undefined){
             return(
               <div key={index} className="tableRow">
-            <label className="labelRowFamilial2">{ant.nom}</label>
+            <label className="labelRowFamilial2">{ant.name}</label>
             <label className="labelRowFamilial1">{ant.membre}</label>
-            <label className="labelRowFamilial">{ant.categorie}</label>
+            <label className="labelRowFamilial">{ant.cateogry}</label>
           </div>
             )
             }

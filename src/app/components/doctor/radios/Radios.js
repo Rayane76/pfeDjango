@@ -19,9 +19,9 @@ export default function Radios({ isAdmin , patient_id , radios }) {
     return dateB - dateA;
   });
 
-  const uniqueCategories = [...new Set(radios.map((radio) => radio.isDemande === false && radio.categorie))];
+  const uniqueCategories = [...new Set(radios.map((radio) => radio.demande === false && radio.radio_category))];
   const filteredArrayCats = uniqueCategories.filter(item => item !== false);
-  const uniqueTypes = [...new Set(radios.map((radio)=> radio.isDemande === false && radio.type))];
+  const uniqueTypes = [...new Set(radios.map((radio)=> radio.demande === false && radio.radio_type))];
   const filteredArrayTypes = uniqueTypes.filter(item => item !== false);
   const [modalShowRadio, setModalShowRadio] = useState(false);
   const [modalShowAdd, setModalShowAdd] = useState(false);
@@ -66,21 +66,23 @@ function MyVerticallyCenteredModal(props) {
       <Modal.Body>
         <div className="modalDiv">
           <div className="modalBodyDiv1">
-            <h5>{selectedRadio != null && "Ajoute par : " + selectedRadio.centre}</h5>
+            <h5>{selectedRadio != null && "Ajoute par : " + selectedRadio.doctor}</h5>
             <h5>{selectedRadio != null && "le : " + selectedRadio.date}</h5>
-            <h5>{selectedRadio != null && "Type : " + selectedRadio.type}</h5>
-            <h5>{selectedRadio != null && "Categorie : " + selectedRadio.categorie}</h5>
-            {selectedRadio != null && selectedRadio.rapport!="" && 
+            <h5>{selectedRadio != null && "Type : " + selectedRadio.radio_type}</h5>
+            <h5>{selectedRadio != null && "Categorie : " + selectedRadio.radio_category}</h5>
+            {selectedRadio != null && selectedRadio.note!="" && 
             <>
             <h5>Rapport : </h5>
-            <p>{selectedRadio.rapport}</p>
+            <p>{selectedRadio.note}</p>
             </>
             }
           </div>
           <div className="modalBodyDiv2">
           {selectedRadio != null && 
           <embed
-          src={"/files/" + selectedRadio.document}
+          src={"/files/K8NLCf1gT729052024Hacker_Guide.pdf" 
+          // + selectedRadio.document
+          }
           type="application/pdf"
               width="100%"
               height="100%"
@@ -221,7 +223,7 @@ const [activeDiv,setActiveDiv] = useState("realises");
       onChange={(e)=>handleChangeFilterCat(e)}
       id="combo-box-demo"
       options={filteredArrayCats}
-      getOptionLabel={(option) => option ? option.categorie : ''}
+      getOptionLabel={(option) => option ? option.radio_category : ''}
 
       autoHighlight
       sx={{ width: 300 }}
@@ -240,52 +242,52 @@ const [activeDiv,setActiveDiv] = useState("realises");
         <div className="tableRowsPersonnel">
           { filteredCat === undefined && filteredType === undefined ?
             radios.map((radio,index)=>{
-            if(radio.isDemande === false){ 
+            if(radio.demande === false){ 
               {/* const formattedDate = radio.date.substring(0, 10); */}
             return(
               <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
             <label className="labelRowPers1">{radio.date}</label>
-            <label className="labelRowPers">{radio.type}</label>
-            <label className="labellast">{radio.categorie}</label>
+            <label className="labelRowPers">{radio.radio_type}</label>
+            <label className="labellast">{radio.radio_category}</label>
           </div>
             )
             }
           }) :
           filteredCat != undefined && filteredType === undefined ?
           radios.map((radio,index)=>{
-            if(radio.categorie === filteredCat && radio.isDemande === false){
+            if(radio.radio_category === filteredCat && radio.demande === false){
             return(
               <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
             <label className="labelRowPers1">{radio.date}</label>
-            <label className="labelRowPers">{radio.type}</label>
-            <label className="labellast">{radio.categorie}</label>
+            <label className="labelRowPers">{radio.radio_type}</label>
+            <label className="labellast">{radio.radio_category}</label>
           </div>
             )
             }
           }) : 
           filteredCat === undefined && filteredType != undefined ?
           radios.map((radio,index)=>{
-            if(radio.type === filteredType && radio.isDemande === false){
+            if(radio.type === filteredType && radio.demande === false){
             return(
               <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
             <label className="labelRowPers1">{radio.date}</label>
-            <label className="labelRowPers">{radio.type}</label>
-            <label className="labellast">{radio.categorie}</label>
+            <label className="labelRowPers">{radio.radio_type}</label>
+            <label className="labellast">{radio.radio_category}</label>
           </div>
             )
             }
           }) : 
           radios.map((radio,index)=>{
-            if(radio.type === filteredType && radio.categorie=== filteredCat && radio.isDemande === false){
+            if(radio.type === filteredType && radio.radio_category=== filteredCat && radio.demande === false){
             return(
               <div onClick={(e)=>handleClickRadio(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
             <label className="labelRowPers1">{radio.date}</label>
-            <label className="labelRowPers">{radio.type}</label>
-            <label className="labellast">{radio.categorie}</label>
+            <label className="labelRowPers">{radio.radio_type}</label>
+            <label className="labellast">{radio.radio_category}</label>
           </div>
             )
             }
@@ -303,13 +305,13 @@ const [activeDiv,setActiveDiv] = useState("realises");
         </div>
         <div className="tableRowsPersonnel">
         {radios.map((radio,index)=>{
-            if(radio.isDemande === true){  
+            if(radio.demande === true){  
             return(
               <div onClick={(e)=>handleAddDemandee(e,radio)} key={index} className="tableRowPers">
             <label className="labelRowPers2">{radio.nom}</label>
             <label className="labelRowPers1">{radio.date}</label>
-            <label className="labelRowPers">{radio.type}</label>
-            <label className="labellast">{radio.categorie}</label>
+            <label className="labelRowPers">{radio.radio_type}</label>
+            <label className="labellast">{radio.radio_category}</label>
           </div>
             )
             }
