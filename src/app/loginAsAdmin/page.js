@@ -24,6 +24,9 @@ export default function LoginAsAdmin(){
 
     
     const handleSubmit = async (e) =>{
+      const options = {
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30) // 30 days from now
+      };
         e.preventDefault()
         await axios
         .post("http://127.0.0.1:8000/api/login/",data)
@@ -33,7 +36,7 @@ export default function LoginAsAdmin(){
                 refresh:res.data.refresh,
                 access:res.data.access,
                 role:res.data.role
-              }));
+              }),options);
               if(res.data.role === "D"){
                 router.push("/admin/doctor");
               }

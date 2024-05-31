@@ -139,13 +139,19 @@ export default function Reg() {
 
 
       const handleSubmit = async (e) => {
+
         e.preventDefault();
-        console.log(allInfos)
+        
+        
         if (currentStep < steps.length - 1) {
           setCurrentStep(currentStep + 1);
         }
         else{
           if(allInfos.password === cfrm){
+            const options = {
+              expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30) // 30 days from now
+            };
+
            await axios
            .post("http://127.0.0.1:8000/api/register/",allInfos)
            .then((res)=>{
@@ -155,7 +161,7 @@ export default function Reg() {
               refresh:res.data.refresh,
               access:res.data.access,
               role:res.data.role
-            }));
+            }),options);
           router.push("/account/" + res.data.id);
               
       }).catch((err)=>{

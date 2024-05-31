@@ -12,6 +12,10 @@ const axiosService = axios.create({
 
 const cookies = new Cookies();
 
+const options = {
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30) // 30 days from now
+  };
+
 
 axiosService.interceptors.request.use(async(config)=>{
     const {access} = cookies.get("auth");
@@ -38,7 +42,7 @@ const refreshAuthLogic = async(failedRequest) =>{
         failedRequest.response.config.headers["Authorization"] = "Bearer" + access;
         cookies.set("auth",JSON.stringify({
             access,refresh,user_id
-        }))
+        }),options)
     })
     .catch(()=>{
         cookies.remove("auth")
