@@ -33,11 +33,6 @@ export default async function SuperAdmin(){
       <div id="demandes" className="demandes active">
            <DemandesPage medecins={admins.doctors} labos={admins.labos} centres={admins.centres} />
         </div>
-        <div id="comptes" className="comptes unActive">
-            <div>
-               Comptes
-            </div>
-        </div>
         <div id="medicaments" className="medicaments unActive">
              <div>
                Medicaments
