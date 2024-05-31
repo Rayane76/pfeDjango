@@ -1,0 +1,10 @@
+.homeDiv{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.openCam{
+    width: 150px;
+    min-width: 150px;
+}

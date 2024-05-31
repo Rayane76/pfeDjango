@@ -1,0 +1,43 @@
+.generalInfos{
+    height: 100vh;
+}
+
+.radios{
+    height: 100vh;
+}
+
+.analyses{
+    height: 100vh;
+}
+
+.operations{
+    height: 100vh;
+}
+
+.qrCode{
+    height: 100vh;
+}
+
+.consultation{
+    height: 100vh;
+}
+
+.unActive{
+  display: none;
+}
+
+.doctorView{
+    margin-left: 18%;
+    height: 100vh;
+    background-color: #F6F6F6;
+}
+
+.modify{
+    height: 100vh;
+}
+
+@media screen and (max-width: 768px) {
+    .doctorView{
+        margin-left: 0;
+    }
+}

@@ -1,0 +1,292 @@
+
+
+.historiqueDiv{
+    height: 100vh;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.historiqueDivTitle{
+  color: #262939;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.historiqueDivTitleDiv{
+    display: flex;
+    align-items: center;
+    margin-top: 50px;
+    margin-left: 50px;
+}
+
+.historiquebtnsDiv{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 100px;
+  margin-top: 20px;
+}
+
+
+
+.historiqueBtns{
+  all: unset;
+  height: 40px;
+  width: 250px;
+  text-align: center;
+  border-style: none none solid none;
+  border-width: 2px;
+  font-weight: bold;
+}
+
+
+
+.notActiveHistoriqueBtn{
+  border-color: #AEAEAE;
+  color: black;
+}
+
+.activeHistoriqueBtn{
+  border-color: #02427D;
+  color: #02427D;
+}
+
+.historiqueFilterDiv{
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10%;
+  margin-top: 30px;
+}
+
+.historiquePersonnelDiv{
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 20px;
+  
+}
+
+.tableTitleDivPersonnel{
+  width: 80%;
+  height: 50px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #C4C4C4;
+}
+
+.tableTitleLabel{
+  color: #02427D;
+  font-weight: bold;
+}
+
+
+.tableTitleLabell{
+  color: #02427D;
+  font-weight: bold;
+  margin-right: 10%;
+}
+
+
+.tableTitleLabelF{
+  color: #02427D;
+  font-weight: bold;
+  margin-right: 17%;
+}
+
+.tableRowsPersonnel{
+  width: 80%;
+}
+
+.tableRowPers{
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  justify-content: space-between;
+  border-style: none solid solid solid;
+  border-width: 1px;
+  border-color: #EEEEEE;
+}
+
+.tableRowPersH{
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-style: none solid solid solid;
+  border-width: 1px;
+  border-color: #EEEEEE;
+}
+
+.normalMaladie{
+  background-color: white;
+}
+
+
+.importantRow{
+  background-color: rgb(193, 65, 65);
+}
+
+.importantRow:hover{
+  background-color: rgb(220, 120, 120);
+}
+
+.normalMaladie:hover{
+  background-color: #dddddd;
+}
+
+.tableRowPers:hover{
+  background-color: #dddddd;
+}
+
+.labelRowPers2{
+  font-weight: bolder;
+  width: 25%;
+}
+
+.labelRowPers1{
+  font-weight: bolder;
+  width: 25%;
+}
+
+.labelRowPers{
+  font-weight: bolder;
+  width: 30%;
+}
+
+.labellast{
+  font-weight: bolder;
+  width: 18%;
+}
+
+.historiqueFamilialDiv{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.tableTitleDivFamilial{
+  width: 65%;
+  height: 50px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #C4C4C4;
+}
+
+.tableRowsFamilial{
+  width: 65%;
+}
+
+
+.labelRowFamilial2{
+  font-weight: bolder;
+  width: 35%;
+}
+
+.labelRowFamilial1{
+  font-weight: bolder;
+  width: 38%;
+}
+
+.labelRowFamilial{
+  font-weight: bolder;
+  width: 27%;
+}
+
+.unActive{
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .historiqueDivTitleDiv{
+    margin: 0;
+  }
+  .historiqueDivTitle{
+    font-size: 20px;
+  }
+  .historiquebtnsDiv{
+    margin-right: 0;
+  }
+  .historiqueFilterDiv{
+    margin-right: 0;
+  }
+  .tableTitleDivPersonnel{
+    width: 100%;
+  }
+  .tableRowsPersonnel{
+    width: 100%;
+  }
+  .tableTitleLabel{
+   font-size: 14px;
+  }
+  
+  
+  .tableTitleLabell{
+    font-size: 14px;
+  }
+  
+  
+  .tableTitleLabelF{
+    font-size: 14px;
+    margin-right: 14%;
+  }
+  
+  .labelRowPers2{
+    font-size: 14px;
+    width: 22%;
+  }
+  
+  .labelRowPers1{
+    font-size: 14px;
+    width: 22%;
+  }
+  
+  .labelRowPers{
+    font-size: 14px;
+    width: 35%;
+  }
+  
+  .labellast{
+    font-size: 14px;
+    width: 21%;
+  }
+
+  .tableTitleDivFamilial{
+    width: 100%;
+  }
+
+  .tableRowsFamilial{
+    width: 100%;
+  }
+  
+  
+  .labelRowFamilial2{
+    font-size: 14px;
+  }
+  
+  .labelRowFamilial1{
+    font-size: 14px;
+  }
+  
+  .labelRowFamilial{
+    font-size: 14px;
+  }
+
+}

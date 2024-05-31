@@ -1,0 +1,81 @@
+:root{
+    --main-color: #6dacff;
+    --sec-color: #006eff;
+    --dark-color: #1f1f1f;
+    --light-color: #f3f3f3;
+}
+
+.sideBarDiv{
+    min-height: 100vh;
+    /* width: 275px; */
+    width: 18%;
+    background-color:  #20558a;
+    position: absolute;
+    left: 0;
+}
+
+.sideBarTitle{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 26px;
+    color: white;
+    border-bottom: solid 4px white;
+    height: 100px;
+}
+
+
+.field{
+    width: 100%;
+    height: 75px;
+    border-width: 2px;
+    border-style: none none solid none;
+    border-color: white;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    padding-left: 20px;
+    gap: 5px;
+    font-weight: 500;
+}
+
+.selected{
+    background-color: #3c749d;
+}
+
+.mobile{
+    display: none;
+}
+
+
+@media screen and (max-width: 768px) {
+    .sideBarDiv{
+        display: none;
+    }
+
+    .mobile{
+        display: block;
+    }
+    
+    .sideBarDivMobile{
+        min-height: 100vh;
+        width: 100%;
+        background-color:  #20558a;
+        position: absolute;
+        left: 0;
+    }
+
+    .field{
+        width: 100%;
+    }
+
+    .selectedMobile{
+        background-color: #3c749d;
+    }
+    .selected{
+    
+    }
+
+}

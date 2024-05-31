@@ -1,0 +1,52 @@
+:root{
+    --main-color: #6dacff;
+    --sec-color: #006eff;
+    --dark-color: #1f1f1f;
+    --light-color: #f3f3f3;
+}
+
+
+.hero{
+    min-height: 80vh;
+    padding-top: 20px;
+    background-color: #f9faff;
+}
+
+
+/* linear-gradient(91.15deg,#0c419a,#1058d1 99.02%); */
+
+
+.imgHome{
+    height: 90%;
+    width: 80%;
+}
+
+
+.descImageDiv{
+    display: flex;
+}
+
+.descLogDiv{
+   width: 50%;
+   margin-left: 10%;
+   margin-top: 8%;
+   font-family: Open Sans, Arial, Sans-serif;
+}
+
+.logBtnsDiv{
+    display: flex;
+    margin-top: 8%;
+}
+
+.btn{
+    padding: 10px;
+    margin-right: 20px;
+    width: auto;
+    min-width: 150px;
+}
+
+.btn1{
+    padding: 10px;
+    margin-right: 20px;
+    background: linear-gradient(91.15deg,#0c419a,#1058d1 99.02%); ;
+}
