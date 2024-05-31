@@ -117,12 +117,12 @@ export default function DemandesPage({ medecins , labos , centres }){
         <div className="demandesPage">
           {success === null ? "" :
       success === true ? (
-        <Alert style={{position:"absolute",top:"75px",right:"30%",zIndex:"100"}} icon={<CheckIcon fontSize="inherit" />} severity="success">
+        <Alert style={{position:"absolute",top:"120px",right:"30%",zIndex:"100"}} icon={<CheckIcon fontSize="inherit" />} severity="success">
       {successMessage}.
     </Alert>
       ) : 
       (
-        <Alert style={{position:"absolute",top:"75px",right:"30%",zIndex:"100"}} severity="error">{successMessage}.</Alert>
+        <Alert style={{position:"absolute",top:"120px",right:"30%",zIndex:"100"}} severity="error">{successMessage}.</Alert>
       )
       }
       

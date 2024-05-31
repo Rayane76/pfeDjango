@@ -22,9 +22,6 @@ export default async function SuperAdmin(){
 
     const admins = await getAdmins();
 
-    console.log(admins);
-
-
 
     return(
         <>
