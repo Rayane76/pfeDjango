@@ -79,10 +79,8 @@ function MyVerticallyCenteredModal(props) {
           </div>
           <div className="modalBodyDiv2">
           {selectedRadio != null && 
-          <embed
-          src={"/files/K8NLCf1gT729052024Hacker_Guide.pdf" 
-          // + selectedRadio.document
-          }
+            <embed
+          src={`http://127.0.0.1:8000/media/${selectedRadio.document}/`}
           type="application/pdf"
               width="100%"
               height="100%"

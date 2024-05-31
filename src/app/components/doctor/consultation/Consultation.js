@@ -14,14 +14,6 @@ export default function Consultation({patient_id , maladies , med}){
 
   const router = useRouter();
 
-    // const [maladie,setMaladie] = useState({
-    //    name:"",
-    //    maladie_type: "",
-    //    note: "",
-    //    isChronic: false,
-    //    medicaments: [],
-    // })
-
     const [maladie,setMaladie] = useState({
       id : "",
       note: "",
@@ -71,10 +63,6 @@ export default function Consultation({patient_id , maladies , med}){
     }
 
 
-
-
-
-
     const handleSave = async (e) => {
       e.preventDefault();
       
@@ -92,25 +80,6 @@ export default function Consultation({patient_id , maladies , med}){
          console.log(err);
        })
     }
-
-
-      // const  med = [
-      //     {
-      //     name: "Doliprane"
-      //     } ,
-      //     {
-      //       name: "Bedelix"
-      //       } ,
-      //       {
-      //         name: "Smecta"
-      //         } ,
-      //         {
-      //           name: "Panadol"
-      //           } ,
-
-      
-      // ]
-
 
     return(
         <div className='consultationDiv'>
