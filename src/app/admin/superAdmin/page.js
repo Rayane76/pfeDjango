@@ -1,11 +1,6 @@
-import GeneralInfos from "@/app/components/doctor/generalInfos/GeneralInfos";
 import "../../styles/doctor/patient/all.css"
-import Radios from "@/app/components/doctor/radios/Radios";
-import Analyses from "@/app/components/doctor/analyses/Analyses";
-import History from "@/app/components/doctor/history/History";
-import Operations from "@/app/components/doctor/operations/Operations";
-import Modify from "@/app/components/doctor/modify/Modify";
 import DemandesPage from "@/app/components/superAdmin/demandes/DemandesPage";
+import MaladiesSuperAdmin from "@/app/components/superAdmin/maladies/MaladiesSuperAdmin";
 
 
 
@@ -17,10 +12,32 @@ async function getAdmins(){
     return admins.json();
   }
 
+  async function getMaladies(){
+    const maladies = await fetch(`http://127.0.0.1:8000//api/maladies`,{
+      cache:"no-store"
+    });
+ 
+   return maladies.json();
+ }
+ 
+ 
+ async function getMedicaments(){
+    const medicaments = await fetch(`http://127.0.0.1:8000//api/medicaments`,{
+      cache:"no-store"
+    });
+ 
+   return medicaments.json();
+ }
+
+
 export default async function SuperAdmin(){
 
 
     const admins = await getAdmins();
+
+    const maladies = await getMaladies();
+
+    const medicaments = await getMedicaments();
 
 
     return(
@@ -36,19 +53,7 @@ export default async function SuperAdmin(){
              </div>
         </div>
         <div id="maladies" className="maladies unActive">
-             <div>
-               Maladies
-             </div>
-        </div>
-        <div id="allergies" className="allergies unActive">
-             <div>
-               Allergies
-             </div>
-        </div>
-        <div id="documents" className="documents unActive">
-             <div>
-               Documents
-             </div>
+             <MaladiesSuperAdmin maladies={maladies}/>
         </div>
       </div>
     </>
