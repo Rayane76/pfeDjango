@@ -26,7 +26,7 @@ export async function middleware(req) {
           return NextResponse.redirect(new URL("/loginAsAdmin", req.url));
         }  
         if (url?.startsWith("/admin/superAdmin") && role !== "A") {
-          return NextResponse.redirect(new URL("/loginAsAdmin", req.url));
+          return NextResponse.redirect(new URL("/loginSuperAdmin", req.url));
         }  
         if (url?.startsWith("/account/") && role !== "P") {
           return NextResponse.redirect(new URL("/login", req.url));
@@ -50,7 +50,7 @@ export async function middleware(req) {
               return NextResponse.redirect(new URL("/loginAsAdmin", req.url));
             }  
             if (url?.startsWith("/admin/superAdmin")) {
-              return NextResponse.redirect(new URL("/loginAsAdmin", req.url));
+              return NextResponse.redirect(new URL("/loginSuperAdmin", req.url));
             }  
             if (url?.startsWith("/account/")) {
               return NextResponse.redirect(new URL("/login", req.url));

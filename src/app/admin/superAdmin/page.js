@@ -1,6 +1,7 @@
 import "../../styles/doctor/patient/all.css"
 import DemandesPage from "@/app/components/superAdmin/demandes/DemandesPage";
 import MaladiesSuperAdmin from "@/app/components/superAdmin/maladies/MaladiesSuperAdmin";
+import MedicamentsSuperAdmin from "@/app/components/superAdmin/medicaments/MedicamentSuperAdmin";
 
 
 
@@ -48,9 +49,7 @@ export default async function SuperAdmin(){
            <DemandesPage medecins={admins.doctors} labos={admins.labos} centres={admins.centres} />
         </div>
         <div id="medicaments" className="medicaments unActive">
-             <div>
-               Medicaments
-             </div>
+           <MedicamentsSuperAdmin medicaments={medicaments} />
         </div>
         <div id="maladies" className="maladies unActive">
              <MaladiesSuperAdmin maladies={maladies}/>
