@@ -13,27 +13,13 @@ export default function ModalAddAnalyse({showModalAdd,setShowModalAdd,patient_id
 
   const router = useRouter();
 
-    let today = new Date();
-
-    let day = today.getDate();
-    let month = today.getMonth() + 1; // Month is zero-based, so we add 1
-    let year = today.getFullYear();
-    
-    // Pad day and month with leading zeros if needed
-    day = day < 10 ? '0' + day : day;
-    month = month < 10 ? '0' + month : month;
-    
-    let formattedDate = `${day}-${month}-${year}`;
-    
-    let fileDate = formattedDate.replace(/-/g, '');
-
     const [analyseData,setAnalyseData] = useState({
         nom: "",
         document: null,
-        demande: false
+        demande: false,
+        type_doc: "A"
       })
 
-      const [fil,setFil]= useState(null);
 
       const handleChangeAddRadio = (e)=>{
         setAnalyseData((prev)=>({...prev,[e.target.name]:e.target.value}));
@@ -41,34 +27,57 @@ export default function ModalAddAnalyse({showModalAdd,setShowModalAdd,patient_id
       
       const handleAddDocument = (e)=>{
         setAnalyseData((prev)=>({...prev,document: e.target.files[0]}));
-        const formData = new FormData();
-        formData.append("file",e.target.files[0]);
       }
 
 
-      const handleUpload = (e) => {
+      const handleUpload = async (e)=>{
         e.preventDefault();
-        const formData = new FormData();
-        formData.append("nom", analyseData.nom);
-        formData.append("document", analyseData.document);
-        formData.append("type_doc","A")
-        axiosService.post(`add_document/${patient_id}`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-        .then((res) => {
-       setShowModalAdd(false);
-       setAnalyseData({
-        nom: "",
-        document: "",
-        demande: false
-      });
-       router.refresh();
-
-        }).catch((err) => {
-          console.log(err);
-        })
+      
+        if(selected === "demanderRadioTitle"){
+          analyseData.demande = true;
+        }
+      
+                if(selected === "ajouterRadioTitle"){
+                  const formData = new FormData();
+                formData.append("nom", analyseData.nom);
+                formData.append("document", analyseData.document);
+                formData.append("demande", analyseData.demande);
+                formData.append("type_doc",analyseData.type_doc)
+      
+                
+                axiosService.post(`doctor/add_document/${patient_id}`,formData, {
+                  headers: {
+                    'Content-Type': 'multipart/form-data'
+                  }
+                })
+               .then((res) => {
+                setShowModalAdd(false);
+                setAnalyseData({
+                  nom: "",
+                  document: null,
+                  demande: false,
+                  type_doc: "A"
+               })
+                router.refresh();
+                }).catch((err) => {
+                  console.log(err);
+                })
+              }
+              else if (selected === "demanderRadioTitle"){
+                axiosService.post(`doctor/add_document/${patient_id}`,analyseData)
+               .then((res) => {
+                setShowModalAdd(false);
+                setAnalyseData({
+                  nom: "",
+                  document: null,
+                  demande: false,
+                  type_doc: "A"
+               })
+                router.refresh();
+                }).catch((err) => {
+                  console.log(err);
+                })
+              }
       }
 
 
@@ -155,7 +164,7 @@ export default function ModalAddAnalyse({showModalAdd,setShowModalAdd,patient_id
        analyseData.document === null ?
        "Drag and drop your file here or click to select a file!"
        :
-       analyseData.document
+       analyseData.document.name
        }</p></label>
    <input required onChange={(e)=>handleAddDocument(e)} className="input" name="document" id="file" type="file" />
            

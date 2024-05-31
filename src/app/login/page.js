@@ -3,11 +3,14 @@ import { useEffect, useState } from "react"
 import "../styles/log.css"
 import { useRouter } from "next/navigation"
 import axios from "axios"
-import {signIn} from "next-auth/react"
-import { getSession } from "next-auth/react"
+import Cookies from 'universal-cookie';
 
 
 export default function Log(){
+
+    const cookies = new Cookies();
+
+
     const router = useRouter()
 
     const [data,setData] = useState({
@@ -21,39 +24,21 @@ export default function Log(){
 
     
     const handleSubmit = async (e) =>{
-        e.preventDefault();
-        try {
-            const res = await signIn("credentials",{
-                carte_id: data.id,
-                password: data.password,
-                user : "patient",
-                redirect: false
-            })
-            if(res.error){
-                console.log("invalid credentials")
-            }
-            else{
-              const session = await getSession();
-              router.push("/account/" + session.user.id);
-            }
-        } catch (error) {
-            console.log(error)
-        }
-        // e.preventDefault()
-        // await axios
-        // .post("http://127.0.0.1:8000/api/login/",data)
-        // .then((res)=>{
-        //     localStorage.setItem("auth",JSON.stringify({
-        //         id:res.data.id,
-        //         refresh:res.data.refresh,
-        //         access:res.data.access,
-        //         role:res.data.role
-        //     }))
-        //     router.push('/account/' + res.data.id)
-        // })
-        // .catch((err)=>{
-        //     console.log('err',err)
-        // })
+        e.preventDefault()
+        await axios
+        .post("http://127.0.0.1:8000/api/login/",data)
+        .then((res)=>{
+            cookies.set("auth",JSON.stringify({
+                id:res.data.id ,
+                refresh:res.data.refresh,
+                access:res.data.access,
+                role:res.data.role
+              }));
+           router.push("/account/" + res.data.id);
+        })
+        .catch((err)=>{
+            console.log('err',err)
+        })
 
     }
 
@@ -65,7 +50,7 @@ export default function Log(){
            <form onSubmit={(e)=>handleSubmit(e)} style={{width:"100%"}}>
            <div className="inputStep">
             <div className="oneInputDiv">
-            <label className="label">Numero carte nationale : </label>
+            <label className="label">ID : </label>
             <input onChange={(e)=>handleInput(e)} name="id" required className="input" />
             </div>
             <div className="oneInputDiv">

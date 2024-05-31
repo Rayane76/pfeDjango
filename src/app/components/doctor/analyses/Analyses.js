@@ -54,8 +54,10 @@ export default function Analyses({ isAdmin , patient_id , analyses }) {
            <div className="analyseModalDiv">
              {selectedAnalyse != null && 
               <embed
-              src={"/files/" + selectedAnalyse.document}
-              type="application/pdf"
+          src={"/files/K8NLCf1gT729052024Hacker_Guide.pdf" 
+          // + selectedRadio.document
+          }
+          type="application/pdf"
               width="100%"
               height="100%"
             />

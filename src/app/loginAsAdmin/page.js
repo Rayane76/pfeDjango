@@ -3,19 +3,19 @@ import { useState } from "react"
 import "../styles/log.css"
 import { useRouter } from "next/navigation"
 import axios from "axios"
-import {signIn} from "next-auth/react"
-import { getSession } from "next-auth/react"
+import Cookies from 'universal-cookie';
 
 
 export default function LoginAsAdmin(){
+
+    const cookies = new Cookies();
+
+    
     const router = useRouter()
 
     const [data,setData] = useState({
-        username: "",
+        id: "",
         password:"",
-        role: "",
-        carte_id: "",
-        email: ""
     })
 
     const handleInput = (e) => {
@@ -24,75 +24,30 @@ export default function LoginAsAdmin(){
 
     
     const handleSubmit = async (e) =>{
-        e.preventDefault();
-        try {
-            if(data.role === "medecin"){
-            const res = await signIn("credentials",{
-                carte_id: data.carte_id,
-                password: data.password,
-                user : data.role,
-                redirect: false
-            })
-            if(res.error){
-                console.log("invalid credentials")
-            }
-            else{
+        e.preventDefault()
+        await axios
+        .post("http://127.0.0.1:8000/api/login/",data)
+        .then((res)=>{
+            cookies.set("auth",JSON.stringify({
+                id:res.data.id ,
+                refresh:res.data.refresh,
+                access:res.data.access,
+                role:res.data.role
+              }));
+              if(res.data.role === "D"){
                 router.push("/admin/doctor");
-            }
-        }
-          else if(data.role === "labo" || data.role === "centre"){
-            const res = await signIn("credentials",{
-                email: data.email,
-                password: data.password,
-                user : data.role,
-                redirect: false
-            })
-            if(res.error){
-                console.log("invalid credentials")
-            }
-            else{
-                const session = await getSession();
-                if(session.user.role === "L"){
-                    router.push("/admin/labo");
-                }
-                else if (session.user.role === "C"){
-                    router.push("/admin/centre");
-                }
-            }
-          }
-          else if(data.role === "superAdmin"){
-            const res = await signIn("credentials",{
-                username: data.username,
-                password: data.password,
-                user : data.role,
-                redirect: false
-            })
-            if(res.error){
-                console.log("invalid credentials")
-            }
-            else{
-                router.push("/admin/superAdmin");
-            }
-          }
+              }
+              else if (res.data.role === "L"){
+                router.push("/admin/labo");
+              }
 
-        } catch (error) {
-            console.log(error)
-        }
-        // e.preventDefault()
-        // await axios
-        // .post("http://127.0.0.1:8000/api/login/",data)
-        // .then((res)=>{
-        //     localStorage.setItem("auth",JSON.stringify({
-        //         id:res.data.id,
-        //         refresh:res.data.refresh,
-        //         access:res.data.access,
-        //         role:res.data.role
-        //     }))
-        //     router.push('/account/' + res.data.id)
-        // })
-        // .catch((err)=>{
-        //     console.log('err',err)
-        // })
+              else if (res.data.role === "C"){
+                router.push("/admin/centre");
+              }
+        })
+        .catch((err)=>{
+            console.log('err',err)
+        })
 
     }
 
@@ -102,52 +57,14 @@ export default function LoginAsAdmin(){
            <h1 className="ttl">Connexion</h1>
            <form onSubmit={(e)=>handleSubmit(e)} style={{width:"100%"}}>
            <div className="inputStep">
-           <div className="oneInputDiv">
-            <label className="label">Choisir specialite : </label>
-            <select required name="role" value={data.role} className="input" onChange={(e)=>{setData({username: "" , password:"",role: e.target.value,carte_id:"",email:""})}}>
-            <option value="" hidden>Choisir specialite : </option>
-            <option value="medecin">Medecin</option>
-            <option value="labo">Laboratoire d'analyses</option>
-            <option value="centre">Centre d'imagerie</option>
-            <option value="superAdmin">Admin</option>
-          </select>
-            </div>
-            { data.role === "" ? "" :
-             data.role === "medecin" ?
-            <>
             <div className="oneInputDiv">
-            <label className="label">Numero carte nationale : </label>
-            <input value={data.carte_id} onChange={(e)=>handleInput(e)} name="carte_id" required className="input" />
+            <label className="label">ID : </label>
+            <input value={data.id} onChange={(e)=>handleInput(e)} name="id" required className="input" />
             </div>
             <div className="oneInputDiv">
             <label className="label">Mot de passe : </label>
             <input value={data.password} onChange={(e)=>handleInput(e)} type="password" name="password" required className="input" />
             </div>
-            </>
-             : data.role === "labo" || data.role === "centre" ? <>
-             <div className="oneInputDiv">
-            <label className="label">Email : </label>
-            <input type="email" value={data.email} onChange={(e)=>handleInput(e)} name="email" required className="input" />
-            </div>
-            <div className="oneInputDiv">
-            <label className="label">Mot de passe : </label>
-            <input value={data.password} onChange={(e)=>handleInput(e)} type="password" name="password" required className="input" />
-            </div>
-             </> : 
-             data.role === "superAdmin" ? 
-             <>
-             <div className="oneInputDiv">
-            <label className="label">Nom d'utilisateur : </label>
-            <input type="text" value={data.username} onChange={(e)=>handleInput(e)} name="username" required className="input" />
-            </div>
-            <div className="oneInputDiv">
-            <label className="label">Mot de passe : </label>
-            <input value={data.password} onChange={(e)=>handleInput(e)} type="password" name="password" required className="input" />
-            </div>
-             </> 
-             : 
-             ""
-             }
            </div>
 
 

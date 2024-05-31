@@ -6,25 +6,9 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import "../../../styles/doctor/patient/radios.css";
-import { useRef, useState } from "react";
-import { getSession } from "next-auth/react";
-import axios from 'axios';
+import { useState } from "react";
+import axiosService from '@/app/helpers/axios';
 import { useRouter } from 'next/navigation';
-
-
-
-function generateRandomString(length) {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  const charactersLength = characters.length;
-
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * charactersLength);
-    result += characters[randomIndex];
-  }
-
-  return result;
-}
 
 
 export default function AddModal({modalShowAdd,setModalShowAdd,patient_id}){
@@ -65,22 +49,6 @@ export default function AddModal({modalShowAdd,setModalShowAdd,patient_id}){
           categories: ["Densitométrie osseuse"]
         }
       ]
-
-      let today = new Date();
-
-let day = today.getDate();
-let month = today.getMonth() + 1; // Month is zero-based, so we add 1
-let year = today.getFullYear();
-
-// Pad day and month with leading zeros if needed
-day = day < 10 ? '0' + day : day;
-month = month < 10 ? '0' + month : month;
-
-let formattedDate = `${day}-${month}-${year}`;
-
-let fileDate = formattedDate.replace(/-/g, '');
-
-const [fil,setFil]= useState(null);
       
 
 const [cats,setCats] = useState([]);
@@ -89,17 +57,16 @@ let array = [];
 
 const [radioData,setRadioData] = useState({
   nom: "",
-  date: formattedDate,
-  type: "",
-  categorie: "",
-  document: "",
-  rapport:"",
-  isDemande: false,
+  radio_type: "",
+  radio_category: "",
+  document: null,
+  note:"",
+  demande: false,
 })
 
 const handleChangeAddRadio = (e)=>{
   setRadioData((prev)=>({...prev,[e.target.name]:e.target.value}));
-  if(e.target.name === "type"){
+  if(e.target.name === "radio_type"){
      array = [];
      for (let index = 0; index < typeEtCategories.length; index++) {
       if(typeEtCategories[index].nomType === e.target.value){
@@ -113,89 +80,65 @@ const handleChangeAddRadio = (e)=>{
   }
 }
 
-
-const randomString = useRef(generateRandomString(10));
-
 const handleAddDocument = (e)=>{
-    setRadioData((prev)=>({...prev,document: randomString.current + fileDate + e.target.files[0].name}));
-    setFil(e.target.files[0]);
+    setRadioData((prev)=>({...prev,document:e.target.files[0]}));
 }
 
 
-const handleSubmit = async (e)=> {
-
+const handleSubmit = async (e)=>{
   e.preventDefault();
 
-  const session = await getSession();
-
   if(selected === "demanderRadioTitle"){
-    radioData.isDemande = true;
-    await axios.post("/api/users/patient/addToArrayField",{data: radioData , field: "radios" , id: patient_id , centrerole: session.user.role ,centreid: session.user.id})
-    .then((res)=>{
-     if(res.data.success === true){
-       setModalShowAdd(false);
-       setRadioData({
-        nom: "",
-        date: formattedDate,
-        type: "",
-        categorie: "",
-        document: "",
-        rapport:"",
-        isDemande: false,
-      })
-       router.refresh();
-     }
-     else{
-       console.log(res);
-     }
-    }).catch((err)=>{
-     console.log(err);
-    })
+    radioData.demande = true;
   }
 
-  else{
+          if(selected === "ajouterRadioTitle"){
+            const formData = new FormData();
+          formData.append("nom", radioData.nom);
+          formData.append("radio_type",radioData.radio_type);
+          formData.append("radio_category", radioData.radio_category);
+          formData.append("document", radioData.document);
+          formData.append("note", radioData.note);
+          formData.append("demande", radioData.demande);
 
-  const formData = new FormData();
-  formData.append("file",fil);
-  formData.append("random",randomString.current);
-  await axios.post(
-    "/api/users/addDocument",
-    formData,
-    {
-      headers: { "Content-Type": "multipart/form-data" },
-    }).then(async (res)=>{
-        if(res.data.success === true){
-           await axios.post("/api/users/patient/addToArrayField",{data: radioData , field: "radios" , id: patient_id , centrerole: session.user.role ,centreid: session.user.id})
-           .then((res)=>{
-            if(res.data.success === true){
-              setModalShowAdd(false);
-              setRadioData({
-                nom: "",
-                date: formattedDate,
-                type: "",
-                categorie: "",
-                document: "",
-                rapport:"",
-                isDemande: false,
-              })
-              router.refresh();
+          
+          axiosService.post(`doctor/add_document/${patient_id}`,formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
             }
-            else{
-              console.log(res);
-            }
-           }).catch((err)=>{
+          })
+         .then((res) => {
+          setModalShowAdd(false);
+          setRadioData({
+            nom: "",
+            radio_type: "",
+            radio_category: "",
+            document: null,
+            note:"",
+            demande: false,
+         })
+          router.refresh();
+          }).catch((err) => {
             console.log(err);
-           })
+          })
         }
-        else{
-           console.log(res);
+        else if (selected === "demanderRadioTitle"){
+          axiosService.post(`doctor/add_document/${patient_id}`,radioData)
+         .then((res) => {
+          setModalShowAdd(false);
+          setRadioData({
+            nom: "",
+            radio_type: "",
+            radio_category: "",
+            document: null,
+            note:"",
+            demande: false,
+         })
+          router.refresh();
+          }).catch((err) => {
+            console.log(err);
+          })
         }
-      }).catch((err)=>{
-        console.log(err);
-      })
-
-    }
-
 }
 
 const [selected,setSelected] = useState("ajouterRadioTitle")
@@ -244,10 +187,10 @@ const handleSwitch = (clicked)=>{
          <Select
            labelId="demo-select-small-label"
            id="demo-select-small"
-           value={radioData.type}
+           value={radioData.radio_type}
            label="Type"
            onChange={(e)=>handleChangeAddRadio(e)}
-           name="type"
+           name="radio_type"
            required
          >
            {typeEtCategories.map((type,index)=>{
@@ -266,10 +209,10 @@ const handleSwitch = (clicked)=>{
          <Select
            labelId="demo-select-small-label"
            id="demo-select-small"
-           value={radioData.categorie}
+           value={radioData.radio_category}
            label="Categorie"
            onChange={(e)=>handleChangeAddRadio(e)}
-           name="categorie"
+           name="radio_category"
            required
          >
          {cats.length > 0 && 
@@ -329,7 +272,7 @@ const handleSwitch = (clicked)=>{
        radioData.document === null ?
        "Drag and drop your file here or click to select a file!"
        :
-       radioData.document
+       radioData.document.name
        }</p></label>
    <input required onChange={(e)=>handleAddDocument(e)} className="input" name="document" id="file" type="file" />
            

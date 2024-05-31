@@ -2,97 +2,44 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import "../../../styles/doctor/patient/radios.css";
-import { useRef, useState } from "react";
-import { getSession } from "next-auth/react";
+import { useState } from "react";
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
-
-
-function generateRandomString(length) {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  const charactersLength = characters.length;
-
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * charactersLength);
-    result += characters[randomIndex];
-  }
-
-  return result;
-}
+import axiosService from '@/app/helpers/axios';
 
 
 export default function AddDemandeeAnalyseModal({modalAddDemande,setModalAddDemande,analyse,patient_id}){
    
   const router = useRouter();
 
-    let today = new Date();
-
-    let day = today.getDate();
-    let month = today.getMonth() + 1; // Month is zero-based, so we add 1
-    let year = today.getFullYear();
-    
-    // Pad day and month with leading zeros if needed
-    day = day < 10 ? '0' + day : day;
-    month = month < 10 ? '0' + month : month;
-    
-    let formattedDate = `${day}-${month}-${year}`;
-
-    let fileDate = formattedDate.replace(/-/g, '');
-
-    const [radioName,setRadioName] = useState("");
-
-    const randomString = useRef(generateRandomString(10));
-
-
     const [doc,setDoc] = useState(null);
     
     const handleAddDocument = (e)=>{
-      setRadioName(randomString.current + fileDate + e.target.files[0].name)
       setDoc(e.target.files[0]); 
     }
 
 
 
     const handleSubmit = async (e)=> {
-
       e.preventDefault();
 
-      const session = await getSession();
-
-      analyse.document = radioName;
-
-
       const formData = new FormData();
-      formData.append("file",doc);
-      formData.append("random",randomString.current);
-      await axios.post(
-        "/api/users/addDocument",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }).then(async (res)=>{
-            if(res.data.success === true){
-               await axios.post("/api/users/patient/addDemandee",{data: analyse , field: "analyses" , id: patient_id , centrerole: session.user.role ,centreid: session.user.id})
-               .then((res)=>{
-                if(res.data.success === true){
-                   setModalAddDemande(false);
-                  router.refresh();
-                }
-                else{
-                  console.log(res);
-                }
-               }).catch((err)=>{
-                console.log(err);
-               })
-            }
-            else{
-               console.log(res);
-            }
-          }).catch((err)=>{
-            console.log(err);
-          })
-    
+      formData.append("nom", analyse.nom);
+      formData.append("document", doc);
+      formData.append("type_doc", "A");
+      formData.append("demande", false);
+
+      
+      axiosService.post(`doctor/add_document/${patient_id}`,formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+     .then((res) => {
+      setModalAddDemande(false);
+      router.refresh();
+      }).catch((err) => {
+        console.log(err);
+      })
     }
 
 
@@ -114,7 +61,7 @@ export default function AddDemandeeAnalyseModal({modalAddDemande,setModalAddDema
          <Modal.Body>
 
            <h4>Nom Analyse : {analyse != null && analyse.nom}</h4>
-           <h4>Demandé par : {analyse != null && analyse.centre}</h4>
+           <h4>Demandé par : {analyse != null && analyse.doctor}</h4>
 
    
             <h4>Document : </h4>

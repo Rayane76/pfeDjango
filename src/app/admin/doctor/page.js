@@ -11,17 +11,18 @@ export default function Doctor() {
 
   const handleSubmit = async (e)=>{
     e.preventDefault();
-    const patient = await axios.post("/api/users/patient/findPatient",{carte: matricule})
-    .then((res)=>{
-      if(res.data.success === true){
-        router.push("/admin/doctor/" + res.data.id)
-      }
-      else{
-        console.log(res.data.message)
-      }
-    }).catch((err)=>{
-      console.log(err);
-    })
+    router.push("/admin/doctor/" + matricule);
+    // const patient = await axios.post("/api/users/patient/findPatient",{carte: matricule})
+    // .then((res)=>{
+    //   if(res.data.success === true){
+    //     router.push("/admin/doctor/" + res.data.id)
+    //   }
+    //   else{
+    //     console.log(res.data.message)
+    //   }
+    // }).catch((err)=>{
+    //   console.log(err);
+    // })
 
   }
 

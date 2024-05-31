@@ -1,22 +1,9 @@
 'use client'
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import "../styles/reg.css";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-
-function generateRandomString(length) {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    const charactersLength = characters.length;
-  
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * charactersLength);
-      result += characters[randomIndex];
-    }
-  
-    return result;
-  }
 
 export default function RegisterHealthCare() {
 
@@ -24,20 +11,21 @@ export default function RegisterHealthCare() {
 
     const router = useRouter();
 
+    const [role,setRole]= useState("");
+
 
     const [allInfos,setAllInfos] = useState({
         first_name: "",  //medecin
         last_name: "",   //medecin
-        nom: "",       //labo
+        name: "",       //labo
         email: "",    
-        numero_tel: "",
+        labo_number: "",
         address: "",
         carte_id: "",   //medecin
         password: "",
-        role:"",
-        certificat: "",
+        certeficat: "",
         specialite: "",   //medecin
-        isValide: false,
+        valide: false,
     })
 
     const handleInput = (e) => {
@@ -46,28 +34,8 @@ export default function RegisterHealthCare() {
 
       const [cfrm,setCfrm] = useState("");
 
-      const [fil,setFil]= useState(null);
-
-      function getCurrentDateFormatted() {
-        const today = new Date();
-      
-        const day = String(today.getDate()).padStart(2, '0');
-        const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed in JavaScript
-        const year = today.getFullYear();
-      
-        return `${day}${month}${year}`;
-      }
-
-      const date = getCurrentDateFormatted();
-
-      const randomString = useRef(generateRandomString(10));
-
-
       const handleChangeCertificat = (e) => {
-
-        
-        setAllInfos((prev)=>({...prev,certificat:randomString.current + date + e.target.files[0].name}));
-        setFil(e.target.files[0]);
+        setAllInfos((prev)=>({...prev,certeficat:e.target.files[0]}));
       }
 
     const medecinSteps = [
@@ -93,7 +61,7 @@ export default function RegisterHealthCare() {
         </div>
         <div className="oneInputDiv">
           <label className="label">Numéro de téléphone : </label>
-          <input  required={currentStep === 1 ? true : false}  name="numero_tel" className="input" onChange={(e)=>handleInput(e)} />
+          <input  required={currentStep === 1 ? true : false}  name="labo_number" className="input" onChange={(e)=>handleInput(e)} />
         </div>
         <div className="oneInputDiv">
           <label className="label">Spécialité : </label>
@@ -104,7 +72,7 @@ export default function RegisterHealthCare() {
       <div className="inputStep">
         <div className="oneInputDiv">
           <label className="label">Diplome : </label>
-          <input required={currentStep === 2 ? true : false}  name="certificat" className="input" type="file" onChange={(e)=>handleChangeCertificat(e)} />
+          <input required={currentStep === 2 ? true : false}  name="certeficat" className="input" type="file" onChange={(e)=>handleChangeCertificat(e)} />
         </div>
       </div>,
   
@@ -130,7 +98,7 @@ export default function RegisterHealthCare() {
         <div className="inputStep">
           <div className="oneInputDiv">
             <label className="label">Nom : </label>
-            <input required name="nom" className="input" onChange={(e)=>handleInput(e)} />
+            <input required name="name" className="input" onChange={(e)=>handleInput(e)} />
           </div>
           <div className="oneInputDiv">
             <label className="label">Email : </label>
@@ -145,14 +113,14 @@ export default function RegisterHealthCare() {
           </div>
           <div className="oneInputDiv">
             <label className="label">Numéro de téléphone : </label>
-            <input  required={currentStep === 1 ? true : false}  name="numero_tel" className="input" onChange={(e)=>handleInput(e)} />
+            <input  required={currentStep === 1 ? true : false}  name="labo_number" className="input" onChange={(e)=>handleInput(e)} />
           </div>
         </div>,
     
         <div className="inputStep">
           <div className="oneInputDiv">
           <label className="label">Certificat : </label>
-          <input required={currentStep === 2 ? true : false}  name="certificat" className="input" type="file" onChange={(e)=>handleChangeCertificat(e)} />
+          <input required={currentStep === 2 ? true : false}  name="certeficat" className="input" type="file" onChange={(e)=>handleChangeCertificat(e)} />
         </div>
         </div>,
     
@@ -169,6 +137,17 @@ export default function RegisterHealthCare() {
       ];
 
 
+      // first_name: "",  //medecin
+      // last_name: "",   //medecin
+      // name: "",       //labo
+      // email: "",    
+      // labo_number: "",
+      // address: "",
+      // carte_id: "",   //medecin
+      // password: "",
+      // certeficat: "",
+      // specialite: "",   //medecin
+      // valide: false,
 
 
       const handleSubmit = async (e) => {
@@ -177,53 +156,54 @@ export default function RegisterHealthCare() {
           setCurrentStep(currentStep + 1);
         }
         else{
-          if(allInfos.password === cfrm){
-            const formData = new FormData();
-            formData.append("file",fil);
-            formData.append("random",randomString.current);
-           await axios.post(
-            "/api/users/addDocument",
-            formData,
-            {
-              headers: { "Content-Type": "multipart/form-data" },
-            }).then(async (res)=>{
-                if(res.data.success === true){
-                    let url = ""
-                    if(allInfos.role === "medecin"){
-                     url = "/api/users/medecin/createMedecin"
-                    }
-                    else if(allInfos.role === "labo"){
-                        url = "/api/users/labo/createLabo"
-                    }
-                    else if (allInfos.role === "centre"){
-                        url = "/api/users/centre/createCentre"
-                    }
-                    await axios
-                    .post(url,{allInfos : allInfos})
-                    .then((res)=>{
-                                if(res.data.success === true){
-                                  alert("Demande enregistre avec success ! Vous pouvez utiliser le compte une fois il sera valide")  
-                                  router.push('/');
-                                }
-                                else{
-                                  console.log(res);
-                                }
-                          }).catch((err)=>{
-                            console.log('err',err)
-                          })
-                }
-                else{
-                    console.log(res);
-                }
-            }).catch((e)=>{
-                console.log(e);
-            })
+        if(allInfos.password === cfrm){
+        if(role === "medecin"){
+          const formData = new FormData();
+          formData.append("first_name", allInfos.first_name);
+          formData.append("last_name", allInfos.last_name);
+          formData.append("email",allInfos.email);
+          formData.append("labo_number", allInfos.labo_number);
+          formData.append("address", allInfos.address);
+          formData.append("carte_id", allInfos.carte_id);
+          formData.append("specialite", allInfos.specialite);
+          formData.append("password", allInfos.password);
+          formData.append("certeficat", allInfos.certeficat);
+          axios.post("http://127.0.0.1:8000/api/register/doctor/",formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+         .then((res) => {
+         alert("Demande enregistre avec success ! vous pouvez vous connecter une fois votre compte a ete valide")
+         router.push("/");
+          }).catch((err) => {
+            console.log(err);
+          })
         }
-        else{
 
+        else if (role === "labo" || role === "centre"){
+          const formData = new FormData();
+          formData.append("name", allInfos.name);
+          formData.append("email",allInfos.email);
+          formData.append("labo_number", allInfos.labo_number);
+          formData.append("address", allInfos.address);
+          formData.append("password", allInfos.password);
+          formData.append("certeficat", allInfos.certeficat);
+          axios.post("http://127.0.0.1:8000/api/register/labo/",formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+         .then((res) => {
+         alert("Demande enregistre avec success ! vous pouvez vous connecter une fois votre compte a ete valide")
+         router.push("/");
+          }).catch((err) => {
+            console.log(err);
+          })
         }
       }
     }
+      }
     
       const handleBack = (e) => {
         e.preventDefault();
@@ -265,17 +245,16 @@ export default function RegisterHealthCare() {
 
         <div className="oneInputDiv">
             <label className="label">Choisir specialite : </label>
-            <select required name="role" value={allInfos.role} className="input" onChange={(e)=>{setAllInfos({
+            <select required name="role" value={role} className="input" onChange={(e)=>{setRole(e.target.value);setAllInfos({
         first_name: "",  //medecin
         last_name: "",   //medecin
-        nom: "",       //labo
+        name: "",       //labo
         email: "",    
-        numero_tel: "",
+        labo_number: "",
         address: "",
         carte_id: "",   //medecin
         password: "",
-        role: e.target.value,
-        certificat: "",
+        certeficat: "",
         specialite: "",   //medecin
         isValide: false,
             })}}>
@@ -287,9 +266,9 @@ export default function RegisterHealthCare() {
             </div>
 
 
-        {allInfos.role === "" ? "" 
+        {role === "" ? "" 
         : 
-        allInfos.role === "medecin" ? 
+        role === "medecin" ? 
         medecinSteps.map((step, index) => (
         <div key={index} className={`inputStep ${index === currentStep ? 'inStep' : 'notInStep'}`}>
           {step}

@@ -3,8 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import "../../../styles/doctor/patient/radios.css";
 import { useState } from "react";
-import { getSession } from "next-auth/react";
-import axios from 'axios';
+import axiosService from '@/app/helpers/axios';
 import { useRouter } from 'next/navigation';
 
 
@@ -13,24 +12,12 @@ export default function AddChirurgieModal({modalShowAdd, setModalShowAdd,patient
 
   const router = useRouter();
 
-    let today = new Date();
-
-    let day = today.getDate();
-    let month = today.getMonth() + 1; // Month is zero-based, so we add 1
-    let year = today.getFullYear();
-    
-    // Pad day and month with leading zeros if needed
-    day = day < 10 ? '0' + day : day;
-    month = month < 10 ? '0' + month : month;
-    
-    let formattedDate = `${day}-${month}-${year}`;
-
     const [chirurgieData,setChirurgieData] = useState({
         nom: "",
-        categorie: "",
-        rapport: "",
-        date: formattedDate,
-        isDemande: false
+        radio_category: "",
+        note: "",
+        demande: false,
+        type_doc: "C"
       })
 
       const handleChangeAddChirurgie = (e)=>{
@@ -43,31 +30,23 @@ export default function AddChirurgieModal({modalShowAdd, setModalShowAdd,patient
 
         const handleSubmit = async (e)=>{
         e.preventDefault();
-        const session = await getSession();
-
         if(selected === "demanderRadioTitle"){
-          chirurgieData.isDemande = true;
+          chirurgieData.demande = true;
         }
-
-        await axios.post("/api/users/patient/addToArrayField",{data: chirurgieData , field: "chirurgies" , id: patient_id , centrerole: session.user.role ,centreid: session.user.id})
-        .then((res)=>{
-       if(res.data.success === true){
-        setModalShowAdd(false);
-       setChirurgieData({
-        nom: "",
-        categorie: "",
-        rapport: "",
-        date: formattedDate,
-        isDemande: false
-      });
-       router.refresh();
-     }
-     else{
-       console.log(res);
-     }
-    }).catch((err)=>{
-     console.log(err);
-    })
+        axiosService.post(`doctor/add_document/${patient_id}`,chirurgieData)
+        .then((res) => {
+          setModalShowAdd(false);
+          setChirurgieData({
+          nom: "",
+          radio_category: "",
+          note: "",
+          demande: false,
+          type_doc: "C"
+        })
+         router.refresh();
+         }).catch((err) => {
+           console.log(err);
+         })
         
         }
 
@@ -112,12 +91,12 @@ export default function AddChirurgieModal({modalShowAdd, setModalShowAdd,patient
            </div>   
            <div className="d-flex justify-content-start align-items-center gap-4">
            <h4>Categorie Chirurgie : </h4>
-           <input onChange={(e)=>handleChangeAddChirurgie(e)} placeholder="Categorie Chirurgie ... " required name="categorie"></input>
+           <input onChange={(e)=>handleChangeAddChirurgie(e)} placeholder="Categorie Chirurgie ... " required name="radio_category"></input>
            </div>  
            {selected === "ajouterRadioTitle" && 
            <>
            <h4>Rapport : </h4>
-           <textarea rows={7} onChange={(e)=>handleChangeAddChirurgie(e)} name='rapport' className="textArea"></textarea>
+           <textarea rows={7} onChange={(e)=>handleChangeAddChirurgie(e)} name='note' className="textArea"></textarea>
            </>
            }
          </Modal.Body>
