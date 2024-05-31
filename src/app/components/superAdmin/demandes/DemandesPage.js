@@ -9,6 +9,7 @@ import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import axiosService from "@/app/helpers/axios";
 
 
 
@@ -48,7 +49,7 @@ export default function DemandesPage({ medecins , labos , centres }){
 
       const labocolumns = [
         {
-            field: 'nom',
+            field: 'name',
             headerName: 'Nom',
             width: 180,
            },
@@ -63,7 +64,7 @@ export default function DemandesPage({ medecins , labos , centres }){
               width: 200,
             },
             {
-              field: 'numero_tel',
+              field: 'labo_number',
               headerName: 'Numero tel',
               width: 170,
             },
@@ -81,143 +82,33 @@ export default function DemandesPage({ medecins , labos , centres }){
 
 
       const handleDeleteDemande = async ()=>{
-        if(selected === "medecin"){
-            const res = await axios.post("/api/users/medecin/deleteMedecin",{id: clicked._id})
-            .then((res)=>{
-               console.log(res);
-               if(res.data.success === true){
-                   setSuccessMessage("Demande supprimee avec success")
-                   setSuccess(true);
-                   setClicked(null);
-                   setModalShow(false);
-                   router.refresh();
-               }
-               else{
-                   setSuccessMessage("Un probleme est survenu lors de la suppression")
-                   setSuccess(false);
-                   setModalShow(false);
-               }
-            }).catch((err)=>{
-               console.log(err);
-               setSuccessMessage("Un probleme est survenu lors de la suppression")
+         await axiosService.delete(`refuse/${clicked.id}/`)
+         .then((res)=>{
+          setSuccessMessage("Demande supprimee avec success")
+          setSuccess(true);
+          setClicked(null);
+          setModalShow(false);
+          router.refresh();
+         }).catch((err)=>{
+          setSuccessMessage("Un probleme est survenu lors de la suppression")
                setSuccess(false);
                setModalShow(false);
-            })
-         }
-         else if(selected === "labo"){
-           const res = await axios.post("/api/users/labo/deleteLabo",{id: clicked._id})
-           .then((res)=>{
-              if(res.data.success === true){
-                  setSuccessMessage("Demande supprimee avec success")
-                  setSuccess(true);
-                  setClicked(null);
-                  setModalShow(false);
-                  router.refresh();
-              }
-              else{
-                  setSuccessMessage("Un probleme est survenu lors de la suppression")
-                  setSuccess(false);
-                  setModalShow(false);
-              }
-           }).catch((err)=>{
-              console.log(err);
-              setSuccessMessage("Un probleme est survenu lors de la suppression")
-              setSuccess(false);
-              setModalShow(false);
-           })
-         }
-         else if(selected === "centre"){
-           const res = await axios.post("/api/users/centre/deleteCentre",{id: clicked._id})
-           .then((res)=>{
-              if(res.data.success === true){
-                  setSuccessMessage("Demande supprimee avec success")
-                  setSuccess(true);
-                  setClicked(null);
-                  setModalShow(false);
-                  router.refresh();
-              }
-              else{
-                  setSuccessMessage("Un probleme est survenu lors de la suppression")
-                  setSuccess(false);
-                  setModalShow(false);
-              }
-           }).catch((err)=>{
-              console.log(err);
-              setSuccessMessage("Un probleme est survenu lors de la suppression")
-              setSuccess(false);
-              setModalShow(false);
-           })
-         }
+         })
       }
 
       const handleConfirmDemande = async ()=>{
-          if(selected === "medecin"){
-             const res = await axios.post("/api/users/medecin/updateMedecin",{id: clicked._id})
-             .then((res)=>{
-                console.log(res);
-                if(res.data.success === true){
-                    setSuccessMessage("Medecin Valide avec success")
-                    setSuccess(true);
-                    setClicked(null);
-                    setModalShow(false);
-                    router.refresh();
-                }
-                else{
-                    setSuccessMessage("Un probleme est survenu lors de la validation")
-                    setSuccess(false);
-                    setModalShow(false);
-                }
-             }).catch((err)=>{
-                console.log(err);
-                setSuccessMessage("Un probleme est survenu lors de la validation")
-                setSuccess(false);
-                setModalShow(false);
-             })
-          }
-          else if(selected === "labo"){
-            const res = await axios.post("/api/users/labo/updateLabo",{id: clicked._id})
+            await axiosService.post(`validate/${clicked.id}/`)
             .then((res)=>{
-               if(res.data.success === true){
-                   setSuccessMessage("Labo Valide avec success")
-                   setSuccess(true);
-                   setClicked(null);
-                   setModalShow(false);
-                   router.refresh();
-               }
-               else{
-                   setSuccessMessage("Un probleme est survenu lors de la validation")
-                   setSuccess(false);
-                   setModalShow(false);
-               }
+              setSuccessMessage("Valide avec success")
+              setSuccess(true);
+              setClicked(null);
+              setModalShow(false);
+              router.refresh();
             }).catch((err)=>{
-               console.log(err);
-               setSuccessMessage("Un probleme est survenu lors de la validation")
-               setSuccess(false);
-               setModalShow(false);
+              setSuccessMessage("Un probleme est survenu lors de la validation")
+              setSuccess(false);
+              setModalShow(false);
             })
-          }
-          else if(selected === "centre"){
-            const res = await axios.post("/api/users/centre/updateCentre",{id: clicked._id})
-            .then((res)=>{
-               if(res.data.success === true){
-                   setSuccessMessage("Centre Valide avec success")
-                   setSuccess(true);
-                   setClicked(null);
-                   setModalShow(false);
-                   router.refresh();
-               }
-               else{
-                   setSuccessMessage("Un probleme est survenu lors de la validation")
-                   setSuccess(false);
-                   setModalShow(false);
-               }
-            }).catch((err)=>{
-               console.log(err);
-               setSuccessMessage("Un probleme est survenu lors de la validation")
-               setSuccess(false);
-               setModalShow(false);
-            })
-          }
       }
 
 
@@ -251,7 +142,7 @@ export default function DemandesPage({ medecins , labos , centres }){
       <Box sx={{ height: 400, width: '100%' }}>
       <DataGrid
         rows={medecins}
-        getRowId={(row)=>row._id}
+        getRowId={(row)=>row.id}
         columns={medecincolumns}
         onRowClick={(row)=>{setModalShow(true);setClicked(row.row)}}
         initialState={{
@@ -270,7 +161,7 @@ export default function DemandesPage({ medecins , labos , centres }){
     <Box sx={{ height: 400, width: '100%' }}>
       <DataGrid
         rows={labos}
-        getRowId={(row)=>row._id}
+        getRowId={(row)=>row.id}
         columns={labocolumns}
         onRowClick={(row)=>{setModalShow(true);setClicked(row.row)}}
         initialState={{
@@ -287,7 +178,7 @@ export default function DemandesPage({ medecins , labos , centres }){
     <Box sx={{ height: 400, width: '100%' }}>
       <DataGrid
         rows={centres}
-        getRowId={(row)=>row._id}
+        getRowId={(row)=>row.id}
         columns={labocolumns}
         onRowClick={(row)=>{setModalShow(true);setClicked(row.row)}}
         initialState={{
@@ -321,9 +212,9 @@ export default function DemandesPage({ medecins , labos , centres }){
       <Modal.Body>
         {clicked === null ? "" :
         <div>
-         <h6><span className='text-black fw-bold'>{selected} :</span> {selected === "medecin" ? clicked.first_name + " " + clicked.last_name : clicked.nom}</h6>
+         <h6><span className='text-black fw-bold'>{selected} :</span> {selected === "medecin" ? clicked.first_name + " " + clicked.last_name : clicked.name}</h6>
          <h6><span className='text-black fw-bold'>email:</span> {clicked.email}</h6>
-         <h6><span className='text-black fw-bold'>Numero tel:</span> {clicked.numero_tel}</h6>
+         <h6><span className='text-black fw-bold'>Numero tel:</span> {clicked.labo_number}</h6>
          <h6><span className='text-black fw-bold'>Address :</span> {clicked.address}</h6>
         {selected === "medecin" && <h6><span className='text-black fw-bold'>Carte_id :</span> {clicked.carte_id}</h6>}
          </div>

@@ -10,7 +10,7 @@ import DemandesPage from "@/app/components/superAdmin/demandes/DemandesPage";
 
 
 async function getAdmins(){
-    const admins = await fetch(`${process.env.WEBSITE_URL}/api/users/getNotValide`,{
+    const admins = await fetch("http://127.0.0.1:8000//api/non_valide/",{
         cache:"no-store"
     });
   
@@ -22,7 +22,7 @@ export default async function SuperAdmin(){
 
     const admins = await getAdmins();
 
-    console.log(admins.data);
+    console.log(admins);
 
 
 
@@ -31,7 +31,7 @@ export default async function SuperAdmin(){
  <>
       <div className="doctorView">
       <div id="demandes" className="demandes active">
-           <DemandesPage medecins={admins.data.medecins} labos={admins.data.labos} centres={admins.data.centres} />
+           <DemandesPage medecins={admins.doctors} labos={admins.labos} centres={admins.centres} />
         </div>
         <div id="comptes" className="comptes unActive">
             <div>
