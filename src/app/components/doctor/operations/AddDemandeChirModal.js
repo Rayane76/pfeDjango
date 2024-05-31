@@ -22,10 +22,7 @@ export default function AddDemandeChirModal({modalAddDemande,setModalAddDemande,
     const handleSubmit = (e)=>{
       e.preventDefault();
 
-      chirurgie.rapport = rapport;
-      chirurgie.demande = false;
-
-      axiosService.post(`doctor/add_document/${patient_id}`,chirurgie)
+      axiosService.put(`medical_doc/${chirurgie.id}`,{note : rapport})
       .then((res) => {
         setModalAddDemande(false);
        router.refresh();

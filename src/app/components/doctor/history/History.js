@@ -93,12 +93,12 @@ export default function History({ maladies , antecedents }) {
           <p>{selectedMaladie.note}</p>
           </>
           }
-          {selectedMaladie != null && selectedMaladie.ordonnance.length > 0 && <>
+          {selectedMaladie != null && selectedMaladie.medicaments.length > 0 && <>
             <h4>Ordonnance : </h4>
           <ul>
              {selectedMaladie.medicaments.map((med,index)=>{
               return(
-                <li key={index}>{med.medicament} : {med.qte} pendant {med.duree} </li>
+                <li key={index}>{med.medicament} : {med.qte} comprimé(s) par jour pendant {med.duree} jours </li>
               )
              })}
           </ul>

@@ -28,15 +28,15 @@ export default function AddDemandeeModal({modalAddDemande,setModalAddDemande,rad
       e.preventDefault();
 
       const formData = new FormData();
-      formData.append("nom", radio.nom);
-      formData.append("radio_type",radio.radio_type);
-      formData.append("radio_category", radio.radio_category);
+      // formData.append("nom", radio.nom);
+      // formData.append("radio_type",radio.radio_type);
+      // formData.append("radio_category", radio.radio_category);
       formData.append("document", doc);
       formData.append("note", rapport);
-      formData.append("demande", false);
+      // formData.append("demande", false);
 
       
-      axiosService.post(`doctor/add_document/${patient_id}`,formData, {
+      axiosService.put(`medical_doc/${radio.id}`,formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

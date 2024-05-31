@@ -10,17 +10,23 @@ import axiosService from "@/app/helpers/axios";
 import { useRouter } from 'next/navigation';
 
 
-export default function Consultation({patient_id}){
+export default function Consultation({patient_id , maladies , med}){
 
   const router = useRouter();
 
+    // const [maladie,setMaladie] = useState({
+    //    name:"",
+    //    maladie_type: "",
+    //    note: "",
+    //    isChronic: false,
+    //    medicaments: [],
+    // })
+
     const [maladie,setMaladie] = useState({
-       name:"",
-       maladie_type: "",
-       note: "",
-       isChronic: false,
-       medicaments: [],
-    })
+      id : "",
+      note: "",
+    medicaments: [],
+  })
     
 
     const handleChange = (e) => {
@@ -31,18 +37,19 @@ export default function Consultation({patient_id}){
 
 
     
-    const handleChangeMedicament = (e)=>{
-        if(e.target.innerText != undefined && e.target.innerText != ""){ 
+      const handleChangeMedicament = (e)=>{
+
+        if(e.target.innerText != undefined && e.target.innerText != ""){
+            const selectedMedicament = med.find(med => med.name === e.target.innerText);
             const medicamentExists = maladie.medicaments.some(
-                (item) => item.medicament === e.target.innerText
+                (item) => item.medicament === selectedMedicament.id
               );
               if(!medicamentExists){
-            setMaladie((prev)=>({...prev,medicaments:[...prev.medicaments,{medicament: e.target.innerText , qte: "", duree: ""}]}))
+            setMaladie((prev)=>({...prev,medicaments:[...prev.medicaments,{medicament: selectedMedicament.id,name:selectedMedicament.name , qte: "", duree: ""}]}))
               }
         }
 
     }
-
     const handleNumChange = (e,medicament)=>{
         const { name, value } = e.target;
 
@@ -72,40 +79,37 @@ export default function Consultation({patient_id}){
       e.preventDefault();
       
       let consultation = {
-        maladie: {
-          name: maladie.name,
-          isChronic: maladie.isChronic,
-          maladie_type: maladie.maladie_type,
-        },
+        maladie: maladie.id,
         note: maladie.note,
         medicaments: maladie.medicaments
       }
+      console.log(consultation)
 
       axiosService.post(`add_consultation/${patient_id}`,consultation)
       .then((res) => {
-       router.refresh();
+       router.back();
        }).catch((err) => {
          console.log(err);
        })
     }
 
 
-      const  med = [
-          {
-          name: "Doliprane"
-          } ,
-          {
-            name: "Bedelix"
-            } ,
-            {
-              name: "Smecta"
-              } ,
-              {
-                name: "Panadol"
-                } ,
+      // const  med = [
+      //     {
+      //     name: "Doliprane"
+      //     } ,
+      //     {
+      //       name: "Bedelix"
+      //       } ,
+      //       {
+      //         name: "Smecta"
+      //         } ,
+      //         {
+      //           name: "Panadol"
+      //           } ,
 
       
-      ]
+      // ]
 
 
     return(
@@ -117,19 +121,20 @@ export default function Consultation({patient_id}){
         <div className="consultationInfosDiv">
          <div className="d-flex align-items-center ms-4">
          <h4 className="fw-bold me-4">Maladie : </h4>
-         <input name="name" onChange={(e)=>handleChange(e)} placeholder="name maladie ... "></input>
-         <input name="maladie_type" onChange={(e)=>handleChange(e)} placeholder="maladie_type maladie ..."></input>
-         {/* <Autocomplete
+         <Autocomplete
       disablePortal
-      onChange={(e)=>setMaladie((prev)=>({...prev,name:e.target.innerText}))}
+      onChange={(event, value) => {
+        const selectedMaladie = maladies.find(maladie => maladie.name === value);
+        if (selectedMaladie) {
+          setMaladie((prev) => ({...prev, id: selectedMaladie.id}));
+        }
+      }}
       id="combo-box-demo"
       options={maladies.map((option) => option.name)}
       autoHighlight
       sx={{ width: 300 }}
       renderInput={(params) => <TextField {...params} label="Maladie" />}
-    /> */}
-    <input className="ms-4 me-2" onChange={(e)=>setMaladie((prev)=>({...prev,isChronic: e.target.checked}))} type="checkbox"></input>
-    <label>Afficher sur la carte ? </label>
+    />
 
          </div>
          <div className="ms-4">
@@ -167,7 +172,7 @@ export default function Consultation({patient_id}){
             return(
               <div key={index} className="tableRow">
             <label className="labelRowFamilial2 d-flex gap-4">
-            {medicament.medicament}
+            {medicament.name}
             </label>
             <label className="labelRowFamilial1"><input onChange={(e)=>handleNumChange(e,medicament)} name="qte" className="numInput" type="number"></input></label>
             <label className="labelRowFamilial"><input onChange={(e)=>handleNumChange(e,medicament)} name="duree" className="numInput" type="number"></input></label>
@@ -184,7 +189,7 @@ export default function Consultation({patient_id}){
             }
          </div>
         
-     <div className="d-flex justify-content-center">
+     <div className="d-flex justify-content-center mt-4">
         <Button onClick={(e)=>handleSave(e)}>Enregistrer consultation</Button>
      </div>
      </div>

@@ -16,6 +16,20 @@ async function getPatient(id){
   return patient.json();
 }
 
+
+async function getMaladies(){
+   const maladies = await fetch(`http://127.0.0.1:8000//api/maladies`);
+
+  return maladies.json();
+}
+
+
+async function getMedicaments(){
+   const medicaments = await fetch(`http://127.0.0.1:8000//api/medicaments`);
+
+  return medicaments.json();
+}
+
 export default async function Patient({ params }) {
 
    const id = params.patient;
@@ -23,7 +37,11 @@ export default async function Patient({ params }) {
 
    const patient = await getPatient(id);
 
-    console.log(patient)
+   const maladies = await getMaladies();
+
+   const medicaments = await getMedicaments();
+
+   console.log(patient);
 
 
   return (
@@ -48,7 +66,7 @@ export default async function Patient({ params }) {
            <Operations isAdmin={true} patient_id={patient.id} chirurgies={patient.chirurgies} />
         </div>
         <div id="consultation" className="consultation unActive">
-        <Consultation patient_id={patient.id} />
+        <Consultation patient_id={patient.id} maladies={maladies} med={medicaments} />
         </div>
       </div>
     </>

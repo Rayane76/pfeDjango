@@ -25,11 +25,11 @@ export default function AddDemandeeAnalyseModal({modalAddDemande,setModalAddDema
       const formData = new FormData();
       formData.append("nom", analyse.nom);
       formData.append("document", doc);
-      formData.append("type_doc", "A");
-      formData.append("demande", false);
+      // formData.append("type_doc", "A");
+      // formData.append("demande", false);
 
       
-      axiosService.post(`doctor/add_document/${patient_id}`,formData, {
+      axiosService.put(`medical_doc/${analyse.id}`,formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -41,6 +41,7 @@ export default function AddDemandeeAnalyseModal({modalAddDemande,setModalAddDema
         console.log(err);
       })
     }
+
 
 
     
