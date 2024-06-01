@@ -53,6 +53,10 @@ export default function GeneralInfos(props) {
                     </span>
                     {props.patient.address} <br></br>
                     <span className="fw-bold me-2">
+                      Numero de telephone :
+                    </span>
+                    {props.patient.numero_tel} <br></br>
+                    <span className="fw-bold me-2">
                       Groupe sanguin:
                     </span>
                      {props.patient.blood_type} <br></br>

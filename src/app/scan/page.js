@@ -1,6 +1,6 @@
 'use client'
 import { useRouter } from "next/navigation";
-import "../../styles/doctor/home.css";
+import "../styles/doctor/home.css";
 import { useState } from "react";
 import axios from "axios";
 
@@ -9,14 +9,13 @@ export default function Doctor() {
   const [matricule,setMatricule] = useState("");
   const router = useRouter();
 
-
   const handleSubmit = async (e)=>{
     e.preventDefault();
     await axios.post("http://127.0.0.1:8000/api/exist/",{
         carte_id: matricule
     }).then((res)=>{
        if(res.data.exist === true){
-         router.push("/admin/doctor/" + res.data.id)
+         router.push("/scan/" + res.data.id)
        }
        else{
         
@@ -25,9 +24,10 @@ export default function Doctor() {
        console.log(err); 
     })
   }
+
   return (
     <>
-       <div className="scanPage">
+      <div className="scanPage">
         <div className="homeDiv">
           <form className="homeDiv" onSubmit={(e)=>handleSubmit(e)}>
           <h6>
@@ -60,3 +60,6 @@ export default function Doctor() {
   );
 
 }
+
+
+
