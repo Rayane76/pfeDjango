@@ -1,7 +1,6 @@
 import "../../styles/doctor/patient/all.css"
 import DemandesPage from "@/app/components/superAdmin/demandes/DemandesPage";
 import MaladiesSuperAdmin from "@/app/components/superAdmin/maladies/MaladiesSuperAdmin";
-import MedicamentsFetch from "@/app/components/superAdmin/medicamentFetch/MedicamentFetch";
 import MedicamentsSuperAdmin from "@/app/components/superAdmin/medicaments/MedicamentSuperAdmin";
 
 

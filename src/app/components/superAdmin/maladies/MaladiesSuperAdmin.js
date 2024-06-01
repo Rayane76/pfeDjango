@@ -13,6 +13,30 @@ import { useRouter } from "next/navigation";
 
 export default function MaladiesSuperAdmin({maladies}){
 
+
+  const itemsPerPage = 50;
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Calculate the current set of items to display
+  const currentItems = maladies.slice(currentIndex, currentIndex + itemsPerPage);
+
+
+  // Function to show the next set of items
+  const showMore = () => {
+    if (currentIndex + itemsPerPage < maladies.length) {
+      setCurrentIndex(currentIndex + itemsPerPage);
+    }
+  };
+  
+
+  // Function to show the previous set of items
+  const showLess = () => {
+    if (currentIndex - itemsPerPage >= 0) {
+      setCurrentIndex(currentIndex - itemsPerPage);
+    }
+  };
+
+
     const router = useRouter();
 
     const [filteredCat,setFilteredCat] = useState(undefined);
@@ -113,8 +137,8 @@ export default function MaladiesSuperAdmin({maladies}){
           <label className="tableTitleLabelF">Chronique</label>
         </div>
         <div className="tableRowsFamilial">
-        { filteredCat === undefined && filteredChronique === undefined ?
-            maladies.map((maladie,index)=>{
+        { (filteredCat === undefined || filteredCat === "") && (filteredChronique === undefined || filteredChronique === "") ?
+          currentItems.map((maladie,index)=>{
               
             return(
                 <div key={index} className="tableRow">
@@ -126,7 +150,7 @@ export default function MaladiesSuperAdmin({maladies}){
             )
             
           }) : 
-           filteredCat != undefined && filteredChronique === undefined ?
+           filteredCat != undefined && (filteredChronique === undefined || filteredChronique === "") ?
            maladies.map((maladie,index)=>{
             if(maladie.maladie_type === filteredCat){
             return(
@@ -139,7 +163,7 @@ export default function MaladiesSuperAdmin({maladies}){
             )
             }
         }) : 
-            filteredCat === undefined && filteredChronique != undefined ?
+            (filteredCat === undefined || filteredCat === "") && filteredChronique != undefined ?
             maladies.map((maladie,index)=>{
             if(maladie.isChronic.toString() === filteredChronique){    
             return(
@@ -167,6 +191,18 @@ export default function MaladiesSuperAdmin({maladies}){
           }
       
         </div>
+
+
+        {(filteredCat === undefined || filteredCat === "") && (filteredChronique === undefined || filteredChronique === "") ?   
+          <div className="d-flex justify-content-center gap-4">
+        {currentIndex > 0 && (
+          <button onClick={showLess}>Show Less</button>
+        )}
+        {currentIndex + itemsPerPage < maladies.length && (
+          <button onClick={showMore}>Show More</button>
+        )}
+      </div>
+         : "" }
         </div>
         <Modal
       show={modalShowAdd}
