@@ -2,7 +2,7 @@
 import "../../../styles/superAdmin/medicaments.css"
 // import "../../../styles/doctor/patient/historique.css";
 import "../../../styles/doctor/patient/radios.css"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from 'react-bootstrap/Button';
@@ -14,7 +14,29 @@ import { useRouter } from "next/navigation";
 
 
 
+
 export default function MedicamentsSuperAdmin({medicaments}){
+
+  const itemsPerPage = 50;
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Calculate the current set of items to display
+  const currentItems = medicaments.slice(currentIndex, currentIndex + itemsPerPage);
+
+  // Function to show the next set of items
+  const showMore = () => {
+    if (currentIndex + itemsPerPage < medicaments.length) {
+      setCurrentIndex(currentIndex + itemsPerPage);
+    }
+  };
+
+  // Function to show the previous set of items
+  const showLess = () => {
+    if (currentIndex - itemsPerPage >= 0) {
+      setCurrentIndex(currentIndex - itemsPerPage);
+    }
+  };
+
 
     const router = useRouter();
 
@@ -27,7 +49,7 @@ export default function MedicamentsSuperAdmin({medicaments}){
     const handleDelete = async (medicament) =>{
         await axiosService.delete(`medicaments/${medicament.id}/`)
         .then((res)=>{
-           router.refresh();
+          router.refresh()
         })
         .catch((err)=>{
            console.log(err);
@@ -94,17 +116,41 @@ export default function MedicamentsSuperAdmin({medicaments}){
             <label className="tableTitleLabell"></label>
           </div>
           <div className="tableRowsAnalyses">
-            {medicaments.map((medicament,index)=>{
-              if(filteredCat === medicament.name || filteredCat === undefined){
+            {
+              filteredCat === undefined || filteredCat === "" ?
+              currentItems.map((medicament,index)=>{
               return(
               <div key={index} className="tableRowPers">
-            <label className="labelRowPers2">{medicament.name}</label>
+            <label style={{fontWeight:"bolder",width:"80%"}}>{medicament.name}</label>
             <DeleteIcon className="labelIcon" onClick={()=>handleDelete(medicament)} />
           </div>
               )
-              }
-            })}
+
+            })
+            : 
+            medicaments.map((medicament,index)=>{
+              if(medicament.name === filteredCat){
+                return(
+                  <div key={index} style={{width:"90%"}} className="tableRowPers">
+            <label className="labelRowPers2">{medicament.name}</label>
+            <DeleteIcon className="labelIcon" onClick={()=>handleDelete(medicament)} />
           </div>
+                )
+              }
+            })
+            }
+          </div>
+
+          {filteredCat === undefined || filteredCat === "" ?   
+          <div className="d-flex justify-content-center gap-4">
+        {currentIndex > 0 && (
+          <button onClick={showLess}>Show Less</button>
+        )}
+        {currentIndex + itemsPerPage < medicaments.length && (
+          <button onClick={showMore}>Show More</button>
+        )}
+      </div>
+         : "" }
         </div>
 
 

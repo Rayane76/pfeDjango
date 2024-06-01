@@ -40,7 +40,7 @@ export default function DemandesPage({ medecins , labos , centres }){
             width: 200,
           },
           {
-            field: 'numero_tel',
+            field: 'labo_number',
             headerName: 'Numero tel',
             width: 200,
           },

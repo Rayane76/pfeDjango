@@ -1,8 +1,8 @@
 import "../../styles/doctor/patient/all.css"
 import DemandesPage from "@/app/components/superAdmin/demandes/DemandesPage";
 import MaladiesSuperAdmin from "@/app/components/superAdmin/maladies/MaladiesSuperAdmin";
+import MedicamentsFetch from "@/app/components/superAdmin/medicamentFetch/MedicamentFetch";
 import MedicamentsSuperAdmin from "@/app/components/superAdmin/medicaments/MedicamentSuperAdmin";
-
 
 
 async function getAdmins(){
@@ -20,15 +20,17 @@ async function getAdmins(){
  
    return maladies.json();
  }
- 
- 
+
+
  async function getMedicaments(){
-    const medicaments = await fetch(`http://127.0.0.1:8000//api/medicaments`,{
-      cache:"no-store"
-    });
+  const medicaments = await fetch(`http://127.0.0.1:8000//api/medicaments`,{
+    cache:"no-store"
+  });
+
+ return medicaments.json();
+}
+
  
-   return medicaments.json();
- }
 
 
 export default async function SuperAdmin(){
@@ -41,6 +43,7 @@ export default async function SuperAdmin(){
     const medicaments = await getMedicaments();
 
 
+
     return(
         <>
  <>
@@ -48,11 +51,11 @@ export default async function SuperAdmin(){
       <div id="demandes" className="demandes active">
            <DemandesPage medecins={admins.doctors} labos={admins.labos} centres={admins.centres} />
         </div>
-        <div id="medicaments" className="medicaments unActive">
-           <MedicamentsSuperAdmin medicaments={medicaments} />
-        </div>
         <div id="maladies" className="maladies unActive">
              <MaladiesSuperAdmin maladies={maladies}/>
+        </div>
+        <div id="medicaments" className="medicaments unActive">
+         <MedicamentsSuperAdmin medicaments={medicaments}/>
         </div>
       </div>
     </>

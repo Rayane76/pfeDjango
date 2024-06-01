@@ -46,13 +46,13 @@ export default function SuperSideBar(props) {
             <GeneralSvg />
             Demandes d'inscription
           </div>
-          <div className="field" onClick={(e) => handleClick(e, "medicaments")}>
-            <DiseasesSvg />
-             Medicaments
-          </div>
           <div className="field" onClick={(e) => handleClick(e, "maladies")}>
             <Xray />
             Maladies
+          </div>
+          <div className="field" onClick={(e) => handleClick(e, "medicaments")}>
+            <DiseasesSvg />
+             Medicaments
           </div>
         </div>
       </div>
@@ -79,17 +79,17 @@ export default function SuperSideBar(props) {
                 </div>
                 <div
                   className="field"
-                  onClick={(e) => handleClick(e, "medicaments")}
-                >
-                 <DiseasesSvg />
-                  Medicaments
-                </div>
-                <div
-                  className="field"
                   onClick={(e) => handleClick(e, "maladies")}
                 >
                   <Xray />
                   Maladies
+                </div>
+                <div
+                  className="field"
+                  onClick={(e) => handleClick(e, "medicaments")}
+                >
+                 <DiseasesSvg />
+                  Medicaments
                 </div>
               </div>
             </div>
