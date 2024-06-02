@@ -41,52 +41,52 @@ export default function RegisterHealthCare() {
     const medecinSteps = [
       <div className="inputStep">
         <div className="oneInputDiv">
-          <label className="label">Nom : </label>
+          <label className="label">Nom :  *</label>
           <input required name="last_name" className="input" onChange={(e)=>handleInput(e)} />
         </div>
         <div className="oneInputDiv">
-          <label className="label">Prénom : </label>
+          <label className="label">Prénom :  *</label>
           <input required name="first_name" className="input" onChange={(e)=>handleInput(e)} />
         </div>
         <div className="oneInputDiv">
-          <label className="label">Email : </label>
+          <label className="label">Email :  *</label>
           <input required name="email" type="email" className="input" onChange={(e)=>handleInput(e)} />
         </div>
       </div>,
   
       <div className="inputStep">
         <div className="oneInputDiv">
-          <label className="label">Adresse : </label>
+          <label className="label">Adresse :  *</label>
           <input required={currentStep === 1 ? true : false} name="address" className="input" onChange={(e)=>handleInput(e)} />
         </div>
         <div className="oneInputDiv">
-          <label className="label">Numéro de téléphone : </label>
+          <label className="label">Numéro de téléphone :  *</label>
           <input  required={currentStep === 1 ? true : false}  name="labo_number" className="input" onChange={(e)=>handleInput(e)} />
         </div>
         <div className="oneInputDiv">
-          <label className="label">Spécialité : </label>
+          <label className="label">Spécialité :  *</label>
           <input  required={currentStep === 1 ? true : false}  name="specialite" className="input" onChange={(e)=>handleInput(e)} />
         </div>
       </div>,
   
       <div className="inputStep">
         <div className="oneInputDiv">
-          <label className="label">Diplome : </label>
-          <input required={currentStep === 2 ? true : false}  name="certeficat" className="input" type="file" onChange={(e)=>handleChangeCertificat(e)} />
+          <label className="label">Diplome :  * (Doit être une image)</label>
+          <input required={currentStep === 2 ? true : false} accept="image/*"  name="certeficat" className="input" type="file" onChange={(e)=>handleChangeCertificat(e)} />
         </div>
       </div>,
   
       <div className="inputStep">
         <div className="oneInputDiv">
-          <label className="label">Numéro d'identification national : </label>
+          <label className="label">Numéro d'identification national : *</label>
           <input required={currentStep === 3 ? true : false} name="carte_id" className="input" onChange={(e)=>handleInput(e)} />
         </div>
         <div className="oneInputDiv">
-          <label className="label">Mot de passe : </label>
+          <label className="label">Mot de passe : *</label>
           <input type="password" required={currentStep === 3 ? true : false} onChange={(e)=>handleInput(e)} name="password" className="input" />
         </div>
         <div className="oneInputDiv">
-          <label className="label">Confirmer mot de passe : </label>
+          <label className="label">Confirmer mot de passe : *</label>
           <input type="password" required={currentStep === 3 ? true : false} onChange={(e)=>setCfrm(e.target.value)} className="input" />
         </div>
       </div>

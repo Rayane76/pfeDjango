@@ -36,44 +36,48 @@ export default function Reg() {
 
       const [cfrm,setCfrm] = useState("");
 
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0];
+
+
     const steps = [
       <div className="inputStep">
         <div className="oneInputDiv">
-          <label className="label">Nom : </label>
+          <label className="label">Nom :  *</label>
           <input required name="last_name" className="input" onChange={(e)=>handleInput(e)} />
         </div>
         <div className="oneInputDiv">
-          <label className="label">Prénom : </label>
+          <label className="label">Prénom :  *</label>
           <input required name="first_name" className="input" onChange={(e)=>handleInput(e)} />
         </div>
         <div className="oneInputDiv">
-          <label className="label">Email : </label>
+          <label className="label">Email :  *</label>
           <input required name="email" type="email" className="input" onChange={(e)=>handleInput(e)} />
         </div>
       </div>,
   
       <div className="inputStep">
         <div className="oneInputDiv">
-          <label className="label">Adresse : </label>
+          <label className="label">Adresse :  *</label>
           <input required={currentStep === 1 ? true : false} name="address" className="input" onChange={(e)=>handleInput(e)} />
         </div>
         <div className="oneInputDiv">
-          <label className="label">Numéro de téléphone : </label>
+          <label className="label">Numéro de téléphone :  *</label>
           <input  required={currentStep === 1 ? true : false}  name="numero_tel" className="input" onChange={(e)=>handleInput(e)} />
         </div>
         <div className="oneInputDiv">
-          <label className="label">Contact d'urgence : </label>
+          <label className="label">Contact d'urgence :  *</label>
           <input  required={currentStep === 1 ? true : false}  name="emergency_number" className="input" onChange={(e)=>handleInput(e)} />
         </div>
       </div>,
   
       <div className="inputStep">
         <div className="oneInputDiv">
-          <label className="label">Date de naissance : </label>
-          <input  required={currentStep === 2 ? true : false}  name="birth_date" className="input" type="date" onChange={(e)=>handleInput(e)} />
+          <label className="label">Date de naissance :  *</label>
+          <input min="1900-01-01" max={todayString}  required={currentStep === 2 ? true : false}  name="birth_date" className="input" type="date" onChange={(e)=>handleInput(e)} />
         </div>
         <div className="oneInputDiv">
-          <label className="label">Sexe : </label>
+          <label className="label">Sexe :  *</label>
           <select required={currentStep === 2 ? true : false} value={allInfos.gender} name="gender" className="input" onChange={(e)=>handleInput(e)}>
             <option value="" hidden>Choisir le sexe : </option>
             <option value="Male">Homme</option>
@@ -82,7 +86,7 @@ export default function Reg() {
 
         </div>
         <div className="oneInputDiv">
-          <label className="label">Groupe sanguin : </label>
+          <label className="label">Groupe sanguin :  *</label>
           <select required={currentStep === 2 ? true : false} name="blood_type" value={allInfos.blood_type} className="input" onChange={(e)=>handleInput(e)}>
             <option value="" hidden>Choisir le groupe sanguin : </option>
             <option value="O+">O +</option>
@@ -105,12 +109,12 @@ export default function Reg() {
       <div className="inputStep">
         <div className="oneInputDiv">
           <label className="label">Numéro d'identification national : </label>
-          <input required={currentStep === 3 ? true : false} name="carte_id" className="input" onChange={(e)=>handleInput(e)} />
+          <input name="carte_id" className="input" onChange={(e)=>handleInput(e)} />
         </div>
         <div className="oneInputDiv">
-          <label className="label">Situation familiale : </label>
-          <select required={currentStep === 3 ? true : false} name="married" value={allInfos.situation} className="input" onChange={(e)=>{handleInput(e);setAllInfos((prev)=>({...prev,nbr_children:"0"}))}}>
-            <option value="" hidden>Choisir Situation familiale : </option>
+          <label className="label">Situation familiale :  *</label>
+          <select required={currentStep === 3 ? true : false} name="married" value={allInfos.married} className="input" onChange={(e)=>{handleInput(e);setAllInfos((prev)=>({...prev,nbr_children:"0"}))}}>
+            <option value="" hidden>Choisir Situation familiale :  *</option>
             <option value="Célibataire">Célibataire</option>
             <option value="Marié(e)">Marié(e)</option>
             <option value="Divorcé(e)">Divorcé(e)</option>
@@ -118,18 +122,18 @@ export default function Reg() {
           </select>
         </div>
         <div className="oneInputDiv">
-          <label className="label">Nombre d'enfants : </label>
-          <input required={currentStep === 3 ? true : false} onChange={(e)=>handleInput(e)} value={allInfos.nbr_children} disabled={allInfos.situation === "" || allInfos.situation === "celibataire" ? true : false} name="nbr_children" type="number" className="input" />
+          <label className="label">Nombre d'enfants :  *</label>
+          <input required={currentStep === 3 ? true : false} onChange={(e)=>handleInput(e)} value={allInfos.nbr_children} disabled={allInfos.married === "" || allInfos.married === "Célibataire" ? true : false} name="nbr_children" type="number" className="input" />
         </div>
       </div>,
   
       <div className="inputStep">
         <div className="oneInputDiv">
-          <label className="label">Mot de passe : </label>
+          <label className="label">Mot de passe :  *</label>
           <input type="password" required={currentStep === 4 ? true : false} onChange={(e)=>handleInput(e)} name="password" className="input" />
         </div>
         <div className="oneInputDiv">
-          <label className="label">Confirmer mot de passe : </label>
+          <label className="label">Confirmer mot de passe :  *</label>
           <input type="password" required={currentStep === 4 ? true : false} onChange={(e)=>setCfrm(e.target.value)} className="input" />
         </div>
       </div>

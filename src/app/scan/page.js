@@ -7,10 +7,26 @@ import axios from "axios";
 export default function Doctor() {
 
   const [matricule,setMatricule] = useState("");
+  const [type,setType] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e)=>{
     e.preventDefault();
+    if(type === "id"){
+    await axios.post("http://127.0.0.1:8000/api/exist/",{
+        id: matricule
+    }).then((res)=>{
+       if(res.data.exist === true){
+         router.push("/scan/" + res.data.id)
+       }
+       else{
+        
+       }
+    }).catch((err)=>{
+       console.log(err); 
+    })
+  }
+  else if (type === "carte_id"){
     await axios.post("http://127.0.0.1:8000/api/exist/",{
         carte_id: matricule
     }).then((res)=>{
@@ -24,16 +40,24 @@ export default function Doctor() {
        console.log(err); 
     })
   }
+  else {
+
+  }
+  }
 
   return (
     <>
       <div className="scanPage">
         <div className="homeDiv">
           <form className="homeDiv" onSubmit={(e)=>handleSubmit(e)}>
-          <h6>
-            Entrer le numéro d'identification national : 
-          </h6>
-          <input className="input" onChange={(e)=>setMatricule(e.target.value)} placeholder="numéro d'identification national ..." required></input>
+          <select style={{height:"50px",borderRadius:"10px" , marginBottom:"50px"}} value={type} required onChange={(e)=>{setType(e.target.value);setMatricule("")}}>
+            <option value="" hidden>Choisir Scan : </option>
+            <option value="carte_id">Numéro d'identification national</option>
+            <option value="id">ID Patient</option>
+          </select>
+          {type === "" ? "" : type === "id" ? <input className="input" name="id" placeholder="ID Patient ..." onChange={(e)=>setMatricule(e.target.value)} required></input> : type === "carte_id" ? 
+          <input className="input" name="carte_id" placeholder="Numéro d'identification national ..." onChange={(e)=>setMatricule(e.target.value)} required></input>
+          : ""}
           <button className="cssbuttons-io" type="submit">
   <span>
     Chercher

@@ -52,10 +52,14 @@ export default function GeneralInfos(props) {
                       Adresse:
                     </span>
                     {props.patient.address} <br></br>
+                    {props.isAdmin === true && 
+                    <>
                     <span className="fw-bold me-2">
                       Numero de telephone :
                     </span>
                     {props.patient.numero_tel} <br></br>
+                    </>
+                    }
                     <span className="fw-bold me-2">
                       Groupe sanguin:
                     </span>
@@ -106,7 +110,7 @@ export default function GeneralInfos(props) {
                 <h4 className="nameInfos">Maladies :</h4>
                  <ul>
                   {props.patient.maladies.map((maladie,index)=>{
-                    if(maladie.isChronic === true){
+                    if(maladie.affiche === true){
                       return(
                         <li key={index} className="disease">{maladie.name}</li>
                       )

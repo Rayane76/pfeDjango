@@ -14,7 +14,7 @@ export default function Log(){
     const router = useRouter()
 
     const [data,setData] = useState({
-        id:"",
+        email:"",
         password:""
     })
 
@@ -55,8 +55,8 @@ export default function Log(){
            <form onSubmit={(e)=>handleSubmit(e)} style={{width:"100%"}}>
            <div className="inputStep">
             <div className="oneInputDiv">
-            <label className="label">ID : </label>
-            <input onChange={(e)=>handleInput(e)} name="id" required className="input" />
+            <label className="label">Email : </label>
+            <input onChange={(e)=>handleInput(e)} name="email" type="email" required className="input" />
             </div>
             <div className="oneInputDiv">
             <label className="label">Mot de passe : </label>
