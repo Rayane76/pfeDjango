@@ -1,7 +1,7 @@
 'use client'
 import { useRouter } from "next/navigation";
 import "../../styles/doctor/home.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function Doctor() {
@@ -19,7 +19,7 @@ export default function Doctor() {
         id: matricule
     }).then((res)=>{
        if(res.data.exist === true){
-         router.push("/scan/" + res.data.id)
+         router.push("/admin/doctor/" + res.data.id)
        }
        else{
         
@@ -33,7 +33,7 @@ export default function Doctor() {
         carte_id: matricule
     }).then((res)=>{
        if(res.data.exist === true){
-         router.push("/scan/" + res.data.id)
+        router.push("/admin/doctor/" + res.data.id)
        }
        else{
         
@@ -58,9 +58,7 @@ export default function Doctor() {
             <option value="carte_id">Numéro d'identification national</option>
             <option value="id">ID Patient</option>
           </select>
-          {type === "" ? "" : type === "id" ? <input className="input" name="id" placeholder="ID Patient ..." onChange={(e)=>setMatricule(e.target.value)} required></input> : type === "carte_id" ? 
-          <input className="input" name="carte_id" placeholder="Numéro d'identification national ..." onChange={(e)=>setMatricule(e.target.value)} required></input>
-          : ""}
+          <input value={matricule} style={{display:"block"}} className="input" name={type} placeholder={type === "carte_id" ? "Numéro d'identification national ..." : type === "id" ? "ID Patient" : "Choisir type d'abord"} onChange={(e)=>setMatricule(e.target.value)} required></input>
           <button className="cssbuttons-io" type="submit">
   <span>
     Chercher

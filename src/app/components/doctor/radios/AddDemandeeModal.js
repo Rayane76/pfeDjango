@@ -158,7 +158,7 @@ export default function AddDemandeeModal({modalAddDemande,setModalAddDemande,rad
        :
        doc.name
        }</p></label>
-   <input required onChange={(e)=>handleAddDocument(e)} className="input" name="document" id="file" type="file" />
+   <input required onChange={(e)=>handleAddDocument(e)} className="inputR" name="document" id="file" type="file" />
            
    </div>
    

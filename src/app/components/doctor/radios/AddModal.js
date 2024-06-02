@@ -274,7 +274,7 @@ const handleSwitch = (clicked)=>{
        :
        radioData.document.name
        }</p></label>
-   <input required onChange={(e)=>handleAddDocument(e)} className="input" name="document" id="file" type="file" />
+   <input required onChange={(e)=>handleAddDocument(e)} className="inputR" name="document" id="file" type="file" />
            
    </div>
 </>

@@ -8,8 +8,19 @@ import Modal from 'react-bootstrap/Modal';
 import { useEffect, useState } from "react";
 import AddModal from "./AddModal";
 import AddDemandeeModal from "./AddDemandeeModal";
+import Cookies from "universal-cookie";
+import axiosService from "@/app/helpers/axios";
+import { useRouter } from "next/navigation";
 
 export default function Radios({ isAdmin , patient_id , radios }) {
+
+  const router = useRouter();
+
+  const cookies = new Cookies();
+
+  const auth = cookies.get("auth");
+
+  console.log(auth);
 
   radios.sort((a, b) => {
     // Convert dates to Date objects for comparison
@@ -19,10 +30,27 @@ export default function Radios({ isAdmin , patient_id , radios }) {
     return dateB - dateA;
   });
 
+  const isWithinThreeDaysBeforeToday = (dateVar) => {
+    const today = new Date();
+    const inputDate = new Date(dateVar);
+  
+    // Calculate the difference in days
+    const diffInTime = today - inputDate;
+    const diffInDays = diffInTime / (1000 * 3600 * 24);
+  
+    // Check if the date is within the range of 0 to 3 days before today
+    return diffInDays >= 0 && diffInDays <= 3;
+  };
+
   const uniqueCategories = [...new Set(radios.map((radio) => radio.demande === false && radio.radio_category))];
   const filteredArrayCats = uniqueCategories.filter(item => item !== false);
+
+
+
   const uniqueTypes = [...new Set(radios.map((radio)=> radio.demande === false && radio.radio_type))];
   const filteredArrayTypes = uniqueTypes.filter(item => item !== false);
+
+
   const [modalShowRadio, setModalShowRadio] = useState(false);
   const [modalShowAdd, setModalShowAdd] = useState(false);
 
@@ -45,11 +73,21 @@ const handleClickRadio = (e,radio) =>{
 }
 
 
+const handleDeleteRadio = async () => {
+  await axiosService.delete(`delete_doc/${selectedRadio.id}/`)
+  .then((res)=>{
+    setModalShowRadio(false);
+    router.refresh();
+  }).catch((err)=>{
+    console.log(err);
+  })
+}
+
+
 
 
 
 function MyVerticallyCenteredModal(props) {
-  console.log(selectedRadio);
   return (
     <Modal
       {...props}
@@ -92,6 +130,7 @@ function MyVerticallyCenteredModal(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={props.onHide}>Close</Button>
+        {selectedRadio != null && isWithinThreeDaysBeforeToday(selectedRadio.date) && selectedRadio.doctor_id === auth.id && <Button onClick={()=>handleDeleteRadio()} variant="danger">Delete radio</Button>}
       </Modal.Footer>
     </Modal>
   );
@@ -209,8 +248,6 @@ const [activeDiv,setActiveDiv] = useState("realises");
       // className="medecinFilter"
       id="combo-box-demo1"
       options={filteredArrayTypes}
-      getOptionLabel={(option) => option ? option.type : ''}
-
       autoHighlight
       sx={{ width: 300 }}
       renderInput={(params) => <TextField {...params} label="Type" />}
@@ -221,8 +258,6 @@ const [activeDiv,setActiveDiv] = useState("realises");
       onChange={(e)=>handleChangeFilterCat(e)}
       id="combo-box-demo"
       options={filteredArrayCats}
-      getOptionLabel={(option) => option ? option.radio_category : ''}
-
       autoHighlight
       sx={{ width: 300 }}
       renderInput={(params) => <TextField {...params} label="Categorie" />}
