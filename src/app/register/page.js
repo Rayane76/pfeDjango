@@ -24,7 +24,7 @@ export default function Reg() {
         gender: "",
         blood_type: "",
         address: "",
-        carte_id: "",
+        carte_id: null,
         password: "",
         married: "",
         nbr_children: "0",

@@ -94,7 +94,7 @@ export default function Personnelles({patient}){
     }
 
     return(
-        <div style={{height:"100vh",width:"100%"}}>
+        <div style={{height:"100vh",width:"100%",overflowY:"auto"}}>
             <div className="personnellesDiv">
 
 
