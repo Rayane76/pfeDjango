@@ -41,7 +41,7 @@ export default async function Patient({ params }) {
 
    const medicaments = await getMedicaments();
 
-   console.log(patient);
+   console.log(patient.consultations);
 
 
   return (
@@ -54,7 +54,7 @@ export default async function Patient({ params }) {
            <Modify patient_id={patient.id} allergies={patient.allergies} antecedents={patient.antecedents} />
         </div>
         <div id="history" className="history unActive">
-           <History maladies={patient.consultations} antecedents={patient.antecedents} />
+           <History maladies={patient.consultations} antecedents={patient.antecedents} medicaments={medicaments} />
         </div>
         <div id="radios" className="radios unActive">
            <Radios isAdmin={true} patient_id={patient.id} radios={patient.radios} />

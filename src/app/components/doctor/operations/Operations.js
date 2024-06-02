@@ -8,9 +8,18 @@ import Modal from 'react-bootstrap/Modal';
 import AddChirurgieModal from "./AddChirurgieModal";
 import AddDemandeChirModal from "./AddDemandeChirModal";
 import { useState } from "react";
+import Cookies from "universal-cookie";
+import axiosService from "@/app/helpers/axios";
+import { useRouter } from "next/navigation";
 
 
 export default function Operations({ isAdmin , patient_id , chirurgies }){
+
+  const router = useRouter();
+
+  const cookies = new Cookies();
+
+  const auth = cookies.get("auth");
 
     chirurgies.sort((a, b) => {
         // Convert dates to Date objects for comparison
@@ -36,6 +45,31 @@ export default function Operations({ isAdmin , patient_id , chirurgies }){
         setModalShowChirurgie(true);
         setSelectedChirurgie(chirurgie);
      }
+
+
+     const isWithinThreeDaysBeforeToday = (dateVar) => {
+      const today = new Date();
+      const inputDate = new Date(dateVar);
+    
+      // Calculate the difference in days
+      const diffInTime = today - inputDate;
+      const diffInDays = diffInTime / (1000 * 3600 * 24);
+    
+      // Check if the date is within the range of 0 to 3 days before today
+      return diffInDays >= 0 && diffInDays <= 3;
+    };
+
+
+    
+  const handleDeleteChirurgie = async () => {
+    await axiosService.delete(`delete_doc/${selectedChirurgie.id}/`)
+    .then((res)=>{
+      setModalShowChirurgie(false);
+      router.refresh();
+    }).catch((err)=>{
+      console.log(err);
+    })
+  }
 
      function MyVerticallyCenteredModal(props) {
         return (
@@ -63,7 +97,8 @@ export default function Operations({ isAdmin , patient_id , chirurgies }){
                   }
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={props.onHide}>Close</Button>
+              <Button variant="secondary" onClick={props.onHide}>Fermer</Button>
+              {selectedChirurgie != null && isWithinThreeDaysBeforeToday(selectedChirurgie.date) && selectedChirurgie.doctor_id === auth.id && <Button onClick={()=>handleDeleteChirurgie()} variant="danger">Supprimer chirurgie</Button>}
             </Modal.Footer>
           </Modal>
         );

@@ -20,7 +20,6 @@ export default function Radios({ isAdmin , patient_id , radios }) {
 
   const auth = cookies.get("auth");
 
-  console.log(auth);
 
   radios.sort((a, b) => {
     // Convert dates to Date objects for comparison
@@ -129,8 +128,8 @@ function MyVerticallyCenteredModal(props) {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={props.onHide}>Close</Button>
-        {selectedRadio != null && isWithinThreeDaysBeforeToday(selectedRadio.date) && selectedRadio.doctor_id === auth.id && <Button onClick={()=>handleDeleteRadio()} variant="danger">Delete radio</Button>}
+        <Button variant="secondary" onClick={props.onHide}>Fermer</Button>
+        {selectedRadio != null && isWithinThreeDaysBeforeToday(selectedRadio.date) && selectedRadio.doctor_id === auth.id && <Button onClick={()=>handleDeleteRadio()} variant="danger">Supprimer radio</Button>}
       </Modal.Footer>
     </Modal>
   );

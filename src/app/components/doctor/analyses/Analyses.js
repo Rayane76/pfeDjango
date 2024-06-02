@@ -8,9 +8,18 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import ModalAddAnalyse from "./ModalAddAnalyse";
 import AddDemandeeAnalyseModal from "./AddDemandeeAnalyseModal";
+import Cookies from "universal-cookie";
+import axiosService from "@/app/helpers/axios";
+import { useRouter } from "next/navigation";
 
 
 export default function Analyses({ isAdmin , patient_id , analyses }) {
+
+  const router = useRouter();
+
+  const cookies = new Cookies();
+
+  const auth = cookies.get("auth");
 
 
   analyses.sort((a, b) => {
@@ -37,6 +46,31 @@ export default function Analyses({ isAdmin , patient_id , analyses }) {
      setSelectedAnalyse(analyse);
   }
 
+
+  const isWithinThreeDaysBeforeToday = (dateVar) => {
+    const today = new Date();
+    const inputDate = new Date(dateVar);
+  
+    // Calculate the difference in days
+    const diffInTime = today - inputDate;
+    const diffInDays = diffInTime / (1000 * 3600 * 24);
+  
+    // Check if the date is within the range of 0 to 3 days before today
+    return diffInDays >= 0 && diffInDays <= 3;
+  };
+
+
+
+  const handleDeleteAnalyse = async () => {
+    await axiosService.delete(`delete_doc/${selectedAnalyse.id}/`)
+    .then((res)=>{
+      setModalShow(false);
+      router.refresh();
+    }).catch((err)=>{
+      console.log(err);
+    })
+  }
+
   function MyVerticallyCenteredModal(props) {
     return (
       <Modal
@@ -54,7 +88,7 @@ export default function Analyses({ isAdmin , patient_id , analyses }) {
            <div className="analyseModalDiv">
              {selectedAnalyse != null && 
               <embed
-          src={`http://127.0.0.1:8000/media/${selectedRadio.document}/`}
+          src={`http://127.0.0.1:8000/media/${selectedAnalyse.document}/`}
           type="application/pdf"
               width="100%"
               height="100%"
@@ -65,6 +99,7 @@ export default function Analyses({ isAdmin , patient_id , analyses }) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={props.onHide}>Fermer</Button>
+          {selectedAnalyse != null && isWithinThreeDaysBeforeToday(selectedAnalyse.date) && selectedAnalyse.doctor_id === auth.id && <Button onClick={()=>handleDeleteAnalyse()} variant="danger">Supprimer analyse</Button>}
         </Modal.Footer>
       </Modal>
     );

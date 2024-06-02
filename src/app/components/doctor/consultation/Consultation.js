@@ -17,6 +17,7 @@ export default function Consultation({patient_id , maladies , med}){
     const [maladie,setMaladie] = useState({
       id : "",
       note: "",
+      affiche: false,
     medicaments: [],
   })
     
@@ -67,14 +68,17 @@ export default function Consultation({patient_id , maladies , med}){
       e.preventDefault();
       
       let consultation = {
-        maladie: maladie.id,
+        maladie: {
+          maladie: maladie.id,
+          affiche: maladie.affiche,
+        },
         note: maladie.note,
         medicaments: maladie.medicaments
       }
-      console.log(consultation)
 
       axiosService.post(`add_consultation/${patient_id}`,consultation)
       .then((res) => {
+       router.refresh(); 
        router.back();
        }).catch((err) => {
          console.log(err);
@@ -104,6 +108,9 @@ export default function Consultation({patient_id , maladies , med}){
       sx={{ width: 300 }}
       renderInput={(params) => <TextField {...params} label="Maladie" />}
     />
+
+<input className="ms-4 me-2" onChange={(e)=>setMaladie((prev)=>({...prev,affiche: e.target.checked}))} type="checkbox"></input>
+    <label>Afficher sur la carte ? </label>
 
          </div>
          <div className="ms-4">
