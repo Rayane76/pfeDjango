@@ -5,6 +5,7 @@ import Analyses from "@/app/components/doctor/analyses/Analyses";
 import History from "@/app/components/doctor/history/History";
 import Operations from "@/app/components/doctor/operations/Operations";
 import Modify from "@/app/components/doctor/modify/Modify";
+import Personnelles from "@/app/components/doctor/personnelles/Personnelles";
 
 
 async function getPatient(id){
@@ -32,6 +33,9 @@ export default async function Patient({ params }) {
       <div className="doctorView">
         <div id="generalInfos" className="generalInfos active">
            <GeneralInfos isAdmin={true} patient={patient} />
+        </div>
+        <div id="personnelles" className="personnelles unActive">
+           <Personnelles patient={patient} />
         </div>
         <div id="modify" className="modify unActive">
            <Modify patient_id={patient.id} allergies={patient.allergies} antecedents={patient.antecedents} />

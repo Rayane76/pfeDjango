@@ -48,6 +48,13 @@ export default function SideBarAdmin(props) {
             <GeneralSvg />
             Informations générales
           </div>
+          {props.qrCodeSection === true &&
+          <div className="field" onClick={(e) => handleClick(e, "personnelles")}>
+            <ModifySvg />
+            Informations Personnelles
+          </div>
+          }
+
           <div className="field" onClick={(e) => handleClick(e, "modify")}>
             <ModifySvg />
             Modifier Informations
@@ -111,6 +118,13 @@ export default function SideBarAdmin(props) {
                   <GeneralSvg />
                   Informations générales
                 </div>
+                {props.qrCodeSection === true &&                
+            <div className="field" onClick={(e) => handleClick(e, "personnelles")}>
+            <ModifySvg />
+            Informations Personnelles
+          </div>
+                }
+
                 <div
                   className="field"
                   onClick={(e) => handleClick(e, "modify")}

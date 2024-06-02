@@ -209,6 +209,10 @@
   width: 25px;
 }
 
+.inpt{
+  width: 50%;
+}
+
 @media screen and (max-width: 768px) {
   .modifyDivTitleDiv{
     margin: 0;
@@ -235,6 +239,9 @@
     width: 100%;
   }
   .tableRowsAnt{
+    width: 100%;
+  }
+  .inpt{
     width: 100%;
   }
 

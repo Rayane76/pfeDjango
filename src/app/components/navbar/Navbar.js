@@ -26,7 +26,7 @@ export default function Navbar(){
            </div>
            <div className="navBtnsDiv">
              <a href="/login" className="navBtn navBtnMrg">Connexion</a>
-             <a href={auth === undefined ? "/login" : auth.role === "P" ? "/account/" + role.id : auth.role === "D" ? "/admin/doctor" : auth.role === "C" ? "/admin/centre" : auth.role === "L" ? "/admin/doctor" : auth.role === "A" ? "/admin/superAdmin" : "/" } className="navBtn navBtnMrg">Mon compte</a>
+             <a href={auth === undefined ? "/login" : auth.role === "P" ? "/account/" + auth.id : auth.role === "D" ? "/admin/doctor" : auth.role === "C" ? "/admin/centre" : auth.role === "L" ? "/admin/doctor" : auth.role === "A" ? "/admin/superAdmin" : "/" } className="navBtn navBtnMrg">Mon compte</a>
              <a href="/registerHealthCare" className="navBtn">Médecin/Centre</a>
              <FaBars className="menuIcon" onClick={handleShow} />
              <Offcanvas show={show} onHide={handleClose} placement="end">
@@ -36,7 +36,7 @@ export default function Navbar(){
         <Offcanvas.Body>
            <div className="canvasBtnsDiv">
              <a href="/login" className="navBtnCanvas">Connexion</a>
-             <a  href={auth === undefined ? "/login" : auth.role === "P" ? "/account/" + role.id : auth.role === "D" ? "/admin/doctor" : auth.role === "C" ? "/admin/centre" : auth.role === "L" ? "/admin/doctor" : auth.role === "A" ? "/admin/superAdmin" : "/" } className="navBtnCanvas">Mon compte</a>
+             <a  href={auth === undefined ? "/login" : auth.role === "P" ? "/account/" + auth.id : auth.role === "D" ? "/admin/doctor" : auth.role === "C" ? "/admin/centre" : auth.role === "L" ? "/admin/doctor" : auth.role === "A" ? "/admin/superAdmin" : "/" } className="navBtnCanvas">Mon compte</a>
              <a href="/registerHealthCare" className="navBtnCanvas">Médecin/Centre</a>
             </div> 
         </Offcanvas.Body>
