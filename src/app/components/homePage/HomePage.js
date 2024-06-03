@@ -3,13 +3,15 @@ import About from "./about/About"
 import Footer from "../footer/Footer"
 import Navbar from "../navbar/Navbar"
 
-export default function HomePage(){
+export default async function HomePage(){
+
+
     return(
         <>
-          <Navbar />
+          <Navbar/>
           <Hero />
-          <About />
-          <Footer />
+          {/* <About />
+          <Footer /> */}
         </>
     )
 }

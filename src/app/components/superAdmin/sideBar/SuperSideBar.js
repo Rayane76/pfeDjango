@@ -9,6 +9,7 @@ import DiseasesSvg from "@/app/utils/svg/sidebarIcons/diseasessvg";
 import Xray from "@/app/utils/svg/sidebarIcons/xray";
 import AnalysesSvg from "@/app/utils/svg/sidebarIcons/analyses";
 import OperationsSvg from "@/app/utils/svg/sidebarIcons/operationsSvg";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 export default function SuperSideBar(props) {
   const [show, setShow] = useState(false);
@@ -66,9 +67,8 @@ export default function SuperSideBar(props) {
 
       {/* MOBILE NAVIGATION */}
       <div className="mobile">
-        <Button variant="primary" onClick={handleShow}>
-          Launch
-        </Button>
+      <GiHamburgerMenu onClick={()=>setShow(true)} style={{position:"absolute",top:"20px",left:"15px",height:"30px",width:"30px"}}/>
+
 
         <Offcanvas show={show} onHide={handleClose}>
           <Offcanvas.Header closeButton>

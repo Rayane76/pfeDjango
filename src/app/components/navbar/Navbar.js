@@ -1,25 +1,29 @@
 'use client'
 import "../../styles/navbar.css"
 import { FaBars } from "react-icons/fa";
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Cookies from 'universal-cookie';
 
 export default function Navbar(){
 
-  const cookies = new Cookies();
+  const [auth, setAuth] = useState(null);
+  const [show, setShow] = useState(false);
 
-  const auth = cookies.get("auth");
+  useEffect(() => {
+    const cookies = new Cookies();
+    const authCookie = cookies.get("auth");
+    setAuth(authCookie);
+  }, []);
 
-  let url = "/"
-
-  if(auth){
-   url = "/account/" + auth.id;
+  if (auth === null) {
+    // Render nothing or a loading state while auth is being fetched
+    return null;
   }
-  console.log(auth);
 
 
-    const [show, setShow] = useState(false);
+  // console.log(auth);
+
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -42,16 +46,23 @@ export default function Navbar(){
               : ""
               }
              <a href="/registerHealthCare" className="navBtn">Médecin/Centre</a>
-             <FaBars className="menuIcon" onClick={handleShow} />
-             <Offcanvas show={show} onHide={handleClose} placement="end">
+             <FaBars className="menuIcon" onClick={()=>setShow(true)} />
+             <Offcanvas show={show} onHide={()=>setShow(false)} placement="end">
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+          <Offcanvas.Title>MEDICA</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
            <div className="canvasBtnsDiv">
              <a href="/login" className="navBtnCanvas">Connexion</a>
-             <a  href={auth === undefined ? "/login" : auth.role === "P" ? "/account/" + auth.id : auth.role === "D" ? "/admin/doctor" : auth.role === "C" ? "/admin/centre" : auth.role === "L" ? "/admin/doctor" : auth.role === "A" ? "/admin/superAdmin" : "/" } className="navBtnCanvas">Mon compte</a>
-             <a href="/registerHealthCare" className="navBtnCanvas">Médecin/Centre</a>
+              {auth === undefined ? <a href="/login" className="navBtnCanvas">Mon compte</a>
+              : auth.role === "P" ? <a href={"/account/"+auth.id} className="navBtnCanvas">Mon compte</a>
+              : auth.role === "D" ? <a href="/admin/doctor" className="navBtnCanvas">Mon compte</a>
+              : auth.role === "L" ? <a href="/admin/labo" className="navBtnCanvas">Mon compte</a>
+              : auth.role === "C" ? <a href="/admin/centre" className="navBtnCanvas">Mon compte</a>
+              : auth.role === "A" ? <a href="/admin/superAdmin" className="navBtnCanvas">Mon compte</a>
+              : ""
+              }            
+               <a href="/registerHealthCare" className="navBtnCanvas">Médecin/Centre</a>
             </div> 
         </Offcanvas.Body>
       </Offcanvas>
