@@ -121,7 +121,7 @@ export default function Modify({ patient_id , allergies , antecedents }) {
         <button
           onClick={(e) => handleAdd(e)}
           title="Add"
-          className="cssbuttons-io-button"
+          className="cssbuttons-io-buttonR"
         >
           <svg
             className="css-btn-svg"

@@ -163,7 +163,7 @@ export default function Analyses({ isAdmin , patient_id , analyses }) {
           <button
            onClick={() => setShowModalAdd(true)}
           title="Add"
-          className="cssbuttons-io-button"
+          className="cssbuttons-io-buttonR"
           id="nouveauBtnAnalyses"
         >
           <svg

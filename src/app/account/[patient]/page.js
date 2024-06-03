@@ -6,6 +6,7 @@ import History from "@/app/components/doctor/history/History";
 import Operations from "@/app/components/doctor/operations/Operations";
 import Modify from "@/app/components/doctor/modify/Modify";
 import Personnelles from "@/app/components/doctor/personnelles/Personnelles";
+import QrPage from "@/app/components/doctor/qrCode/QrPage";
 
 
 async function getPatient(id){
@@ -41,7 +42,7 @@ export default async function Patient({ params }) {
            <Modify patient_id={patient.id} allergies={patient.allergies} antecedents={patient.antecedents} />
         </div>
         <div id="history" className="history unActive">
-           <History maladies={patient.consultations} antecedents={patient.antecedents} />
+           <History maladies={patient.consultations} antecedents={patient.antecedents} medicaments={[]} />
         </div>
         <div id="radios" className="radios unActive">
            <Radios isAdmin={false} patient_id={patient.id} radios={patient.radios} />
@@ -52,11 +53,9 @@ export default async function Patient({ params }) {
         <div id="operations" className="operations unActive">
            <Operations isAdmin={false} patient_id={patient.id} chirurgies={patient.chirurgies} />
         </div>
-        {/* <div id="qrCode" className="qrCode unActive">
-            <div style={{height:"100vh",width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
-               <img style={{height:"300px",width:"300px"}} src={patient.data.qrCodeUrl} alt="qrcode"></img>
-            </div>
-        </div> */}
+        <div id="qrCode" className="qrCode unActive">
+         <QrPage patient_id={patient.id} can_demande={patient.can_demande}/>
+        </div>
       </div>
     </>
   );

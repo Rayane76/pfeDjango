@@ -144,10 +144,10 @@ export default function MedicamentsSuperAdmin({medicaments}){
           {filteredCat === undefined || filteredCat === "" ?   
           <div className="d-flex justify-content-center gap-4">
         {currentIndex > 0 && (
-          <button onClick={showLess}>Show Less</button>
+          <button className="btn btn-secondary" onClick={showLess}>Show Less</button>
         )}
         {currentIndex + itemsPerPage < medicaments.length && (
-          <button onClick={showMore}>Show More</button>
+          <button className="btn btn-primary" onClick={showMore}>Show More</button>
         )}
       </div>
          : "" }

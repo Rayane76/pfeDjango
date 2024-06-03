@@ -172,7 +172,7 @@
 
 
 
-.cssbuttons-io-button {
+.cssbuttons-io-buttonR {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -194,12 +194,12 @@
   margin-right: 40px;
 }
 
-.cssbuttons-io-button:hover {
+.cssbuttons-io-buttonR:hover {
   filter: brightness(1.2);
   color: rgb(0, 0, 0, .5);
 }
 
-.cssbuttons-io-button:active {
+.cssbuttons-io-buttonR:active {
   transition: 0s;
   transform: rotate(-10deg);
 }

@@ -158,7 +158,7 @@ export default function Operations({ isAdmin , patient_id , chirurgies }){
           <button
             onClick={() => setModalShowAdd(true)}
             title="Add"
-            className="cssbuttons-io-button"
+            className="cssbuttons-io-buttonR"
             id="nouveauBtnChir"
           >
             <svg

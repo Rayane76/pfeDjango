@@ -1,3 +1,4 @@
+import CartesPage from "@/app/components/superAdmin/cartes/CartesPage";
 import "../../styles/doctor/patient/all.css"
 import DemandesPage from "@/app/components/superAdmin/demandes/DemandesPage";
 import MaladiesSuperAdmin from "@/app/components/superAdmin/maladies/MaladiesSuperAdmin";
@@ -29,6 +30,15 @@ async function getAdmins(){
  return medicaments.json();
 }
 
+
+
+async function getDemandes(){
+  const demandes = await fetch(`http://127.0.0.1:8000//api/cartes_demande/`,{
+    cache:"no-store"
+  });
+
+ return demandes.json();
+}
  
 
 
@@ -41,6 +51,9 @@ export default async function SuperAdmin(){
 
     const medicaments = await getMedicaments();
 
+    const demandes = await getDemandes();
+
+
 
 
     return(
@@ -49,6 +62,9 @@ export default async function SuperAdmin(){
       <div className="doctorView">
       <div id="demandes" className="demandes active">
            <DemandesPage medecins={admins.doctors} labos={admins.labos} centres={admins.centres} />
+        </div>
+        <div id="cartes" className="cartes unActive">
+            <CartesPage demandes={demandes}/>
         </div>
         <div id="maladies" className="maladies unActive">
              <MaladiesSuperAdmin maladies={maladies}/>

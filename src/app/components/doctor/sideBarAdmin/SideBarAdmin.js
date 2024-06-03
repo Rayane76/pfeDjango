@@ -11,6 +11,8 @@ import AnalysesSvg from "@/app/utils/svg/sidebarIcons/analyses";
 import OperationsSvg from "@/app/utils/svg/sidebarIcons/operationsSvg";
 import ConsultationSvg from "@/app/utils/svg/sidebarIcons/consultationSvg";
 import { BsQrCode } from "react-icons/bs";
+import { GiHamburgerMenu } from "react-icons/gi";
+
 
 export default function SideBarAdmin(props) {
   const [show, setShow] = useState(false);
@@ -100,13 +102,13 @@ export default function SideBarAdmin(props) {
 
       {/* MOBILE NAVIGATION */}
       <div className="mobile">
-        <Button variant="primary" onClick={handleShow}>
-          Launch
-        </Button>
+       <GiHamburgerMenu onClick={()=>setShow(true)} style={{position:"absolute",top:"20px",left:"15px",height:"30px",width:"30px"}}/>
 
         <Offcanvas show={show} onHide={handleClose}>
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+            <Offcanvas.Title>
+             Accueil
+            </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
             <div className="sideBarDivMobile">

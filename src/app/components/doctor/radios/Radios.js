@@ -194,7 +194,7 @@ const [activeDiv,setActiveDiv] = useState("realises");
         <button
           onClick={() => setModalShowAdd(true)}
           title="Add"
-          className="cssbuttons-io-button"
+          className="cssbuttons-io-buttonR"
           id="nouveauBtnRadios"
         >
           <svg

@@ -36,8 +36,21 @@
     height: 100vh;
 }
 
+.cartes{
+    height: 100vh;
+}
+
+.qrcodeImg{
+  width: 50%;
+  max-width: 90%;
+}
+
 @media screen and (max-width: 768px) {
     .doctorView{
         margin-left: 0;
+    }
+    .qrcodeImg{
+        width: 90%;
+        max-width: 90%;
     }
 }

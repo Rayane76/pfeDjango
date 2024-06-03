@@ -11,7 +11,12 @@ export default function Navbar(){
 
   const auth = cookies.get("auth");
 
-  const url = "/account/" + auth.id;
+  let url = "/"
+
+  if(auth){
+   url = "/account/" + auth.id;
+  }
+  console.log(auth);
 
 
     const [show, setShow] = useState(false);
@@ -27,8 +32,15 @@ export default function Navbar(){
               <a href="/" style={{all:"unset",cursor:"pointer"}}><h1 className="title">MEDICA</h1></a>
            </div>
            <div className="navBtnsDiv">
-             <a href="/login" className="navBtn navBtnMrg">Connexion</a>
-             <a href={auth === undefined ? "/login" : auth.role === "P" ? url : auth.role === "D" ? "/admin/doctor" : auth.role === "C" ? "/admin/centre" : auth.role === "L" ? "/admin/doctor" : auth.role === "A" ? "/admin/superAdmin" : "/" } className="navBtn navBtnMrg">Mon compte</a>
+           <a href="/login" className="navBtn navBtnMrg">Connexion</a>
+             {auth === undefined ? <a href="/login" className="navBtn navBtnMrg">Mon compte</a>
+              : auth.role === "P" ? <a href={"/account/"+auth.id} className="navBtn navBtnMrg">Mon compte</a>
+              : auth.role === "D" ? <a href="/admin/doctor" className="navBtn navBtnMrg">Mon compte</a>
+              : auth.role === "L" ? <a href="/admin/labo" className="navBtn navBtnMrg">Mon compte</a>
+              : auth.role === "C" ? <a href="/admin/centre" className="navBtn navBtnMrg">Mon compte</a>
+              : auth.role === "A" ? <a href="/admin/superAdmin" className="navBtn navBtnMrg">Mon compte</a>
+              : ""
+              }
              <a href="/registerHealthCare" className="navBtn">Médecin/Centre</a>
              <FaBars className="menuIcon" onClick={handleShow} />
              <Offcanvas show={show} onHide={handleClose} placement="end">
