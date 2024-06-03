@@ -217,6 +217,7 @@ export default function DemandesPage({ medecins , labos , centres }){
          <h6><span className='text-black fw-bold'>Numero tel:</span> {clicked.labo_number}</h6>
          <h6><span className='text-black fw-bold'>Address :</span> {clicked.address}</h6>
         {selected === "medecin" && <h6><span className='text-black fw-bold'>Carte_id :</span> {clicked.carte_id}</h6>}
+        <img style={{width:"100%",maxWidth:"100%"}} src={"http://127.0.0.1:8000/"+ clicked.certeficat} alt="qrcode"></img>
          </div>
         }
       </Modal.Body>

@@ -47,6 +47,8 @@ export default async function SuperAdmin(){
 
     const admins = await getAdmins();
 
+    console.log(admins);
+
     const maladies = await getMaladies();
 
     const medicaments = await getMedicaments();
